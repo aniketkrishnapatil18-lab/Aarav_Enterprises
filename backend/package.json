@@ -1,0 +1,36 @@
+{
+  "name": "aarav-enterprises-backend",
+  "version": "1.0.0",
+  "description": "Aarav Enterprises backend API server",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "start:qr": "node src/start-qr.js",
+    "dev": "nodemon src/server.js",
+    "dev:debug": "nodemon --inspect src/server.js",
+    "db:setup": "node ../database/setup.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.1",
+    "express-validator": "^7.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.11.3",
+    "qrcode-terminal": "^0.12.0",
+    "uuid": "^10.0.0",
+    "whatsapp-web.js": "^1.34.7",
+    "winston": "^3.15.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
