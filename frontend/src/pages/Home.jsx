@@ -428,6 +428,39 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── CATEGORY BUBBLES ───────────────────────────────── */}
+      <section style={{ padding: '2.5rem 0 0' }}>
+        <div className="container">
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '2rem', overflowX: 'auto',
+            paddingBottom: '1rem', scrollbarWidth: 'none', msOverflowStyle: 'none'
+          }}>
+            <style>{`
+              .cat-bubble { transition: transform 0.2s; cursor: pointer; text-align: center; min-width: 90px; }
+              .cat-bubble:hover { transform: translateY(-5px); }
+              .cat-bubble-img { width: 80px; height: 80px; borderRadius: 50%; objectFit: cover; marginBottom: 0.75rem; border: 2px solid transparent; transition: border 0.2s; box-shadow: var(--shadow-sm); }
+              .cat-bubble:hover .cat-bubble-img { border-color: var(--brand-violet); }
+              .cat-bubble-txt { font-size: 0.8rem; font-weight: 600; color: var(--text-main); line-height: 1.2; }
+            `}</style>
+            {[
+              { name: 'UV Printing Service', img: 'https://images.unsplash.com/photo-1636633762833-5d1658f1e29b?auto=format&fit=crop&w=150&q=80' },
+              { name: 'Acrylic Sign Board', img: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=150&q=80' },
+              { name: 'Roll Up Standee', img: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=150&q=80' },
+              { name: 'LED Sign Board', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=150&q=80' },
+              { name: 'Glow Sign Board', img: 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3?auto=format&fit=crop&w=150&q=80' },
+              { name: 'Flex Banner', img: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=150&q=80' },
+              { name: 'Letter Sign Board', img: 'https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=150&q=80' },
+              { name: 'LED Acrylic Letter', img: 'https://images.unsplash.com/photo-1601662528567-526cd06f6582?auto=format&fit=crop&w=150&q=80' },
+            ].map((cat, i) => (
+              <Link to={`/services?category=${cat.name}`} key={i} className="cat-bubble" style={{ textDecoration: 'none' }}>
+                <img src={cat.img} alt={cat.name} className="cat-bubble-img" />
+                <div className="cat-bubble-txt">{cat.name.replace(' ', '\n')}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── FEATURED SERVICES ──────────────────────────────── */}
       <section className="section" id="services" style={{ paddingTop: '2.5rem' }}>
         <div className="container">
