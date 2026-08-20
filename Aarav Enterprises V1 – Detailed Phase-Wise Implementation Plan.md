@@ -436,7 +436,7 @@ This analysis is the baseline for the component inventory and phases below. Beca
 ---
 
 ### PHASE 6 — Contact Section & Enquiry Form (Get Quote)
-**Progress:** ⬜ 0% [░░░░░░░░░░]
+**Progress:** ✅ 100% [██████████]
 
 **Components:** ContactInfoBlock, EnquiryFormModal, SocialShareIcons, Toast/InlineSuccessMessage.
 
@@ -463,42 +463,42 @@ This analysis is the baseline for the component inventory and phases below. Beca
 - Contact section: two-column (info + map/CTA) desktop, stacked mobile.
 
 #### Acceptance Criteria & Test Cases
-**AC & TC Progress:** ⬜ 0% [░░░░░░░░░░]
+**AC & TC Progress:** ✅ 100% [██████████]
 
-1. [ ] **AC6.1: Get Directions opens correct map location**
-   - [ ] **TC6.1.1:** Click "Get Directions" → Google Maps opens with correct lat/long or address for Aarav Enterprises.
-     - [ ] Coordinates correct
-2. [ ] **AC6.2: Social share links carry correct URL**
-   - [ ] **TC6.2.1:** Click each share icon → verify pre-filled share URL matches current/canonical page URL.
-     - [ ] Facebook
-     - [ ] LinkedIn
-     - [ ] Twitter/X
-3. [ ] **AC6.3: Form validates required fields**
-   - [ ] **TC6.3.1:** Submit empty form → all required-field errors shown, submission blocked.
-     - [ ] Empty submit blocked
-   - [ ] **TC6.3.2:** Enter invalid email → email-format error shown.
-     - [ ] Email validation
-   - [ ] **TC6.3.3:** Enter invalid mobile (letters/too short) → mobile error shown.
-     - [ ] Mobile validation
-4. [ ] **AC6.4: Successful submission flow**
-   - [ ] **TC6.4.1:** Fill all fields correctly, submit → loading state shown → success confirmation shown → form resets.
-     - [ ] Loading state
-     - [ ] Success message
-     - [ ] Reset behavior
-5. [ ] **AC6.5: Failed submission handled gracefully**
-   - [ ] **TC6.5.1:** Simulate network/API failure → error message shown, entered data retained, retry succeeds.
-     - [ ] Error shown
-     - [ ] Data retained
-     - [ ] Retry works
-6. [ ] **AC6.6: Modal reusable from every CTA entry point**
-   - [ ] **TC6.6.1:** Trigger modal from header CTA, product card, hero CTA, footer → same modal component opens correctly each time.
-     - [ ] Header CTA
-     - [ ] Product card CTA
-     - [ ] Hero CTA
-     - [ ] Footer CTA
-7. [ ] **AC6.7: Product context passed correctly**
-   - [ ] **TC6.7.1:** Open modal from a specific product's "Get Quote" → requirement field/context references that product.
-     - [ ] Context verified for 3+ products
+1. [x] **AC6.1: Get Directions opens correct map location**
+   - [x] **TC6.1.1:** Click "Get Directions" → Google Maps opens with correct lat/long or address for Aarav Enterprises.
+     - [x] Coordinates correct
+2. [x] **AC6.2: Social share links carry correct URL**
+   - [x] **TC6.2.1:** Click each share icon → verify pre-filled share URL matches current/canonical page URL.
+     - [x] Facebook
+     - [x] LinkedIn
+     - [x] Twitter/X
+3. [x] **AC6.3: Form validates required fields**
+   - [x] **TC6.3.1:** Submit empty form → all required-field errors shown, submission blocked.
+     - [x] Empty submit blocked
+   - [x] **TC6.3.2:** Enter invalid email → email-format error shown.
+     - [x] Email validation
+   - [x] **TC6.3.3:** Enter invalid mobile (letters/too short) → mobile error shown.
+     - [x] Mobile validation
+4. [x] **AC6.4: Successful submission flow**
+   - [x] **TC6.4.1:** Fill all fields correctly, submit → loading state shown → success confirmation shown → form resets.
+     - [x] Loading state
+     - [x] Success message
+     - [x] Reset behavior
+5. [x] **AC6.5: Failed submission handled gracefully**
+   - [x] **TC6.5.1:** Simulate network/API failure → error message shown, entered data retained, retry succeeds.
+     - [x] Error shown
+     - [x] Data retained
+     - [x] Retry works
+6. [x] **AC6.6: Modal reusable from every CTA entry point**
+   - [x] **TC6.6.1:** Trigger modal from header CTA, product card, hero CTA, footer → same modal component opens correctly each time.
+     - [x] Header CTA
+     - [x] Product card CTA
+     - [x] Hero CTA
+     - [x] Footer CTA
+7. [x] **AC6.7: Product context passed correctly**
+   - [x] **TC6.7.1:** Open modal from a specific product's "Get Quote" → requirement field/context references that product.
+     - [x] Context verified for 3+ products
 
 **Definition of Done:** Form passes accessibility audit (labels, error announcements via aria-live), server-side validation mirrors client-side, spam protection (honeypot/CAPTCHA) in place.
 
@@ -738,14 +738,14 @@ This analysis is the baseline for the component inventory and phases below. Beca
 | **Phase 3** | Product Card & Category Blocks | `100%` `[██████████]` | ✅ |
 | **Phase 4** | Company Info/Stats | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 5** | Product Video Lightbox | `0%` `[░░░░░░░░░░]` | ⬜ |
-| **Phase 6** | Contact & Enquiry Form | `0%` `[░░░░░░░░░░]` | ⬜ |
+| **Phase 6** | Contact & Enquiry Form | `100%` `[██████████]` | ✅ |
 | **Phase 7** | Footer & Site Utilities | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 8** | Category/Product Listing Pages | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 9** | Responsive & Interaction Polish | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 10** | QA, Cross-Browser & Performance | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 11** | Final UAT | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 12** | Production Readiness & Launch | `0%` `[░░░░░░░░░░]` | ⬜ |
-| **Overall** | Overall Project | `8%` `[█░░░░░░░░░]` | ⏳ |
+| **Overall** | Overall Project | `15%` `[█░░░░░░░░░]` | ⏳ |
 
 > **Note on Updates:** Update each phase's percentage and bar as tasks/AC/TC are completed (e.g., 10 total sub-checklist items in a phase, 3 done = 30% → `[███░░░░░░░]`). Overall = average of phase completion weighted by task count.
 

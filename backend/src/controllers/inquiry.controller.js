@@ -71,4 +71,71 @@ async function update(req, res, next) {
   } catch (err) { next(err); }
 }
 
-module.exports = { list, detail, updateStatus, addNote, update };
+async function createPublic(req, res, next) {
+  try {
+    const { name, whatsapp_number, email, requirements, product_id, service_name, business_name, salutation } = req.body;
+    if (!name || !whatsapp_number || !email || !requirements) {
+      return res.status(400).json({ success: false, message: 'Name, WhatsApp number, email, and requirements are required.' });
+    }
+
+    const customerModel = require('../models/customer.model');
+    const productModel = require('../models/product.model');
+
+    // Find or create customer
+    const { customer } = await customerModel.findOrCreate(whatsapp_number, name);
+
+    // Update customer name & email if they weren't set yet
+    const updateFields = {};
+    if (!customer.name && name) updateFields.name = name;
+    if (!customer.email && email) updateFields.email = email;
+    if (!customer.phone && whatsapp_number) updateFields.phone = whatsapp_number;
+    if (Object.keys(updateFields).length > 0) {
+      await customerModel.update(customer.id, updateFields);
+    }
+
+    let resolvedProductId = product_id ? parseInt(product_id) : null;
+    let resolvedServiceName = service_name || null;
+
+    if (resolvedProductId) {
+      const product = await productModel.getById(resolvedProductId);
+      if (product) {
+        resolvedServiceName = product.name;
+      }
+    }
+
+    // Format the requirements to include contact/salutation details
+    const fullRequirements = `Name: ${salutation ? salutation + ' ' : ''}${name}\nEmail: ${email}\nMobile: ${whatsapp_number}\n\nRequirements:\n${requirements}`;
+
+    // Create the inquiry
+    const inquiry = await inquiryModel.create({
+      customer_id: customer.id,
+      product_id: resolvedProductId,
+      service_name: resolvedServiceName,
+      requirements: fullRequirements,
+      business_name: business_name || null,
+      language: 'en',
+      collected_data: {
+        salutation,
+        name,
+        email,
+        whatsapp_number,
+        requirements
+      }
+    });
+
+    // Increment customer inquiries count
+    await customerModel.incrementInquiries(customer.id);
+
+    // Create a notification for admins
+    await notificationModel.create({
+      type: 'new_inquiry',
+      title: `New Inquiry ${inquiry.inquiry_number}`,
+      body: `New inquiry for ${inquiry.service_name || 'Design Service'} by ${name} (${whatsapp_number}).`,
+      data: { inquiryId: inquiry.id }
+    });
+
+    res.status(201).json({ success: true, data: inquiry });
+  } catch (err) { next(err); }
+}
+
+module.exports = { list, detail, updateStatus, addNote, update, createPublic };

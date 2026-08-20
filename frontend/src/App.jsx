@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from './context/ThemeContext';
+import { EnquiryModalProvider } from './context/EnquiryModalContext';
+import EnquiryFormModal from './components/common/EnquiryFormModal';
 
 // Layouts
 import PublicLayout from './layouts/PublicLayout';
@@ -34,8 +36,10 @@ import AdminSettings       from './pages/admin/AdminSettings';
 export default function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
-        <Toaster
+      <EnquiryModalProvider>
+        <BrowserRouter>
+          <EnquiryFormModal />
+          <Toaster
           position="top-right"
           toastOptions={{
             style: {
@@ -77,7 +81,8 @@ export default function App() {
             <Route path="settings"         element={<AdminSettings />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+        </BrowserRouter>
+      </EnquiryModalProvider>
     </ThemeProvider>
   );
 }

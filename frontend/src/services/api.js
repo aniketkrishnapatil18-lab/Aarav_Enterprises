@@ -84,6 +84,7 @@ export const inquiryAPI = {
   update:       (id, d)     => api.put(`/inquiries/${id}`, d),
   updateStatus: (id, data)  => api.put(`/inquiries/${id}/status`, data),
   addNote:      (id, data)  => api.post(`/inquiries/${id}/messages`, data),
+  submitPublic: (data)      => api.post('/inquiries', data),
 };
 
 // ── Conversations ───────────────────────────────────────────

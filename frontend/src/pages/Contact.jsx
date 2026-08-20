@@ -1,63 +1,151 @@
 import { useEffect } from 'react';
-import { MessageCircle, Phone, Mail, MapPin, Clock } from 'lucide-react';
+import { MessageCircle, Phone, Mail, MapPin, Clock, Navigation } from 'lucide-react';
 import { openWhatsApp } from '../utils/helpers';
+import EnquiryForm from '../components/common/EnquiryForm';
+import SocialShareIcons from '../components/common/SocialShareIcons';
 
+/**
+ * Contact Page Component
+ * Renders contact details and integrated inline enquiry form.
+ * Full support for both light and dark themes using CSS design tokens.
+ */
 export default function Contact() {
-  useEffect(() => { document.title = 'Contact — Aarav Enterprises'; }, []);
+  useEffect(() => {
+    document.title = 'Contact Us — Aarav Enterprises';
+  }, []);
+
+  const contactDetails = [
+    {
+      icon: MessageCircle,
+      color: '#25D366',
+      label: 'WhatsApp Line',
+      value: '+91 9763530208',
+      action: () => openWhatsApp('Hi! I need help with graphic design or signage requirements.')
+    },
+    {
+      icon: Phone,
+      color: 'var(--brand-violet)',
+      label: 'Phone Call',
+      value: '+91 9763530208',
+      link: 'tel:+919763530208'
+    },
+    {
+      icon: Mail,
+      color: 'var(--brand-pink)',
+      label: 'Email Address',
+      value: 'info@aaraventerprises.com',
+      link: 'mailto:info@aaraventerprises.com'
+    },
+    {
+      icon: MapPin,
+      color: 'var(--brand-amber)',
+      label: 'Our Location',
+      value: 'Survey No 659/16, Beside Jagtap Dairy, Bibwewadi, Pune 411037',
+      directions: 'https://maps.google.com/?q=Survey+No+659%2F16%2C+Beside+Jagtap+Dairy%2C+Bibwewadi%2C+Pune+411037'
+    },
+    {
+      icon: Clock,
+      color: 'var(--brand-emerald)',
+      label: 'Business Hours',
+      value: 'Monday – Saturday: 10 AM – 7 PM'
+    }
+  ];
+
   return (
-    <div style={{ paddingTop: 70 }}>
-      <div style={{ padding: '4rem 1.5rem', background: 'var(--brand-surface)', textAlign: 'center' }}>
+    <div style={{ paddingTop: '80px', minHeight: '100vh', background: 'var(--bg-main)' }}>
+      {/* Header Banner */}
+      <div 
+        style={{ 
+          padding: '4.5rem 1.5rem', 
+          background: 'var(--bg-surface)', 
+          textAlign: 'center',
+          borderBottom: '1px solid var(--border-light)'
+        }}
+      >
         <div className="container">
-          <h1 className="section-title">Get In <span className="gradient-text">Touch</span></h1>
-          <p className="section-subtitle">We're available on WhatsApp, phone, and email. Our AI assistant responds 24/7.</p>
+          <h1 className="section-title">Get in <span className="gradient-text">Touch</span></h1>
+          <p className="section-subtitle">
+            Have a project in mind? Submit an enquiry or chat with us on WhatsApp. Our AI assistant responds 24/7.
+          </p>
         </div>
       </div>
+
+      {/* Grid Content */}
       <div className="container section">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'start' }}>
-          <div>
-            <h2 style={{ fontSize: '1.75rem', marginBottom: '2rem' }}>Contact <span className="gradient-text">Information</span></h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              {[
-                { icon: MessageCircle, color: '#25D366', label: 'WhatsApp AI Line', value: '+1 (555) 196-0714', action: () => openWhatsApp() },
-                { icon: Phone, color: '#A78BFA', label: 'Phone', value: '+91 9763530208' },
-                { icon: Mail, color: '#A78BFA', label: 'Email', value: 'info@aaraventerprises.com' },
-                { icon: MapPin, color: '#A78BFA', label: 'Location', value: 'Pune, Maharashtra, India' },
-                { icon: Clock, color: '#A78BFA', label: 'Business Hours', value: 'Monday – Saturday: 10 AM – 7 PM' },
-              ].map(({ icon: Icon, color, label, value, action }) => (
-                <div key={label} className="glass-card" style={{ padding: '1.25rem', display: 'flex', gap: '1rem', alignItems: 'flex-start', cursor: action ? 'pointer' : 'default' }} onClick={action}>
-                  <div style={{ width: 44, height: 44, borderRadius: 10, background: `${color}22`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Icon size={20} color={color} />
+        <div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start"
+        >
+          {/* Left Column: Details */}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold font-outfit" style={{ color: 'var(--text-main)' }}>
+              Contact <span className="gradient-text">Information</span>
+            </h2>
+            <p className="text-sm" style={{ color: 'var(--text-muted)', lineHeight: 1.7 }}>
+              Aarav Enterprises provides professional acrylic sign boards, LED letters, UV printing, and custom graphic design solutions in Pune and surrounding regions.
+            </p>
+
+            <div className="flex flex-col gap-4">
+              {contactDetails.map((detail, index) => {
+                const Icon = detail.icon;
+                const isClickable = detail.action || detail.link || detail.directions;
+                
+                // Wrap click handlers
+                const handleClick = () => {
+                  if (detail.action) detail.action();
+                  else if (detail.link) window.location.href = detail.link;
+                  else if (detail.directions) window.open(detail.directions, '_blank');
+                };
+
+                return (
+                  <div 
+                    key={index} 
+                    className={`glass-card p-4 flex gap-4 items-start ${isClickable ? 'cursor-pointer hover:border-glow transition-all duration-300' : ''}`}
+                    onClick={isClickable ? handleClick : undefined}
+                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-light)' }}
+                  >
+                    <div 
+                      className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: `${detail.color}22` }}
+                    >
+                      <Icon size={20} style={{ color: detail.color }} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-semibold" style={{ color: 'var(--text-subtle)', textTransform: 'uppercase' }}>
+                        {detail.label}
+                      </div>
+                      <div className="font-semibold text-sm mt-0.5 break-words" style={{ color: 'var(--text-main)' }}>
+                        {detail.value}
+                      </div>
+                      {detail.directions && (
+                        <button
+                          className="mt-2 text-xs flex items-center gap-1 font-bold transition-all duration-200"
+                          style={{ color: 'var(--brand-violet)' }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(detail.directions, '_blank');
+                          }}
+                        >
+                          <Navigation size={12} /> Get Directions
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <div style={{ fontSize: '0.8rem', color: '#64748B', marginBottom: '0.25rem' }}>{label}</div>
-                    <div style={{ fontWeight: 600, color: '#F8FAFC' }}>{value}</div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
+            </div>
+
+            {/* Social Share Buttons */}
+            <div className="pt-2">
+              <SocialShareIcons />
             </div>
           </div>
-          <div className="glass-card" style={{ padding: '2rem' }}>
-            <h3 style={{ marginBottom: '0.5rem' }}>Chat on <span className="gradient-text">WhatsApp</span></h3>
-            <p style={{ color: '#64748B', marginBottom: '2rem', fontSize: '0.95rem', lineHeight: 1.7 }}>
-              The fastest way to reach us! Our AI assistant understands English, Hindi, and Marathi. Send us your requirements and we'll get back to you quickly.
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {[
-                { label: '🎨 Logo Design Enquiry',          msg: "Hi! I need a logo design for my business." },
-                { label: '📇 Visiting Card Enquiry',        msg: "Hi! I need visiting card designs." },
-                { label: '📋 Brochure / Banner Enquiry',    msg: "Hi! I need brochure or banner designs." },
-                { label: '📱 Social Media Designs',         msg: "Hi! I need social media post designs." },
-                { label: '💬 General Enquiry',              msg: "Hi! I need help with a graphic design." },
-              ].map(({ label, msg }) => (
-                <button key={label} onClick={() => openWhatsApp(msg)} className="btn-whatsapp" style={{ justifyContent: 'flex-start', fontSize: '0.875rem' }}>
-                  <MessageCircle size={15} /> {label}
-                </button>
-              ))}
-            </div>
+
+          {/* Right Column: Inline Enquiry Form */}
+          <div>
+            <EnquiryForm inline={true} />
           </div>
         </div>
       </div>
-      <style>{`@media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr !important; } }`}</style>
     </div>
   );
 }

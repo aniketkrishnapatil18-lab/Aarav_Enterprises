@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye, MessageCircle, Star, Zap, RefreshCw, FileText } from 'lucide-react';
-import { openWhatsApp } from '../../utils/helpers';
+import { useEnquiryModal } from '../../context/EnquiryModalContext';
 
 /**
  * ProductCard Component
@@ -39,8 +39,10 @@ export default function ProductCard({ product }) {
     });
   }
 
+  const { openModal } = useEnquiryModal();
+
   const handleGetQuote = () => {
-    openWhatsApp(`Hi! I'm interested in your ${product.name} service.`, product.name);
+    openModal({ id: product.id, name: product.name });
   };
 
   const startingPrice = parseFloat(product.starting_price);
