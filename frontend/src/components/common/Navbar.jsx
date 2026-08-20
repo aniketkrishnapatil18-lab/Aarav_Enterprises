@@ -90,9 +90,8 @@ export default function Navbar() {
             onClick={() => openWhatsApp()}
             className="btn-whatsapp-navbar"
           >
-            <span className="wa-dot" />
             <MessageCircle size={19} className="wa-icon" />
-            <span className="desktop-nav">Chat on WhatsApp</span>
+            <span className="desktop-nav">Order Now</span>
           </button>
 
           {/* Mobile menu toggle */}
@@ -139,7 +138,7 @@ export default function Navbar() {
             className="btn-whatsapp"
             style={{ width: '100%', justifyContent: 'center' }}
           >
-            <MessageCircle size={18} /> Chat on WhatsApp Now
+            <MessageCircle size={18} /> Order Now
           </button>
         </div>
       )}
