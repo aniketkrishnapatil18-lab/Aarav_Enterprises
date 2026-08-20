@@ -440,7 +440,8 @@ export default function Home() {
             </Link>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem' }}>
+          <style>{`.hide-scroll::-webkit-scrollbar { display: none; }`}</style>
+          <div className="hide-scroll" style={{ display: 'flex', overflowX: 'auto', gap: '1.5rem', paddingBottom: '1rem', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             {[
               { id: 'cat-1', name: 'UV Printing Service', thumbnail_url: 'https://images.unsplash.com/photo-1636633762833-5d1658f1e29b?auto=format&fit=crop&w=400&q=80', starting_price: 999 },
               { id: 'cat-2', name: 'Acrylic Sign Board', thumbnail_url: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=400&q=80', starting_price: 1499 },
@@ -450,7 +451,11 @@ export default function Home() {
               { id: 'cat-6', name: 'Flex Banner', thumbnail_url: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=400&q=80', starting_price: 499 },
               { id: 'cat-7', name: 'Letter Sign Board', thumbnail_url: 'https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=400&q=80', starting_price: 1299 },
               { id: 'cat-8', name: 'LED Acrylic Letter', thumbnail_url: 'https://images.unsplash.com/photo-1601662528567-526cd06f6582?auto=format&fit=crop&w=400&q=80', starting_price: 3499 },
-            ].map(s => <ServiceCard key={s.id} service={s} />)}
+            ].map(s => (
+              <div key={s.id} style={{ minWidth: '240px', flexShrink: 0 }}>
+                <ServiceCard service={s} />
+              </div>
+            ))}
           </div>
         </div>
       </section>
