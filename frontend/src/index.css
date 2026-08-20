@@ -568,3 +568,25 @@ h1, h2, h3, h4, h5, h6 {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ── HERO DOTTED BACKGROUND & FLOATING ──────────────── */
+.bg-dots {
+  background-image: radial-gradient(var(--border-light) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+[data-theme='dark'] .bg-dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px);
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+@keyframes floatFast {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float-slow { animation: floatSlow 6s ease-in-out infinite; }
+.animate-float-fast { animation: floatFast 4s ease-in-out infinite; }
