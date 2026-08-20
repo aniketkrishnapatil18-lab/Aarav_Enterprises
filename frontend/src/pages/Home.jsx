@@ -220,6 +220,46 @@ function HeroCentered() {
         </div>
       </div>
 
+      {/* Mid Left Group */}
+      <div className="animate-float-fast hero-float-el" style={{
+        position: 'absolute', top: '35%', left: '12%',
+        display: 'flex', alignItems: 'center', gap: '0.8rem', zIndex: 9
+      }}>
+        <div style={{
+          background: 'var(--bg-card)', padding: '0.75rem 1.25rem', borderRadius: '0.75rem',
+          boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)',
+        }}>
+          <span style={{ fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-main)' }}>Fast Turnaround</span>
+        </div>
+        <div style={{
+          background: 'var(--bg-card)', padding: '0.5rem', borderRadius: '0.75rem',
+          boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem'
+        }}>
+          <Lightbulb size={20} color="#F59E0B" />
+        </div>
+      </div>
+
+      {/* Mid Right Group */}
+      <div className="animate-float-slow hero-float-el" style={{
+        position: 'absolute', top: '38%', right: '12%',
+        display: 'flex', alignItems: 'center', gap: '0.8rem', zIndex: 9
+      }}>
+        <div style={{
+          background: 'var(--bg-card)', padding: '0.5rem', borderRadius: '0.75rem',
+          boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '1.5rem'
+        }}>
+          <Shield size={20} color="#10B981" />
+        </div>
+        <div style={{
+          background: 'var(--bg-card)', padding: '0.75rem 1.25rem', borderRadius: '0.75rem',
+          boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)',
+        }}>
+          <span style={{ fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-main)' }}>Eco-Friendly</span>
+        </div>
+      </div>
+
       {/* Bottom Left Overlapping Cards */}
       <div className="animate-float-fast hero-float-img" style={{
         position: 'absolute', bottom: '12%', left: '2%', zIndex: 10, width: 320, height: 220
