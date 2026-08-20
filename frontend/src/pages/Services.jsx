@@ -3,6 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { Search, Filter, ArrowRight, MessageCircle, Palette, Eye } from 'lucide-react';
 import { productAPI, categoryAPI } from '../services/api';
 import { openWhatsApp } from '../utils/helpers';
+import Breadcrumbs from '../components/common/Breadcrumbs';
+import ProductCard from '../components/common/ProductCard';
 
 export default function Services() {
   const [products,    setProducts]    = useState([]);
@@ -32,7 +34,19 @@ export default function Services() {
     load();
     const cat = searchParams.get('category');
     if (cat) setActiveCategory(cat);
-  }, []);
+  }, [searchParams]);
+
+  const activeCategoryName = categories.find(
+    c => c.slug === activeCategory || c.id?.toString() === activeCategory
+  )?.name;
+
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Services', path: '/services' }
+  ];
+  if (activeCategoryName && activeCategory !== 'all') {
+    breadcrumbItems.push({ label: activeCategoryName });
+  }
 
   const filtered = products.filter(p => {
     const matchCat    = activeCategory === 'all' || p.category_slug === activeCategory || p.category_id?.toString() === activeCategory;
@@ -50,7 +64,9 @@ export default function Services() {
         </div>
       </div>
 
-      <div className="container section">
+      <div className="container section" style={{ paddingTop: '2.5rem' }}>
+        <Breadcrumbs items={breadcrumbItems} />
+
         {/* Filters */}
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '2.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
           <div style={{ position: 'relative', flex: 1, minWidth: 220 }}>
@@ -105,38 +121,7 @@ export default function Services() {
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.75rem' }}>
             {filtered.map(s => (
-              <div key={s.id} className="service-card">
-                <div className="img-container">
-                  {s.thumbnail_url ? (
-                    <img src={s.thumbnail_url} alt={s.name} loading="lazy" />
-                  ) : (
-                    <div style={{ height: '100%', background: 'linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(219,39,119,0.08) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Palette size={48} color="var(--brand-violet)" style={{ opacity: 0.7 }} />
-                    </div>
-                  )}
-                  {s.is_featured && (
-                    <div style={{ position: 'absolute', top: 12, right: 12, background: 'linear-gradient(135deg, #D97706, #DB2777)', padding: '0.2rem 0.65rem', borderRadius: 999, fontSize: '0.7rem', fontWeight: 800, color: 'white' }}>⭐ Popular</div>
-                  )}
-                </div>
-                <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--brand-violet)', fontWeight: 700, marginBottom: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.category_name}</div>
-                  <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--text-main)' }}>{s.name}</h3>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.25rem', flex: 1 }}>{s.short_desc}</p>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', padding: '0.75rem 1rem', background: 'var(--bg-subtle)', borderRadius: '0.75rem', border: '1px solid var(--border-light)' }}>
-                    <div>
-                      <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)', textTransform: 'uppercase', fontWeight: 600 }}>Starting From</div>
-                      <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--brand-violet)', fontFamily: 'Outfit' }}>
-                        {s.starting_price > 0 ? `₹${parseInt(s.starting_price).toLocaleString('en-IN')}` : 'Configurable'}
-                      </div>
-                    </div>
-                    {s.delivery_days && <div style={{ fontSize: '0.85rem', color: 'var(--text-main)', fontWeight: 700 }}>⚡ {s.delivery_days} Days</div>}
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
-                    <Link to={`/services/${s.slug || s.id}`} style={{ textAlign: 'center', padding: '0.65rem', borderRadius: '0.6rem', background: 'var(--badge-bg-purple)', color: 'var(--brand-violet)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 700, border: '1px solid var(--badge-border-purple)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem' }}><Eye size={15} /> Details</Link>
-                    <button onClick={() => openWhatsApp(`Hi! I'm interested in your ${s.name} service.`, s.name)} className="btn-whatsapp" style={{ padding: '0.65rem', fontSize: '0.85rem', borderRadius: '0.6rem', justifyContent: 'center' }}><MessageCircle size={15} /> Enquire</button>
-                  </div>
-                </div>
-              </div>
+              <ProductCard key={s.id} product={s} />
             ))}
           </div>
         )}
