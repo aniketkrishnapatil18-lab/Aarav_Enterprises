@@ -1,9 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowRight, MessageCircle, Star, Palette, Layers, Zap, Shield,
-  CheckCircle2, Sparkles, Globe, Award, Eye
+  ArrowRight, MessageCircle, Palette, Zap, Shield,
+  Eye, ChevronLeft, ChevronRight, Sparkles,
+  Lightbulb, Printer, Box
 } from 'lucide-react';
+
+/* Responsive hero grid: stack on mobile */
+const heroGridStyle = `
+  @media (max-width: 768px) {
+    .hero-carousel-grid {
+      grid-template-columns: 1fr !important;
+      padding: 2.5rem 0 5rem !important;
+      min-height: unset !important;
+      gap: 1.5rem !important;
+    }
+  }
+`;
 import { productAPI, portfolioAPI } from '../services/api';
 import { openWhatsApp } from '../utils/helpers';
 
@@ -146,6 +159,390 @@ function FeatureCard({ icon: Icon, title, desc, gradient }) {
   );
 }
 
+// ── Hero Carousel ────────────────────────────────────────────
+const HERO_SLIDES = [
+  {
+    id: 'led',
+    badge: 'New Collection',
+    title: 'Light Up',
+    titleAccent: 'Your Brand.',
+    subtitle: 'LED Sign Boards',
+    desc: 'Transform your storefront with vibrant, energy-efficient LED sign boards. Custom sizes, full color, built to last.',
+    cta1: { label: 'Enquire on WhatsApp', action: () => openWhatsApp('Hi! I need LED Sign Boards for my business.', 'LED Sign Boards'), type: 'whatsapp' },
+    cta2: { label: 'View Details', to: '/services/led-sign-boards', type: 'primary' },
+    stat: { label: 'Starting From', value: '₹2,500', sub: 'per sq.ft' },
+    Icon: Lightbulb,
+    visual: {
+      img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80',
+      tag: 'LED Sign Board',
+    },
+  },
+  {
+    id: 'uv',
+    badge: 'Premium Quality',
+    title: 'Vivid Prints',
+    titleAccent: 'That Last.',
+    subtitle: 'UV Printing Services',
+    desc: 'High-definition UV flatbed printing on any surface. Sun boards, acrylics, metals — sharp & weather-proof.',
+    cta1: { label: 'Get a Free Quote', action: () => openWhatsApp('Hi! I want a quote for UV Printing.', 'UV Printing'), type: 'whatsapp' },
+    cta2: { label: 'View Details', to: '/services/uv-printing', type: 'primary' },
+    stat: { label: 'Turnaround', value: '2–3 Days', sub: 'express available' },
+    Icon: Printer,
+    visual: {
+      img: 'https://images.unsplash.com/photo-1636633762833-5d1658f1e29b?auto=format&fit=crop&w=600&q=80',
+      tag: 'UV Print',
+    },
+  },
+  {
+    id: 'acrylic',
+    badge: 'Premium 3D',
+    title: '3D Presence,',
+    titleAccent: 'Premium Look.',
+    subtitle: 'Acrylic Sign Boards',
+    desc: 'Elegant backlit acrylic letters and sign boards for offices, showrooms & retail stores. Premium finish guaranteed.',
+    cta1: { label: 'Enquire on WhatsApp', action: () => openWhatsApp('Hi! I need Acrylic Sign Boards.', 'Acrylic Sign Boards'), type: 'whatsapp' },
+    cta2: { label: 'View Details', to: '/services/acrylic-sign-boards', type: 'primary' },
+    stat: { label: 'Starting From', value: '₹3,500', sub: 'custom shapes' },
+    Icon: Box,
+    visual: {
+      img: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=600&q=80',
+      tag: 'Acrylic Board',
+    },
+  },
+];
+
+function HeroCarousel() {
+  const [current, setCurrent] = useState(0);
+  const [animating, setAnimating] = useState(false);
+  const [direction, setDirection] = useState('next');
+  const timerRef = useRef(null);
+
+  const goTo = useCallback((idx, dir = 'next') => {
+    if (animating) return;
+    setDirection(dir);
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrent(idx);
+      setAnimating(false);
+    }, 380);
+  }, [animating]);
+
+  const prev = () => goTo((current - 1 + HERO_SLIDES.length) % HERO_SLIDES.length, 'prev');
+  const next = useCallback(() => goTo((current + 1) % HERO_SLIDES.length, 'next'), [current, goTo]);
+
+  useEffect(() => {
+    timerRef.current = setInterval(next, 4000);
+    return () => clearInterval(timerRef.current);
+  }, [next]);
+
+  const slide = HERO_SLIDES[current];
+  const SlideIcon = slide.Icon;
+
+  return (
+    <section style={{ position: 'relative', overflow: 'hidden', paddingTop: '4.5rem' }}>
+      <style>{heroGridStyle}</style>
+      {/* Ambient orbs */}
+      <div className="orb orb-purple" />
+      <div className="orb orb-pink" />
+
+      {/* Carousel wrapper */}
+      <div style={{
+        background: 'var(--bg-main)',
+        transition: 'background 0.6s ease',
+        position: 'relative',
+      }}>
+        {/* Dynamic bg gradient per slide */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'var(--grad-hero)',
+          transition: 'background 0.6s ease',
+          pointerEvents: 'none', zIndex: 0,
+        }} />
+
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '3rem',
+            alignItems: 'center',
+            minHeight: '88vh',
+            padding: '4rem 0 3rem',
+          }}
+          className="hero-carousel-grid"
+          >
+            {/* ── LEFT: Text Content ── */}
+            <div style={{
+              opacity: animating ? 0 : 1,
+              transform: animating
+                ? `translateX(${direction === 'next' ? '-40px' : '40px'})`
+                : 'translateX(0)',
+              transition: 'opacity 0.38s ease, transform 0.38s ease',
+            }}>
+              {/* Gradient pill badge */}
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                background: 'var(--badge-bg-purple)',
+                padding: '0.35rem 1rem', borderRadius: 999,
+                fontSize: '0.78rem', fontWeight: 700, color: 'var(--brand-violet)',
+                letterSpacing: '0.04em', textTransform: 'uppercase',
+                marginBottom: '1.5rem',
+                border: '1px solid var(--badge-border-purple)',
+                boxShadow: `var(--shadow-sm)`,
+              }}>
+                <Sparkles size={14} color="var(--brand-violet)" />
+                {slide.badge}
+              </div>
+
+              {/* Subtitle */}
+              <p style={{
+                fontSize: '0.95rem', fontWeight: 700,
+                color: 'var(--brand-violet)',
+                marginBottom: '0.6rem',
+                textTransform: 'uppercase', letterSpacing: '0.05em',
+              }}>
+                {slide.subtitle}
+              </p>
+
+              {/* Main headline */}
+              <h1 style={{
+                fontSize: 'clamp(2.6rem, 5vw, 4.2rem)',
+                fontWeight: 900, lineHeight: 1.1,
+                letterSpacing: '-0.03em',
+                color: 'var(--text-main)',
+                marginBottom: '0.25rem',
+              }}>
+                {slide.title}
+              </h1>
+              <h1 
+                className="gradient-text"
+                style={{
+                  fontSize: 'clamp(2.6rem, 5vw, 4.2rem)',
+                  fontWeight: 900, lineHeight: 1.1,
+                  letterSpacing: '-0.03em',
+                  marginBottom: '1.5rem',
+                  backgroundImage: 'var(--grad-primary)',
+                }}
+              >
+                {slide.titleAccent}
+              </h1>
+
+              {/* Description */}
+              <p style={{
+                fontSize: '1.1rem', color: 'var(--text-muted)',
+                lineHeight: 1.75, maxWidth: 480,
+                marginBottom: '2.25rem',
+              }}>
+                {slide.desc}
+              </p>
+
+              {/* CTA Buttons */}
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
+                <button
+                  onClick={slide.cta1.action}
+                  className="btn-whatsapp"
+                  style={{ padding: '0.95rem 2rem', fontSize: '0.95rem' }}
+                >
+                  <MessageCircle size={18} /> {slide.cta1.label}
+                </button>
+                <Link
+                  to={slide.cta2.to}
+                  className="btn-secondary"
+                  style={{ padding: '0.95rem 2rem', fontSize: '0.95rem' }}
+                >
+                  <Eye size={18} /> {slide.cta2.label}
+                </Link>
+              </div>
+
+              {/* Happy Customers Row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex' }}>
+                  {['#7C3AED', '#DB2777', '#D97706', '#059669'].map((c, i) => (
+                    <div key={i} style={{
+                      width: 36, height: 36, borderRadius: '50%',
+                      background: `linear-gradient(135deg, ${c} 0%, ${c}99 100%)`,
+                      border: '2px solid var(--bg-main)',
+                      marginLeft: i > 0 ? -10 : 0,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '0.7rem', color: 'white', fontWeight: 800,
+                    }}>
+                      {['A', 'R', 'S', 'M'][i]}
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-main)' }}>
+                    500+ Happy Customers
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>
+                    Across Pune & Maharashtra
+                  </div>
+                </div>
+
+                {/* Price stat pill */}
+                <div style={{
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--border-light)',
+                  borderRadius: 'var(--radius-lg)',
+                  padding: '0.6rem 1rem',
+                  boxShadow: 'var(--shadow-md)',
+                  marginLeft: 'auto',
+                }}>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)', fontWeight: 600 }}>
+                    {slide.stat.label}
+                  </div>
+                  <div 
+                    className="gradient-text"
+                    style={{
+                      fontSize: '1.3rem', fontWeight: 900, fontFamily: 'Outfit',
+                      backgroundImage: 'var(--grad-primary)',
+                      lineHeight: 1.1,
+                    }}
+                  >
+                    {slide.stat.value}
+                  </div>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)' }}>
+                    {slide.stat.sub}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ── RIGHT: Visual Panel ── */}
+            <div style={{
+              opacity: animating ? 0 : 1,
+              transform: animating
+                ? `translateX(${direction === 'next' ? '40px' : '-40px'}) scale(0.96)`
+                : 'translateX(0) scale(1)',
+              transition: 'opacity 0.38s ease, transform 0.42s cubic-bezier(0.4,0,0.2,1)',
+              display: 'flex', justifyContent: 'center', alignItems: 'center',
+            }}>
+              <div style={{
+                position: 'relative',
+                width: '100%',
+                maxWidth: 520,
+                borderRadius: '2rem',
+                overflow: 'hidden',
+                background: `linear-gradient(135deg, var(--bg-card) 0%, var(--bg-subtle) 100%)`,
+                border: '1px solid var(--border-light)',
+                boxShadow: `0 30px 80px -10px rgba(0,0,0,0.2), 0 0 0 1px var(--border-light)`,
+                aspectRatio: '4/3',
+              }}>
+                {/* Soft gradient overlay on image */}
+                <img
+                  src={slide.visual.img}
+                  alt={slide.subtitle}
+                  style={{
+                    width: '100%', height: '100%',
+                    objectFit: 'cover',
+                    transition: 'transform 0.5s ease',
+                  }}
+                  onError={e => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+                {/* Gradient tint overlay */}
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  background: `linear-gradient(135deg, rgba(124,58,237,0.1) 0%, transparent 60%)`,
+                  pointerEvents: 'none',
+                }} />
+
+                {/* Service tag chip */}
+                <div style={{
+                  position: 'absolute', top: 16, left: 16,
+                  background: 'rgba(255,255,255,0.12)',
+                  backdropFilter: 'blur(14px)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  borderRadius: 999,
+                  padding: '0.35rem 0.9rem',
+                  fontSize: '0.75rem', fontWeight: 700, color: '#fff',
+                  textTransform: 'uppercase', letterSpacing: '0.06em',
+                }}>
+                  {slide.visual.tag}
+                </div>
+
+                {/* Floating icon badge */}
+                <div style={{
+                  position: 'absolute', bottom: 16, right: 16,
+                  width: 56, height: 56, borderRadius: '50%',
+                  background: 'var(--grad-primary)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: `var(--shadow-md)`,
+                  border: '2px solid rgba(255,255,255,0.25)',
+                }}>
+                  <SlideIcon size={26} color="white" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Prev/Next Arrows ── */}
+        <button
+          onClick={prev}
+          aria-label="Previous slide"
+          style={{
+            position: 'absolute', left: '1.5rem', top: '50%', transform: 'translateY(-50%)',
+            width: 48, height: 48, borderRadius: '50%',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border-light)',
+            boxShadow: 'var(--shadow-md)',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: 'var(--text-main)', zIndex: 10,
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'var(--brand-violet)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'var(--brand-violet)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'var(--bg-card)'; e.currentTarget.style.color = 'var(--text-main)'; e.currentTarget.style.borderColor = 'var(--border-light)'; }}
+        >
+          <ChevronLeft size={22} />
+        </button>
+        <button
+          onClick={next}
+          aria-label="Next slide"
+          style={{
+            position: 'absolute', right: '1.5rem', top: '50%', transform: 'translateY(-50%)',
+            width: 48, height: 48, borderRadius: '50%',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border-light)',
+            boxShadow: 'var(--shadow-md)',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: 'var(--text-main)', zIndex: 10,
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'var(--brand-violet)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'var(--brand-violet)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'var(--bg-card)'; e.currentTarget.style.color = 'var(--text-main)'; e.currentTarget.style.borderColor = 'var(--border-light)'; }}
+        >
+          <ChevronRight size={22} />
+        </button>
+
+        {/* ── Dot Navigation ── */}
+        <div style={{
+          position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', gap: '0.6rem', zIndex: 10,
+        }}>
+          {HERO_SLIDES.map((s, i) => (
+            <button
+              key={s.id}
+              onClick={() => goTo(i, i > current ? 'next' : 'prev')}
+              aria-label={`Go to slide ${i + 1}`}
+              style={{
+                width: i === current ? 28 : 10,
+                height: 10,
+                borderRadius: 999,
+                border: 'none', cursor: 'pointer',
+                background: i === current ? 'var(--brand-violet)' : 'var(--border-light)',
+                transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)',
+                opacity: i === current ? 1 : 0.5,
+                padding: 0,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ── Main Home Component ──────────────────────────────────────
 export default function Home() {
   const [services,  setServices]  = useState([]);
@@ -153,7 +550,7 @@ export default function Home() {
   const [loading,   setLoading]   = useState(true);
 
   useEffect(() => {
-    document.title = 'Aarav Enterprises — Graphic Design, Multimedia & Branding';
+    document.title = 'Aarav Enterprises — Signage, LED Boards & Printing in Pune';
     async function load() {
       try {
         const [sRes, pRes] = await Promise.all([
@@ -176,87 +573,45 @@ export default function Home() {
 
   return (
     <>
-      {/* ── HERO SECTION ───────────────────────────────────── */}
+      {/* ── HERO CAROUSEL ──────────────────────────────────── */}
+      <HeroCarousel />
+
+      {/* ── TRUST BAR ──────────────────────────────────────── */}
       <section style={{
-        minHeight: '92vh', display: 'flex', alignItems: 'center',
-        position: 'relative', overflow: 'hidden', padding: '8rem 0 5rem',
-        background: 'var(--grad-hero)',
+        borderTop: '1px solid var(--border-light)',
+        borderBottom: '1px solid var(--border-light)',
+        background: 'var(--bg-surface)',
+        padding: '1.75rem 0',
       }}>
-        <div className="orb orb-purple" />
-        <div className="orb orb-pink" />
-        <div className="orb orb-amber" />
-
-        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <div style={{ maxWidth: 840, margin: '0 auto', textAlign: 'center' }}>
-            {/* AI Pill Badge */}
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
-              background: 'var(--badge-bg-purple)', border: '1px solid var(--badge-border-purple)',
-              padding: '0.5rem 1.25rem', borderRadius: 999, fontSize: '0.85rem',
-              color: 'var(--brand-violet)', fontWeight: 700, marginBottom: '2rem',
-              boxShadow: 'var(--shadow-sm)',
-            }}>
-              <Sparkles size={16} color="#D97706" />
-              <span>AI-Powered WhatsApp Communication System · 24/7 Response</span>
-            </div>
-
-            {/* Main Headline */}
-            <h1 style={{
-              fontSize: 'clamp(2.75rem, 6vw, 4.5rem)', fontWeight: 900,
-              lineHeight: 1.1, marginBottom: '1.5rem', letterSpacing: '-0.03em',
-              color: 'var(--text-main)',
-            }}>
-              Creative Graphic Designs.{' '}
-              <span className="gradient-text">Stunning Branding.</span>{' '}
-              Printing Solutions.
-            </h1>
-
-            <p style={{
-              fontSize: '1.2rem', color: 'var(--text-muted)', lineHeight: 1.8,
-              maxWidth: 680, margin: '0 auto 2.5rem', fontWeight: 500,
-            }}>
-              Transform your business identity with professional logos, visiting cards, banners, brochures, and multimedia assets. Chat directly on WhatsApp with our AI assistant in **English, Hindi, or Marathi**.
-            </p>
-
-            {/* CTAs */}
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '3.5rem' }}>
-              <Link to="/services" className="btn-primary" style={{ padding: '1rem 2.25rem', fontSize: '1rem' }}>
-                Explore All Services <ArrowRight size={20} />
-              </Link>
-              <button onClick={() => openWhatsApp()} className="btn-whatsapp" style={{ padding: '1rem 2.25rem', fontSize: '1rem' }}>
-                <MessageCircle size={20} /> Chat on WhatsApp Now
-              </button>
-            </div>
-
-            {/* Multi-language ticker pill */}
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '1rem',
-              background: 'var(--bg-card)', border: '1px solid var(--border-light)',
-              padding: '0.65rem 1.5rem', borderRadius: 999, fontSize: '0.85rem', color: 'var(--text-muted)',
-              boxShadow: 'var(--shadow-sm)',
-            }}>
-              <Globe size={16} color="var(--brand-violet)" />
-              <span>Multi-Language AI Support: 🇬🇧 English · 🇮🇳 हिंदी · मराठी · Mixed Hinglish</span>
-            </div>
-          </div>
-
-          {/* Stats Bar */}
+        <div className="container">
           <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1.5rem', marginTop: '4.5rem',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1rem',
           }}>
             {[
-              { val: '500+', label: 'Successful Design Projects', sub: 'Logos, Cards, Banners' },
-              { val: '100+', label: 'Happy Business Clients', sub: 'Across Pune & Maharashtra' },
-              { val: '24/7',  label: 'Automated AI Response', sub: 'Instant WhatsApp Replies' },
-              { val: '4.9★', label: 'Client Satisfaction Rating', sub: 'Top Quality Guaranteed' },
-            ].map((s, i) => (
-              <div key={i} className="glass-card glass-card-hover" style={{ padding: '1.75rem', textAlign: 'center' }}>
-                <div style={{ fontSize: '2.5rem', fontWeight: 900, fontFamily: 'Outfit', lineHeight: 1 }} className="gradient-text">
-                  {s.val}
+              { Icon: Palette, title: 'Custom Designs', sub: '100% Original, Made for You' },
+              { Icon: Zap,     title: 'Fast Turnaround', sub: 'Delivery in 1–5 Days' },
+              { Icon: MessageCircle, title: 'WhatsApp Support', sub: 'Chat 24/7 in Hindi & English' },
+              { Icon: Shield,  title: 'Premium Quality', sub: 'Durable & Print-Ready' },
+            ].map(({ Icon, title, sub }, i) => (
+              <div key={i} style={{
+                display: 'flex', alignItems: 'center', gap: '0.85rem',
+                padding: '0.5rem 1rem',
+              }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: 12,
+                  background: 'var(--badge-bg-purple)',
+                  border: '1px solid var(--badge-border-purple)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  <Icon size={18} color="var(--brand-violet)" />
                 </div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)', marginTop: '0.5rem' }}>{s.label}</div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-subtle)', marginTop: '0.25rem' }}>{s.sub}</div>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>{title}</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-subtle)' }}>{sub}</div>
+                </div>
               </div>
             ))}
           </div>

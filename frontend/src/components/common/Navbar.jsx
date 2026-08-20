@@ -59,9 +59,7 @@ export default function Navbar() {
 
         {/* Desktop Nav Links */}
         <div style={{
-          display: 'flex', alignItems: 'center', gap: '0.35rem',
-          background: 'var(--nav-pill-bg)', padding: '0.35rem 0.5rem',
-          borderRadius: 999, border: '1px solid var(--border-light)',
+          display: 'flex', alignItems: 'center', gap: '1.5rem',
         }} className="desktop-nav">
           {NAV_LINKS.map(link => {
             const isActive = location.pathname === link.to || (link.to !== '/' && location.pathname.startsWith(link.to));
@@ -70,17 +68,15 @@ export default function Navbar() {
                 key={link.to}
                 to={link.to}
                 style={{
-                  padding: '0.5rem 1.1rem',
-                  color: isActive ? 'var(--brand-violet)' : 'var(--text-muted)',
-                  fontWeight: isActive ? 700 : 600,
-                  fontSize: '0.9rem',
+                  color: isActive ? 'var(--brand-violet)' : 'var(--text-main)',
+                  fontWeight: isActive ? 700 : 500,
+                  fontSize: '0.95rem',
                   textDecoration: 'none',
-                  borderRadius: 999,
-                  background: isActive ? 'var(--nav-pill-active)' : 'transparent',
-                  boxShadow: isActive ? 'var(--shadow-sm)' : 'none',
-                  transition: 'all 0.25s ease',
+                  transition: 'color 0.2s ease',
                 }}
-              >{link.label}</Link>
+              >
+                {link.label}
+              </Link>
             );
           })}
         </div>

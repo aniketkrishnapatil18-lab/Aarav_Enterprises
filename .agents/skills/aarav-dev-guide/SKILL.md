@@ -795,6 +795,7 @@ The dev branch has an empty `data/` folder. Always include `FALLBACK_SERVICES` a
 5. **axios via `api.js`** — never raw `fetch()` for backend calls
 6. **Both buttons** on any service card: detail link + WhatsApp enquire button
 7. **Always include fallback data** arrays when fetching from API
+8. **Design & Color Theme**: Do NOT use very dark or heavy gradients. Use simple, fresh colors and follow ONE consistent, professional color theme across all components instead of mixing multiple themes.
 
 ### File Naming
 - Components → `PascalCase.jsx`
