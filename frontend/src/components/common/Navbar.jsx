@@ -36,7 +36,7 @@ export default function Navbar() {
       borderBottom: scrolled ? '1px solid var(--border-light)' : '1px solid transparent',
       boxShadow: scrolled ? 'var(--shadow-md)' : 'none',
     }}>
-      <div style={{ maxWidth: 1240, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ width: '100%', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* Brand Logo */}
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', textDecoration: 'none' }}>
           <div style={{
