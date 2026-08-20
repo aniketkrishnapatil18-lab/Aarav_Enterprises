@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import {
   ArrowRight, MessageCircle, Palette, Zap, Shield,
   Eye, ChevronLeft, ChevronRight, Sparkles,
-  Lightbulb, Printer, Box
+  Lightbulb, Printer, Box,
+  Youtube, Instagram, Linkedin, Twitter
 } from 'lucide-react';
 
 /* Responsive hero grid: stack on mobile */
@@ -279,9 +280,32 @@ function HeroCentered() {
           Order Now
         </button>
         
-        <p style={{ marginTop: '1rem', fontSize: '0.85rem', color: 'var(--text-subtle)', fontWeight: 500 }}>
+        <p style={{ marginTop: '1rem', fontSize: '0.85rem', color: 'var(--text-subtle)', fontWeight: 500, marginBottom: '3rem' }}>
           Free quote available. No upfront costs.
         </p>
+
+        {/* Floating Social Icons (Reference: quso.ai) */}
+        <div style={{
+          display: 'flex', justifyContent: 'center', gap: '1.25rem', marginTop: '1rem',
+          flexWrap: 'wrap', maxWidth: 400, margin: '0 auto'
+        }}>
+          {[
+            { icon: Youtube, color: '#FF0000', label: 'YouTube' },
+            { icon: Instagram, color: '#E1306C', label: 'Instagram' },
+            { icon: Linkedin, color: '#0A66C2', label: 'LinkedIn' },
+            { icon: Twitter, color: '#000000', label: 'X (Twitter)' }
+          ].map((item, idx) => (
+            <div key={idx} className={idx % 2 === 0 ? "animate-float-slow" : "animate-float-fast"} style={{
+              width: 50, height: 50, borderRadius: '1rem',
+              background: 'var(--bg-card)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)',
+              transform: `translateY(${idx % 2 === 0 ? '5px' : '-5px'})`,
+            }}>
+              <item.icon size={22} color={item.color} />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
