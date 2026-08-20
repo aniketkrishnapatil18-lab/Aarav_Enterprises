@@ -452,7 +452,7 @@ export default function Home() {
               { id: 'cat-7', name: 'Letter Sign Board', thumbnail_url: 'https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=400&q=80', starting_price: 1299 },
               { id: 'cat-8', name: 'LED Acrylic Letter', thumbnail_url: 'https://images.unsplash.com/photo-1601662528567-526cd06f6582?auto=format&fit=crop&w=400&q=80', starting_price: 3499 },
             ].map(s => (
-              <div key={s.id} style={{ minWidth: '240px', flexShrink: 0 }}>
+              <div key={s.id} style={{ minWidth: '200px', flexShrink: 0 }}>
                 <ServiceCard service={s} />
               </div>
             ))}
