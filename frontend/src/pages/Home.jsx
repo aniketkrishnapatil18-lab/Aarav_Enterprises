@@ -20,95 +20,35 @@ const heroGridStyle = `
 import { productAPI, portfolioAPI } from '../services/api';
 import { openWhatsApp } from '../utils/helpers';
 
-// ── Service Card Component ───────────────────────────────────
+// ── Service Card Component (Shop by Category Style) ───────────
 function ServiceCard({ service }) {
   return (
-    <div className="service-card">
-      <div className="img-container">
+    <Link to={`/services/${service.slug || service.id}`} style={{ textDecoration: 'none', display: 'block' }}>
+      <div style={{
+        background: 'var(--bg-subtle)', 
+        borderRadius: '1.25rem',
+        padding: '1.5rem',
+        boxShadow: 'var(--shadow-sm)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        marginBottom: '1rem',
+        aspectRatio: '1 / 1',
+        overflow: 'hidden',
+      }}>
         {service.thumbnail_url ? (
-          <img src={service.thumbnail_url} alt={service.name} loading="lazy" />
+          <img src={service.thumbnail_url} alt={service.name} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
         ) : (
-          <div style={{
-            height: '100%', background: 'linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(219,39,119,0.08) 100%)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <Palette size={48} color="var(--brand-violet)" style={{ opacity: 0.7 }} />
-          </div>
+          <Palette size={48} color="var(--brand-violet)" style={{ opacity: 0.5 }} />
         )}
-        <div style={{
-          position: 'absolute', top: 12, left: 12, right: 12,
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        }}>
-          <span style={{
-            background: 'var(--bg-card)', backdropFilter: 'blur(10px)',
-            border: '1px solid var(--border-light)', padding: '0.2rem 0.65rem',
-            borderRadius: 999, fontSize: '0.7rem', fontWeight: 700, color: 'var(--brand-violet)',
-            textTransform: 'uppercase', letterSpacing: '0.05em', boxShadow: 'var(--shadow-sm)',
-          }}>
-            {service.category_name || 'Design'}
-          </span>
-          {service.is_featured && (
-            <span style={{
-              background: 'linear-gradient(135deg, #D97706, #DB2777)',
-              padding: '0.2rem 0.65rem', borderRadius: 999,
-              fontSize: '0.7rem', fontWeight: 800, color: 'white',
-              boxShadow: '0 4px 12px rgba(217,119,6,0.3)',
-            }}>⭐ Popular</span>
-          )}
-        </div>
       </div>
-
-      <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
-        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--text-main)' }}>{service.name}</h3>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.25rem', flex: 1 }}>
-          {service.short_desc}
+      <div>
+        <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.2rem' }}>
+          {service.name}
+        </h3>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-subtle)' }}>
+          {service.starting_price > 0 ? `Starting from ₹${service.starting_price}` : 'Explore'}
         </p>
-
-        <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '0.75rem 1rem', background: 'var(--bg-subtle)',
-          borderRadius: '0.75rem', border: '1px solid var(--border-light)',
-          marginBottom: '1.25rem',
-        }}>
-          <div>
-            <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Starting From</div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--brand-violet)', fontFamily: 'Outfit' }}>
-              {service.starting_price > 0
-                ? `₹${parseInt(service.starting_price).toLocaleString('en-IN')}`
-                : 'Configurable'}
-              {service.price_label && <span style={{ fontSize: '0.75rem', color: 'var(--text-subtle)', fontWeight: 500, marginLeft: 4 }}>{service.price_label}</span>}
-            </div>
-          </div>
-          {service.delivery_days && (
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Turnaround</div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-main)' }}>⚡ {service.delivery_days} Days</div>
-            </div>
-          )}
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
-          <Link to={`/services/${service.slug || service.id}`}
-            style={{
-              textAlign: 'center', padding: '0.65rem', borderRadius: '0.6rem',
-              background: 'var(--badge-bg-purple)', color: 'var(--brand-violet)',
-              textDecoration: 'none', fontSize: '0.85rem', fontWeight: 700,
-              border: '1px solid var(--badge-border-purple)', transition: 'all 0.25s ease',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem',
-            }}
-          >
-            <Eye size={15} /> Details
-          </Link>
-          <button
-            onClick={() => openWhatsApp(`Hi! I'm interested in your ${service.name} service.`, service.name)}
-            className="btn-whatsapp"
-            style={{ padding: '0.65rem', fontSize: '0.85rem', borderRadius: '0.6rem', justifyContent: 'center' }}
-          >
-            <MessageCircle size={15} /> Enquire
-          </button>
-        </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -489,34 +429,26 @@ export default function Home() {
       </section>
 
       {/* ── FEATURED SERVICES ──────────────────────────────── */}
-      <section className="section" id="services">
+      <section className="section" id="services" style={{ paddingTop: '2.5rem' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <div style={{
-              display: 'inline-block', background: 'var(--badge-bg-purple)',
-              color: 'var(--brand-violet)', padding: '0.35rem 1rem', borderRadius: 999,
-              fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase',
-              letterSpacing: '0.06em', marginBottom: '0.75rem',
-            }}>What We Offer</div>
-            <h2 className="section-title">Our Premier <span className="gradient-text">Design Services</span></h2>
-            <p className="section-subtitle">High-quality graphic design, branding, and printing solutions crafted specifically for your business growth.</p>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '2rem' }}>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
+              Shop by Category
+            </h2>
+            <Link to="/services" style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-muted)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              View All <ArrowRight size={14} />
+            </Link>
           </div>
 
           {loading ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-              {[...Array(6)].map((_, i) => <div key={i} className="skeleton" style={{ height: 420 }} />)}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem' }}>
+              {[...Array(5)].map((_, i) => <div key={i} className="skeleton" style={{ height: 260, borderRadius: '1.25rem' }} />)}
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.75rem' }}>
-              {displayServices.map(s => <ServiceCard key={s.id || s.name} service={s} />)}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem' }}>
+              {displayServices.slice(0, 5).map(s => <ServiceCard key={s.id || s.name} service={s} />)}
             </div>
           )}
-
-          <div style={{ textAlign: 'center', marginTop: '3.5rem' }}>
-            <Link to="/services" className="btn-primary" style={{ padding: '0.9rem 2.25rem' }}>
-              View All Services Catalog <ArrowRight size={18} />
-            </Link>
-          </div>
         </div>
       </section>
 
