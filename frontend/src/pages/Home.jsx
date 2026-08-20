@@ -179,54 +179,104 @@ function HeroCentered() {
       <div className="orb orb-purple" style={{ top: '20%', left: '30%', opacity: 0.5 }} />
       <div className="orb orb-pink" style={{ top: '40%', right: '30%', opacity: 0.3 }} />
 
-      {/* ── FLOATING ELEMENTS ── */}
-      {/* Top Left Badge */}
+      {/* ── FLOATING ELEMENTS (Quso.ai Style) ── */}
+      {/* Top Left Group */}
       <div className="animate-float-slow hero-float-el" style={{
-        position: 'absolute', top: '15%', left: '8%',
-        background: 'var(--bg-card)', padding: '0.75rem 1.25rem', borderRadius: '1rem',
-        boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)',
-        alignItems: 'center', gap: '0.6rem', zIndex: 10,
+        position: 'absolute', top: '12%', left: '6%',
+        display: 'flex', alignItems: 'center', gap: '0.8rem', zIndex: 10
       }}>
-        <Zap size={18} color="var(--brand-violet)" />
-        <span style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-main)' }}>Fast Turnaround</span>
-      </div>
-
-      {/* Top Right Badge */}
-      <div className="animate-float-fast hero-float-el" style={{
-        position: 'absolute', top: '20%', right: '10%',
-        background: 'var(--bg-card)', padding: '0.75rem 1.25rem', borderRadius: '1rem',
-        boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)',
-        alignItems: 'center', gap: '0.6rem', zIndex: 10,
-      }}>
-        <Sparkles size={18} color="var(--brand-violet)" />
-        <span style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-main)' }}>Premium Quality</span>
-      </div>
-
-      {/* Bottom Left Image Card */}
-      <div className="animate-float-fast hero-float-img" style={{
-        position: 'absolute', bottom: '15%', left: '5%',
-        background: 'var(--bg-card)', padding: '0.5rem', borderRadius: '1.25rem',
-        boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-light)',
-        width: 240, zIndex: 10,
-      }}>
-        <img src="https://images.unsplash.com/photo-1636633762833-5d1658f1e29b?auto=format&fit=crop&w=400&q=80" alt="UV Printing" style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: '0.85rem' }} />
-        <div style={{ padding: '0.75rem 0.5rem 0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Printer size={16} color="var(--brand-pink)" />
-          <span style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-main)' }}>UV Printing</span>
+        <div style={{
+          background: 'var(--bg-card)', padding: '0.75rem 1.25rem', borderRadius: '0.75rem',
+          boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)',
+        }}>
+          <span style={{ fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-main)' }}>Custom Sizes</span>
+        </div>
+        <div style={{
+          background: 'var(--bg-card)', padding: '0.5rem', borderRadius: '0.75rem',
+          boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '1.5rem'
+        }}>
+          <Zap size={20} color="var(--brand-violet)" />
         </div>
       </div>
 
-      {/* Bottom Right Image Card */}
-      <div className="animate-float-slow hero-float-img" style={{
-        position: 'absolute', bottom: '22%', right: '5%',
-        background: 'var(--bg-card)', padding: '0.5rem', borderRadius: '1.25rem',
-        boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-light)',
-        width: 260, zIndex: 10,
+      {/* Top Right Group */}
+      <div className="animate-float-fast hero-float-el" style={{
+        position: 'absolute', top: '16%', right: '6%',
+        display: 'flex', alignItems: 'center', gap: '0.8rem', zIndex: 10
       }}>
-        <img src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=400&q=80" alt="Acrylic Sign Boards" style={{ width: '100%', height: 180, objectFit: 'cover', borderRadius: '0.85rem' }} />
-        <div style={{ padding: '0.75rem 0.5rem 0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Box size={16} color="var(--brand-violet)" />
-          <span style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-main)' }}>Acrylic Sign Boards</span>
+        <div style={{
+          background: 'var(--bg-card)', padding: '0.5rem', borderRadius: '0.75rem',
+          boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem'
+        }}>
+          <Sparkles size={20} color="var(--brand-pink)" />
+        </div>
+        <div style={{
+          background: 'var(--bg-card)', padding: '0.75rem 1.25rem', borderRadius: '0.75rem',
+          boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)',
+        }}>
+          <span style={{ fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-main)' }}>Premium Quality</span>
+        </div>
+      </div>
+
+      {/* Bottom Left Overlapping Cards */}
+      <div className="animate-float-fast hero-float-img" style={{
+        position: 'absolute', bottom: '12%', left: '2%', zIndex: 10, width: 320, height: 220
+      }}>
+        {/* Back Card */}
+        <div style={{
+          position: 'absolute', bottom: 20, left: 10,
+          background: 'var(--bg-card)', padding: '0.4rem', borderRadius: '1rem',
+          boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-light)',
+          width: 220, transform: 'rotate(-8deg)', transformOrigin: 'bottom left'
+        }}>
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=80" alt="LED Board" style={{ width: '100%', height: 130, objectFit: 'cover', borderRadius: '0.6rem' }} />
+        </div>
+        {/* Front Card */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 70,
+          background: 'var(--bg-card)', padding: '0.5rem', borderRadius: '1rem',
+          boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-light)',
+          width: 240, transform: 'rotate(5deg)'
+        }}>
+          <img src="https://images.unsplash.com/photo-1636633762833-5d1658f1e29b?auto=format&fit=crop&w=400&q=80" alt="UV Printing" style={{ width: '100%', height: 140, objectFit: 'cover', borderRadius: '0.75rem' }} />
+          <div style={{ padding: '0.5rem 0.25rem 0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Printer size={14} color="var(--brand-pink)" />
+            <span style={{ fontWeight: 700, fontSize: '0.75rem', color: 'var(--text-main)' }}>UV Printing</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Right Overlapping Cards */}
+      <div className="animate-float-slow hero-float-img" style={{
+        position: 'absolute', bottom: '16%', right: '2%', zIndex: 10, width: 320, height: 240
+      }}>
+        {/* Back Card */}
+        <div style={{
+          position: 'absolute', top: 0, right: 90,
+          background: 'var(--bg-card)', padding: '0.4rem', borderRadius: '1rem',
+          boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-light)',
+          width: 200, transform: 'rotate(6deg)'
+        }}>
+           <div style={{ background: 'var(--bg-subtle)', height: 120, borderRadius: '0.6rem', padding: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div style={{ width: '50%', height: 8, background: 'var(--border-light)', borderRadius: 4 }}></div>
+              <div style={{ width: '90%', height: 8, background: 'var(--border-light)', borderRadius: 4 }}></div>
+              <div style={{ width: '70%', height: 8, background: 'var(--border-light)', borderRadius: 4 }}></div>
+           </div>
+        </div>
+        {/* Front Card */}
+        <div style={{
+          position: 'absolute', top: 30, right: 10,
+          background: 'var(--bg-card)', padding: '0.5rem', borderRadius: '1rem',
+          boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-light)',
+          width: 250, transform: 'rotate(-4deg)'
+        }}>
+          <img src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=400&q=80" alt="Acrylic Sign Boards" style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: '0.75rem' }} />
+          <div style={{ padding: '0.5rem 0.25rem 0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Box size={14} color="var(--brand-violet)" />
+            <span style={{ fontWeight: 700, fontSize: '0.75rem', color: 'var(--text-main)' }}>Acrylic Boards</span>
+          </div>
         </div>
       </div>
 
