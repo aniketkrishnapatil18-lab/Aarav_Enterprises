@@ -52,32 +52,40 @@ function ServiceCard({ service }) {
   );
 }
 
-// ── Portfolio Thumb ──────────────────────────────────────────
+// ── Portfolio Thumb (Shop by Category Style) ─────────────────
 function PortfolioThumb({ item }) {
   return (
-    <div className="portfolio-card">
-      <img
-        src={item.image_url}
-        alt={item.title}
-        loading="lazy"
-        onError={e => { e.target.src = `https://placehold.co/500x380/160C33/A78BFA?text=${encodeURIComponent(item.category_name || 'Design')}`; }}
-      />
-      <div className="overlay">
-        <div>
-          <div style={{
-            display: 'inline-block', background: 'rgba(124, 58, 237, 0.3)',
-            border: '1px solid rgba(124, 58, 237, 0.5)', padding: '0.2rem 0.6rem',
-            borderRadius: 999, fontSize: '0.7rem', color: '#A78BFA', fontWeight: 700,
-            marginBottom: '0.4rem', textTransform: 'uppercase',
-          }}>
-            {item.category_name}
-          </div>
-          <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#FFFFFF', fontFamily: 'Outfit' }}>
-            {item.title}
-          </div>
-        </div>
+    <Link to="/portfolio" style={{ textDecoration: 'none', display: 'block' }}>
+      <div style={{
+        background: 'var(--bg-subtle)', 
+        borderRadius: '1.25rem',
+        padding: '1.5rem',
+        boxShadow: 'var(--shadow-sm)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        marginBottom: '1rem',
+        aspectRatio: '1 / 1',
+        overflow: 'hidden',
+        position: 'relative'
+      }}>
+        {item.category_name && (
+          <span style={{
+             position: 'absolute', top: 12, left: 12,
+             background: 'var(--brand-violet)', color: 'white',
+             padding: '0.2rem 0.6rem', borderRadius: 999,
+             fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase'
+          }}>{item.category_name}</span>
+        )}
+        <img src={item.image_url} alt={item.title} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} onError={e => { e.target.src = `https://placehold.co/500x500/160C33/A78BFA?text=${encodeURIComponent(item.category_name || 'Design')}`; }} />
       </div>
-    </div>
+      <div>
+        <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.2rem' }}>
+          {item.title}
+        </h3>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-subtle)' }}>
+          {item.category_name || 'Design'}
+        </p>
+      </div>
+    </Link>
   );
 }
 
@@ -460,28 +468,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── PORTFOLIO SHOWCASE ───────────────────────────────── */}
-      <section className="section" style={{ background: 'var(--bg-surface)' }}>
+      {/* ── RECENT WORK ───────────────────────────────────────── */}
+      <section className="section" style={{ background: 'var(--bg-surface)', paddingTop: '2.5rem' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <div style={{
-              display: 'inline-block', background: 'rgba(219, 39, 119, 0.12)',
-              color: 'var(--brand-pink)', padding: '0.35rem 1rem', borderRadius: 999,
-              fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase',
-              letterSpacing: '0.06em', marginBottom: '0.75rem',
-            }}>Creative Work</div>
-            <h2 className="section-title">Design <span className="gradient-text-sec">Portfolio</span></h2>
-            <p className="section-subtitle">Take a look at some of our recent logo, business card, brochure, and menu card design samples.</p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.25rem' }}>
-            {displayPortfolio.map((item, i) => <PortfolioThumb key={item.id || i} item={item} />)}
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: '3.5rem' }}>
-            <Link to="/portfolio" className="btn-secondary" style={{ padding: '0.9rem 2.25rem' }}>
-              Explore Full Portfolio Gallery <ArrowRight size={18} />
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '2rem' }}>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
+              Recent work
+            </h2>
+            <Link to="/portfolio" style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-muted)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              View All <ArrowRight size={14} />
             </Link>
+          </div>
+
+          <div className="hide-scroll" style={{ display: 'flex', overflowX: 'auto', gap: '1.5rem', paddingBottom: '1rem', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            {displayPortfolio.map((item, i) => (
+              <div key={item.id || i} style={{ minWidth: '200px', flexShrink: 0 }}>
+                <PortfolioThumb item={item} />
+              </div>
+            ))}
           </div>
         </div>
       </section>
