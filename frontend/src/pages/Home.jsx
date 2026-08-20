@@ -276,7 +276,7 @@ function HeroCentered() {
           className="btn-whatsapp"
           style={{ padding: '1.1rem 2.5rem', fontSize: '1.05rem', borderRadius: 'var(--radius-lg)' }}
         >
-          Order Now
+          Explore More
         </button>
         
         <p style={{ marginTop: '1rem', fontSize: '0.85rem', color: 'var(--text-subtle)', fontWeight: 500, marginBottom: '3rem' }}>
