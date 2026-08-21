@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { to: '/admin/conversations',label: 'WhatsApp Chat',   icon: MessageCircle },
   { to: '/admin/products',     label: 'Services Catalog',icon: Package },
   { to: '/admin/portfolio',    label: 'Portfolio Showcase', icon: Image },
+  { to: '/admin/clients',      label: 'Clients',         icon: Users },
   { to: '/admin/knowledge',    label: 'AI Knowledge Base',icon: BookOpen },
   { to: '/admin/notifications',label: 'Notifications',   icon: Bell },
   { to: '/admin/reports',      label: 'Reports & Analytics', icon: BarChart2 },

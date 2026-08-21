@@ -1,24 +1,30 @@
 import { useState, useEffect } from 'react';
-import { portfolioAPI, categoryAPI } from '../services/api';
+import { portfolioAPI, categoryAPI, clientAPI } from '../services/api';
 import { openWhatsApp } from '../utils/helpers';
+import { CheckCircle2, Factory, Info, Award, MessageSquare, Download, Briefcase, ChevronRight } from 'lucide-react';
+import AdminAccessSection from '../components/AdminAccess/AdminAccessSection';
 
 export default function Portfolio() {
-  const [items,      setItems]      = useState([]);
+  const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [loading,    setLoading]    = useState(true);
-  const [active,     setActive]     = useState('all');
-  const [selected,   setSelected]   = useState(null);
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('intro');
+  const [activeCat, setActiveCat] = useState('all');
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     document.title = 'Portfolio — Aarav Enterprises';
     async function load() {
       try {
-        const [pRes, cRes] = await Promise.all([
+        const [pRes, cRes, clRes] = await Promise.all([
           portfolioAPI.list({ active: true }),
           categoryAPI.list({ active: true }),
+          clientAPI.list({ active: true }),
         ]);
         setItems(pRes.data.data || []);
         setCategories(cRes.data.data || []);
+        setClients(clRes.data.data || []);
       } catch {
         setItems(FALLBACK_PORTFOLIO);
         setCategories(FALLBACK_CATS);
@@ -29,108 +35,200 @@ export default function Portfolio() {
     load();
   }, []);
 
-  const filtered = active === 'all' ? items : items.filter(i => i.category_slug === active || i.category_id?.toString() === active);
+  const filteredItems = activeCat === 'all' ? items : items.filter(i => i.category_slug === activeCat || i.category_id?.toString() === activeCat);
+
+  const sidebarTabs = [
+    { id: 'intro', label: 'Introduction & Profiles' },
+    { id: 'testimonial', label: 'Testimonial' },
+    { id: 'about', label: 'About The Company' },
+    { id: 'brochure', label: 'Download Brochure' },
+    { id: 'clients', label: 'Our Clients' },
+  ];
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'intro':
+        return (
+          <div className="tab-content-animation">
+            <h2 style={{ fontSize: '1.75rem', marginBottom: '1.5rem', color: 'var(--text-main)', fontFamily: 'Outfit' }}>Introduction & Profiles</h2>
+            <div className="glass-card" style={{ padding: '2rem', marginBottom: '2rem', borderRadius: 'var(--radius-lg)' }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', lineHeight: 1.8 }}>
+                “Aarav Enterprises” is a well-known Manufacturer of a trendy and flawless assortment of LED Sign Boards, Designer Canopies, Innovative Branding, etc. Incepted in the year 2019 at Pune (Maharashtra, India), we design these products as per current market trends. We are actively committed to providing high-quality products that are widely appreciated for their mesmerizing look, smooth texture, longevity, and colorfastness. Managed under the headship of our CEO, our firm has covered a foremost share in the market.
+              </p>
+            </div>
+
+            <h3 style={{ fontSize: '1.4rem', marginTop: '3rem', marginBottom: '1.2rem', color: 'var(--text-main)', fontFamily: 'Outfit' }}>Statutory Profile</h3>
+            <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '2rem', borderRadius: 'var(--radius-lg)' }}>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'var(--text-muted)' }}>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><CheckCircle2 size={16} color="var(--brand-violet)" /> Bank: HDFC Bank Ltd.</li>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--brand-violet)" /> GST No: 27AAMCM4944N1ZQ (Placeholder)</li>
+              </ul>
+            </div>
+
+            <h3 style={{ fontSize: '1.4rem', marginTop: '3rem', marginBottom: '1.2rem', color: 'var(--text-main)', fontFamily: 'Outfit' }}>Why Us?</h3>
+            <div className="glass-card" style={{ padding: '2rem', marginBottom: '2rem', borderRadius: 'var(--radius-lg)' }}>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+                We are an eminent firm that is actively committed to offering a premium quality range of products within the minimum time and at genuine rates. Few of the essential factors that help us to become the prime choice of our patrons are listed below:
+              </p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'var(--text-main)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+                {['Qualitative products', 'Dexterous team of professionals', 'Client-centric approach', 'Positive records', 'Excellent transport & logistic facility', 'Economical price range', 'Prompt delivery'].map((point, idx) => (
+                  <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ background: 'rgba(16, 185, 129, 0.15)', padding: '0.4rem', borderRadius: '50%' }}><Award size={14} color="var(--brand-emerald)" /></div>
+                    <span style={{ fontSize: '0.95rem', fontWeight: 500 }}>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <h3 style={{ fontSize: '1.4rem', marginTop: '3rem', marginBottom: '1.2rem', color: 'var(--text-main)', fontFamily: 'Outfit' }}>Infrastructural Set-Up</h3>
+            <div className="glass-card" style={{ padding: '2rem', marginBottom: '2rem', borderRadius: 'var(--radius-lg)' }}>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+                At Aarav Enterprises, our advanced manufacturing facility is the heart of our operations, equipped with cutting-edge technology and machinery. This state-of-the-art setup allows us to deliver high-quality, precision-driven solutions across a wide range of printing and signage services.
+              </p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'var(--text-main)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem' }}>
+                {['GRANDO 5121 SOLVENT PRINTER', 'HP LATEX 560 PRINTER', 'UV FLATBED', 'UV ROLL TO ROLL', 'CNC CHANNEL BENDER', 'LASER MACHINE 8X4', 'CNC ROUTER 12X5', 'ECO SOLVENT DUALHEAD', 'VINYL PLOTTER', 'XL JET LAMINATION MACHINE'].map((machine, idx) => (
+                  <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', fontWeight: 600 }}>
+                    <Factory size={16} color="var(--brand-amber)" /> {machine}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <h3 style={{ fontSize: '1.4rem', marginTop: '3rem', marginBottom: '1.2rem', color: 'var(--text-main)', fontFamily: 'Outfit' }}>Our Warehouse</h3>
+            <div className="glass-card" style={{ padding: '2rem', borderRadius: 'var(--radius-lg)' }}>
+              <p style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                We maintain a spacious and well-organized warehouse facility that allows us to store raw materials and finished products safely. Our inventory management ensures rapid deployment and uninterrupted supply for large scale projects.
+              </p>
+            </div>
+          </div>
+        );
+
+      case 'testimonial':
+        return (
+          <div className="tab-content-animation" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+            <h2 style={{ fontSize: '1.75rem', marginBottom: '1rem', color: 'var(--text-main)', fontFamily: 'Outfit' }}>Client Testimonials</h2>
+            <p style={{ color: 'var(--text-muted)' }}>Feedback and reviews from our valued clients will be updated here shortly.</p>
+          </div>
+        );
+
+      case 'about':
+        return (
+          <div className="tab-content-animation">
+            <h2 style={{ fontSize: '1.75rem', marginBottom: '1.5rem', color: 'var(--text-main)', fontFamily: 'Outfit' }}>About The Company</h2>
+            <div className="glass-card" style={{ padding: '2.5rem', borderRadius: 'var(--radius-lg)' }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', lineHeight: 1.8, marginBottom: '1rem' }}>
+                Aarav Enterprises, based in Pune, specializes in premium printing and innovative signage solutions. With over a decade of experience, we offer expertise in large-format printing, wayfinding systems, and branded office environments. Our services span a range of materials and projects, from detailed architectural signage to impactful building wraps and billboards for brand launches.
+              </p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', lineHeight: 1.8 }}>
+                Our commitment to quality is matched by our mastery of cutting-edge technology, allowing us to deliver high-calibre products, even within tight timelines. Our facility is where creativity, precision, and craftsmanship converge, creating a seamless journey from concept to completion—all under one roof. With a proven track record, Aarav Enterprises stands as a trusted leader in visual communication. Our legacy reflects extensive branding initiatives and successful projects across diverse sectors, backed by a dedication to excellence, innovation, and client satisfaction.
+              </p>
+            </div>
+          </div>
+        );
+
+      case 'brochure':
+        return (
+          <div className="tab-content-animation" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+            <div style={{ display: 'inline-flex', background: 'var(--badge-bg-purple)', padding: '1.5rem', borderRadius: '50%', marginBottom: '1.5rem' }}>
+              <Download size={40} color="var(--brand-violet)" />
+            </div>
+            <h2 style={{ fontSize: '1.75rem', marginBottom: '1rem', color: 'var(--text-main)', fontFamily: 'Outfit' }}>Download Brochure</h2>
+            <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Get a complete overview of our services, products, and manufacturing capabilities.</p>
+            <button className="btn-primary" style={{ padding: '0.8rem 2rem', fontSize: '1rem', borderRadius: '999px' }}>
+              Download PDF Brochure
+            </button>
+          </div>
+        );
+
+      case 'clients':
+        return (
+          <div className="tab-content-animation" style={{ width: '100%' }}>
+            <AdminAccessSection isPageTab={true} dynamicClients={clients} />
+          </div>
+        );
+      default: return null;
+    }
+  };
 
   return (
-    <div style={{ paddingTop: 70 }}>
-      <div style={{ padding: '4rem 1.5rem', background: 'var(--brand-surface)', textAlign: 'center' }}>
-        <div className="container">
-          <h1 className="section-title">Our <span className="gradient-text">Portfolio</span></h1>
-          <p className="section-subtitle">Showcasing our best design work across all categories</p>
-        </div>
-      </div>
+    <div style={{ paddingTop: 90 }}>
 
-      <div className="container section">
-        {/* Category Filters */}
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '2rem', justifyContent: 'center' }}>
-          <FilterBtn label="All" value="all" active={active} onClick={setActive} />
-          {categories.map(cat => (
-            <FilterBtn key={cat.id} label={cat.name} value={cat.slug || cat.id?.toString()} active={active} onClick={setActive} />
-          ))}
-        </div>
 
-        {loading ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1rem' }}>
-            {[...Array(9)].map((_, i) => <div key={i} className="skeleton" style={{ height: 220, borderRadius: '1rem' }} />)}
-          </div>
-        ) : filtered.length === 0 ? (
-          <div style={{ textAlign: 'center', color: '#64748B', padding: '4rem' }}>No portfolio items in this category yet.</div>
-        ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1rem' }}>
-            {filtered.map((item, i) => (
-              <div key={item.id || i} className="portfolio-card" onClick={() => setSelected(item)}>
-                <img
-                  src={item.image_url}
-                  alt={item.title}
-                  loading="lazy"
-                  onError={e => { e.target.src = `https://placehold.co/400x300/231845/A78BFA?text=${encodeURIComponent(item.category_name || 'Design')}`; }}
-                />
-                <div className="overlay">
-                  <div>
-                    <div style={{ fontSize: '0.75rem', color: '#A78BFA', marginBottom: 4 }}>{item.category_name}</div>
-                    <div style={{ fontWeight: 700, color: '#F8FAFC' }}>{item.title}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <div className="container section" style={{ display: 'flex', gap: '3rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
 
-      {/* Lightbox */}
-      {selected && (
-        <div
-          onClick={() => setSelected(null)}
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
-        >
-          <div onClick={e => e.stopPropagation()} style={{ maxWidth: 700, width: '100%', background: 'var(--brand-surface)', borderRadius: '1rem', overflow: 'hidden', border: '1px solid var(--brand-border)' }}>
-            <img src={selected.image_url} alt={selected.title} style={{ width: '100%', objectFit: 'cover', maxHeight: 450 }}
-              onError={e => { e.target.src = `https://placehold.co/700x450/231845/A78BFA?text=${encodeURIComponent(selected.title)}`; }}
-            />
-            <div style={{ padding: '1.5rem' }}>
-              <div style={{ fontSize: '0.8rem', color: '#A78BFA', marginBottom: '0.4rem' }}>{selected.category_name}</div>
-              <h3 style={{ marginBottom: '0.5rem' }}>{selected.title}</h3>
-              {selected.description && <p style={{ color: '#64748B', fontSize: '0.9rem', lineHeight: 1.6 }}>{selected.description}</p>}
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '1.25rem' }}>
-                <button onClick={() => openWhatsApp('', selected.category_name)} className="btn-whatsapp" style={{ flex: 1, justifyContent: 'center' }}>
-                  Enquire for Similar Design
+        {/* Sidebar Menu */}
+        <div style={{ flex: '1 1 280px', maxWidth: '320px', position: 'sticky', top: 120 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {sidebarTabs.map(tab => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  style={{
+                    textAlign: 'left',
+                    padding: '1.25rem 1.5rem',
+                    borderRadius: '0.75rem',
+                    background: isActive ? 'var(--badge-bg-purple)' : 'var(--bg-surface)',
+                    color: isActive ? 'var(--brand-violet)' : 'var(--text-main)',
+                    border: '1px solid',
+                    borderColor: isActive ? 'var(--brand-violet)' : 'transparent',
+                    fontSize: '1rem',
+                    fontWeight: isActive ? 700 : 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    boxShadow: isActive ? 'none' : '0 1px 3px rgba(0,0,0,0.02)'
+                  }}
+                >
+                  {tab.label}
                 </button>
-                <button onClick={() => setSelected(null)} className="btn-secondary">Close</button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div style={{ flex: '3 1 600px', minWidth: 0 }}>
+          {renderContent()}
+        </div>
+
+      </div>
+
+      {/* Lightbox for Portfolio Tab */}
+      {selected && (
+        <div onClick={() => setSelected(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }}>
+          <div onClick={e => e.stopPropagation()} style={{ maxWidth: 800, width: '100%', background: 'var(--bg-surface)', borderRadius: '1rem', overflow: 'hidden', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-lg)' }}>
+            <img src={selected.image_url} alt={selected.title} style={{ width: '100%', objectFit: 'cover', maxHeight: 450 }}
+              onError={e => { e.target.src = `https://placehold.co/800x450/160C33/A78BFA?text=${encodeURIComponent(selected.title)}`; }} />
+            <div style={{ padding: '2rem' }}>
+              <div style={{ fontSize: '0.8rem', color: 'var(--brand-violet)', fontWeight: 700, marginBottom: '0.5rem', textTransform: 'uppercase' }}>{selected.category_name}</div>
+              <h3 style={{ marginBottom: '1rem', fontSize: '1.5rem', color: 'var(--text-main)', fontFamily: 'Outfit' }}>{selected.title}</h3>
+              {selected.description && <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>{selected.description}</p>}
+              <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
+                <button onClick={() => openWhatsApp(`Hi! I'm interested in a design similar to your "${selected.title}" (${selected.category_name}).`, selected.category_name)} className="btn-whatsapp" style={{ flex: 1, justifyContent: 'center', padding: '0.8rem', borderRadius: '0.5rem' }}>Enquire for Similar Design</button>
+                <button onClick={() => setSelected(null)} className="btn-secondary" style={{ padding: '0.8rem 1.5rem', borderRadius: '0.5rem' }}>Close</button>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      <style dangerouslySetInnerHTML={{
+        __html: `
+        .tab-content-animation { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      `}} />
     </div>
   );
 }
 
-function FilterBtn({ label, value, active, onClick }) {
-  const isActive = active === value;
-  return (
-    <button
-      onClick={() => onClick(value)}
-      style={{
-        padding: '0.5rem 1rem', borderRadius: 6, fontSize: '0.85rem', fontWeight: 600,
-        border: `1px solid ${isActive ? '#7C3AED' : 'rgba(255,255,255,0.1)'}`,
-        background: isActive ? 'rgba(124,58,237,0.2)' : 'transparent',
-        color: isActive ? '#A78BFA' : '#94A3B8',
-        cursor: 'pointer', transition: 'all 0.2s',
-      }}
-    >{label}</button>
-  );
-}
-
 const FALLBACK_PORTFOLIO = [
-  { id: 1, title: 'Modern Tech Logo', category_name: 'Logo Design', category_slug: 'logo-design', image_url: 'https://placehold.co/400x300/1A1033/A78BFA?text=Logo+Design' },
-  { id: 2, title: 'Premium Business Card', category_name: 'Visiting Card', category_slug: 'visiting-card', image_url: 'https://placehold.co/400x300/231845/EC4899?text=Business+Card' },
-  { id: 3, title: '3D Corporate Brand', category_name: '3D Logo', category_slug: '3d-logo-design', image_url: 'https://placehold.co/400x300/1A1033/7C3AED?text=3D+Logo' },
-  { id: 4, title: 'Instagram Post', category_name: 'Social Media', category_slug: 'social-media-design', image_url: 'https://placehold.co/400x300/231845/A78BFA?text=Social+Media' },
-  { id: 5, title: 'Restaurant Menu', category_name: 'Menu Card', category_slug: 'menu-card-design', image_url: 'https://placehold.co/400x300/1A1033/EC4899?text=Menu+Card' },
-  { id: 6, title: 'Festival Banner', category_name: 'Banner Design', category_slug: 'banner-design', image_url: 'https://placehold.co/400x300/231845/7C3AED?text=Banner' },
-  { id: 7, title: 'Business Brochure', category_name: 'Brochure', category_slug: 'brochure-design', image_url: 'https://placehold.co/400x300/1A1033/A78BFA?text=Brochure' },
-  { id: 8, title: 'Event Flyer', category_name: 'Pamphlet/Flyer', category_slug: 'pamphlet-flyer', image_url: 'https://placehold.co/400x300/231845/EC4899?text=Flyer' },
-  { id: 9, title: 'Advertisement Creative', category_name: 'Advertisement', category_slug: 'advertisement', image_url: 'https://placehold.co/400x300/1A1033/7C3AED?text=Advertisement' },
+  { id: 1, title: 'Modern Tech Logo', category_name: 'Logo Design', category_slug: 'logo-design', image_url: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=600&q=80' },
+  { id: 2, title: 'Premium Business Card', category_name: 'Visiting Card', category_slug: 'visiting-card', image_url: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=600&q=80' },
+  { id: 3, title: '3D Corporate Brand', category_name: '3D Logo', category_slug: '3d-logo-design', image_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80' },
+  { id: 4, title: 'Instagram Post', category_name: 'Social Media', category_slug: 'social-media-design', image_url: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=600&q=80' },
+  { id: 5, title: 'Restaurant Menu', category_name: 'Menu Card', category_slug: 'menu-card-design', image_url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80' },
+  { id: 6, title: 'Festival Banner', category_name: 'Banner Design', category_slug: 'banner-design', image_url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80' },
 ];
 const FALLBACK_CATS = [
   { id: 1, name: 'Logo Design', slug: 'logo-design' },

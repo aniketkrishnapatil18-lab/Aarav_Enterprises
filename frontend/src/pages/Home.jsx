@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { productAPI, portfolioAPI } from '../services/api';
 import { openWhatsApp } from '../utils/helpers';
+import { CompanyStatsGrid } from '../components/common/CompanyStats';
 
 // ── Service Card Component ───────────────────────────────────
 function ServiceCard({ service }) {
@@ -357,6 +358,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── COMPANY STATS / INFO ─────────────────────────────── */}
+      <CompanyStatsGrid />
 
       {/* ── CALL TO ACTION BANNER ────────────────────────────── */}
       <section style={{ padding: '5rem 1.5rem' }}>

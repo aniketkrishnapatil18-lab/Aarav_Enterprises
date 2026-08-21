@@ -25,6 +25,8 @@ const notificationRoutes = require('./routes/notification.routes');
 const reportRoutes       = require('./routes/report.routes');
 const settingsRoutes     = require('./routes/settings.routes');
 const whatsappRoutes     = require('./routes/whatsapp.routes');
+const clientRoutes       = require('./routes/client.routes');
+const adminAccessRoutes  = require('./routes/adminAccess.routes');
 
 const app = express();
 
@@ -83,6 +85,8 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/reports',       reportRoutes);
 app.use('/api/settings',      settingsRoutes);
 app.use('/api/whatsapp',      whatsappRoutes);
+app.use('/api/clients',       clientRoutes);
+app.use('/api/admins',        adminAccessRoutes);
 
 // ── 404 Handler ────────────────────────────────────────────────
 app.use((_req, res) => {

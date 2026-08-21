@@ -77,6 +77,21 @@ export const customerAPI = {
   update: (id, d)  => api.put(`/customers/${id}`, d),
 };
 
+// ── Clients (Public Showcase) ───────────────────────────────
+export const clientAPI = {
+  list:     (params) => api.get('/clients', { params }),
+  detail:   (id)     => api.get(`/clients/${id}`),
+  create:   (fd)     => api.post('/clients', fd, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  update:   (id, fd) => api.put(`/clients/${id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  toggle:   (id)     => api.put(`/clients/${id}/toggle`),
+  remove:   (id)     => api.delete(`/clients/${id}`),
+};
+
+// ── Admin Access Showcase ───────────────────────────────────
+export const adminAccessAPI = {
+  list: (params) => api.get('/admins', { params }),
+};
+
 // ── Inquiries ───────────────────────────────────────────────
 export const inquiryAPI = {
   list:         (params)    => api.get('/inquiries', { params }),
