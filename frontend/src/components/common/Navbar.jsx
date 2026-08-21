@@ -36,7 +36,7 @@ export default function Navbar() {
       borderBottom: scrolled ? '1px solid var(--border-light)' : '1px solid transparent',
       boxShadow: scrolled ? 'var(--shadow-md)' : 'none',
     }}>
-      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="nav-container">
         {/* Brand Logo */}
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', textDecoration: 'none' }}>
           <div style={{
@@ -206,6 +206,15 @@ export default function Navbar() {
       )}
 
       <style>{`
+        .nav-container {
+          width: 100%;
+          max-width: 1440px;
+          margin: 0 auto;
+          padding: 0 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
         .nav-search-input {
           width: 130px;
           transition: width 0.3s ease;
@@ -221,6 +230,11 @@ export default function Navbar() {
         @media (max-width: 980px) {
           .desktop-nav { display: none !important; }
           .mobile-menu-btn { display: flex !important; }
+        }
+        @media (max-width: 640px) {
+          .nav-container {
+            padding: 0 1.25rem;
+          }
         }
       `}</style>
     </header>
