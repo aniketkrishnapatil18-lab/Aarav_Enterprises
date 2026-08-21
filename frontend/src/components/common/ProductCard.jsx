@@ -11,7 +11,7 @@ import { useEnquiryModal } from '../../context/EnquiryModalContext';
  * @param {Object} props
  * @param {Object} props.product - The product/service data object.
  */
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, isHighlighted = false }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -48,7 +48,11 @@ export default function ProductCard({ product }) {
   const startingPrice = parseFloat(product.starting_price);
 
   return (
-    <div className="service-card" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div 
+      id={product.slug || product.id?.toString()}
+      className={`service-card ${isHighlighted ? 'highlighted-card' : ''}`}
+      style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+    >
       {/* Image Container */}
       <div 
         className="img-container" 
@@ -107,7 +111,8 @@ export default function ProductCard({ product }) {
             pointerEvents: 'none'
           }}
         >
-          <span 
+          <Link 
+            to={`/products/${product.category_slug || 'all'}`}
             style={{
               background: 'var(--bg-card)', 
               backdropFilter: 'blur(10px)',
@@ -120,11 +125,21 @@ export default function ProductCard({ product }) {
               textTransform: 'uppercase', 
               letterSpacing: '0.05em', 
               boxShadow: 'var(--shadow-sm)',
-              pointerEvents: 'auto'
+              pointerEvents: 'auto',
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={e => {
+              e.target.style.transform = 'scale(1.05)';
+              e.target.style.borderColor = 'var(--brand-violet)';
+            }}
+            onMouseLeave={e => {
+              e.target.style.transform = 'scale(1)';
+              e.target.style.borderColor = 'var(--border-light)';
             }}
           >
             {product.category_name || 'Design'}
-          </span>
+          </Link>
           {product.is_featured === 1 && (
             <span 
               style={{

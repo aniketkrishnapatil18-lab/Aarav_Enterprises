@@ -13,6 +13,7 @@ import Home          from './pages/Home';
 import About         from './pages/About';
 import Services      from './pages/Services';
 import ServiceDetail from './pages/ServiceDetail';
+import CategoryProducts from './pages/CategoryProducts';
 import Portfolio     from './pages/Portfolio';
 import Pricing       from './pages/Pricing';
 import Contact       from './pages/Contact';
@@ -56,6 +57,7 @@ export default function App() {
             <Route path="/about"         element={<About />} />
             <Route path="/services"      element={<Services />} />
             <Route path="/services/:id"  element={<ServiceDetail />} />
+            <Route path="/products/:category" element={<CategoryProducts />} />
             <Route path="/portfolio"     element={<Portfolio />} />
             <Route path="/pricing"       element={<Pricing />} />
             <Route path="/contact"       element={<Contact />} />

@@ -75,3 +75,4 @@ The frontend website will run on `http://localhost:5173`.
 - Automatically detects customer language: **English**, **Hindi**, **Marathi**, or **Mixed (Hinglish/Marathi-English)**.
 - Gathers project requirements iteratively before generating an inquiry.
 - Built-in human handoff detection flags conversations when customers request live agent assistance.
+

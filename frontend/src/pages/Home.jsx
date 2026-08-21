@@ -301,12 +301,12 @@ export default function Home() {
 
 // Fallback data if backend is offline
 const FALLBACK_SERVICES = [
-  { id: 1, name: 'Logo Design', slug: 'logo-design', short_desc: 'Unique 2D & 3D brand logo designs with vector files', starting_price: 999, price_label: 'onwards', delivery_days: 3, category_name: 'Logo', is_featured: true },
-  { id: 2, name: 'Visiting Card Design', slug: 'visiting-card', short_desc: 'Professional single & double side business card designs', starting_price: 299, price_label: 'onwards', delivery_days: 2, category_name: 'Business Card', is_featured: true },
-  { id: 3, name: 'Social Media Posts', slug: 'social-media', short_desc: 'High-converting Instagram & Facebook post creatives', starting_price: 299, price_label: 'onwards', delivery_days: 1, category_name: 'Social Media', is_featured: true },
-  { id: 4, name: 'Flex & Banner Design', slug: 'flex-banner', short_desc: 'Large format outdoor flex banners and hoardings', starting_price: 499, price_label: 'onwards', delivery_days: 2, category_name: 'Printing', is_featured: false },
-  { id: 5, name: '3D Logo Design', slug: '3d-logo', short_desc: 'Premium 3D embossed logo design with metallic rendering', starting_price: 1499, price_label: 'onwards', delivery_days: 5, category_name: '3D Logo', is_featured: true },
-  { id: 6, name: 'Brochure & Catalog', slug: 'brochure-design', short_desc: 'Bi-fold & tri-fold corporate company brochures', starting_price: 799, price_label: 'onwards', delivery_days: 4, category_name: 'Brochure', is_featured: false },
+  { id: 1, name: 'Logo Design', slug: 'logo-design-service', short_desc: 'Unique 2D & 3D brand logo designs with vector files', starting_price: 999, price_label: 'onwards', delivery_days: 3, category_name: 'Logo', category_slug: 'logo-design', is_featured: true },
+  { id: 2, name: 'Visiting Card Design', slug: 'visiting-card-design', short_desc: 'Professional single & double side business card designs', starting_price: 299, price_label: 'onwards', delivery_days: 2, category_name: 'Business Card', category_slug: 'visiting-card', is_featured: true },
+  { id: 3, name: 'Social Media Posts', slug: 'social-media-post-design', short_desc: 'High-converting Instagram & Facebook post creatives', starting_price: 299, price_label: 'onwards', delivery_days: 1, category_name: 'Social Media', category_slug: 'social-media-design', is_featured: true },
+  { id: 4, name: 'Flex & Banner Design', slug: 'flex-design-printing', short_desc: 'Large format outdoor flex banners and hoardings', starting_price: 499, price_label: 'onwards', delivery_days: 2, category_name: 'Printing', category_slug: 'flex-printing', is_featured: false },
+  { id: 5, name: '3D Logo Design', slug: '3d-logo-design-service', short_desc: 'Premium 3D embossed logo design with metallic rendering', starting_price: 1499, price_label: 'onwards', delivery_days: 5, category_name: '3D Logo', category_slug: '3d-logo-design', is_featured: true },
+  { id: 6, name: 'Brochure & Catalog', slug: 'brochure-design-service', short_desc: 'Bi-fold & tri-fold corporate company brochures', starting_price: 799, price_label: 'onwards', delivery_days: 4, category_name: 'Brochure', category_slug: 'brochure-design', is_featured: false },
 ];
 
 const FALLBACK_PORTFOLIO = [
