@@ -17,11 +17,11 @@ export default function CategoryBlock({ category, products }) {
   return (
     <div style={{ marginBottom: '4.5rem', width: '100%' }}>
       {/* Category Header Bar */}
-      <div 
-        style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'flex-end', 
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-end',
           marginBottom: '1.75rem',
           borderBottom: '1px solid var(--border-light)',
           paddingBottom: '1rem',
@@ -30,16 +30,16 @@ export default function CategoryBlock({ category, products }) {
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: '250px' }}>
-          <h2 
-            style={{ 
-              margin: 0, 
-              fontSize: '1.65rem', 
-              fontWeight: 800, 
-              fontFamily: 'Outfit' 
+          <h2
+            style={{
+              margin: 0,
+              fontSize: '1.65rem',
+              fontWeight: 800,
+              fontFamily: 'Outfit'
             }}
           >
-            <Link 
-              to={`/services?category=${category.slug}`} 
+            <Link
+              to={`/services?category=${category.slug}`}
               style={{ color: 'var(--text-main)', textDecoration: 'none' }}
               className="hover:text-[var(--brand-violet)] transition-colors"
             >
@@ -47,10 +47,10 @@ export default function CategoryBlock({ category, products }) {
             </Link>
           </h2>
           {category.description && (
-            <p 
-              style={{ 
-                color: 'var(--text-muted)', 
-                fontSize: '0.9rem', 
+            <p
+              style={{
+                color: 'var(--text-muted)',
+                fontSize: '0.9rem',
                 margin: '0.35rem 0 0 0',
                 lineHeight: 1.5
               }}
@@ -60,14 +60,14 @@ export default function CategoryBlock({ category, products }) {
           )}
         </div>
 
-        <Link 
+        <Link
           to={`/services?category=${category.slug}`}
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.3rem', 
-            color: 'var(--brand-violet)', 
-            fontWeight: 700, 
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.3rem',
+            color: 'var(--brand-violet)',
+            fontWeight: 700,
             fontSize: '0.9rem',
             textDecoration: 'none',
             paddingBottom: '2px'
@@ -75,9 +75,9 @@ export default function CategoryBlock({ category, products }) {
           className="underline-grow group"
         >
           <span>View All</span>
-          <ArrowRight 
-            size={16} 
-            className="group-hover:translate-x-1 transition-transform" 
+          <ArrowRight
+            size={16}
+            className="group-hover:translate-x-1 transition-transform"
           />
         </Link>
       </div>

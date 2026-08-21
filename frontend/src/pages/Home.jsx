@@ -28,7 +28,7 @@ function ServiceCard({ service }) {
   return (
     <Link to={`/services/${service.slug || service.id}`} style={{ textDecoration: 'none', display: 'block' }}>
       <div style={{
-        background: 'var(--bg-card)', 
+        background: 'var(--bg-card)',
         borderRadius: '1rem',
         padding: '1.25rem',
         boxShadow: 'var(--shadow-sm)',
@@ -58,10 +58,10 @@ function ServiceCard({ service }) {
 // ── Portfolio Thumb (Deals of the Day Style) ─────────────────
 function PortfolioThumb({ item }) {
   return (
-    <Link to="/portfolio" style={{ 
-      textDecoration: 'none', 
+    <Link to="/portfolio" style={{
+      textDecoration: 'none',
       display: 'flex', flexDirection: 'column',
-      background: 'var(--bg-subtle)', 
+      background: 'var(--bg-subtle)',
       borderRadius: '1.25rem',
       padding: '1.25rem',
       boxShadow: 'var(--shadow-sm)',
@@ -73,12 +73,12 @@ function PortfolioThumb({ item }) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
         {item.category_name ? (
           <span style={{
-             background: '#EF4444', color: 'white',
-             padding: '0.25rem 0.6rem', borderRadius: 999,
-             fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase',
-             letterSpacing: '0.02em'
+            background: '#EF4444', color: 'white',
+            padding: '0.25rem 0.6rem', borderRadius: 999,
+            fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase',
+            letterSpacing: '0.02em'
           }}>{item.category_name}</span>
-        ) : <div/>}
+        ) : <div />}
         <Eye size={18} color="var(--text-subtle)" style={{ opacity: 0.7 }} />
       </div>
 
@@ -98,11 +98,11 @@ function PortfolioThumb({ item }) {
         <p style={{ fontSize: '0.75rem', color: 'var(--text-subtle)', marginBottom: '1rem' }}>
           {item.category_name || 'Design'}
         </p>
-        
+
         {/* Bottom row: CTA / Icon */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-main)' }}>
-             Explore
+            Explore
           </span>
           <div style={{
             background: 'var(--text-main)', color: 'var(--bg-main)',
@@ -210,9 +210,9 @@ function AutoScrollingFeatures() {
       const card = container.children[originalLength * 2];
       if (card) {
         const scrollLeft = card.offsetLeft - (container.clientWidth / 2) + (card.clientWidth / 2);
-        container.style.scrollSnapType = 'none'; 
+        container.style.scrollSnapType = 'none';
         container.scrollTo({ left: scrollLeft });
-        
+
         setTimeout(() => {
           if (scrollRef.current) scrollRef.current.style.scrollSnapType = 'x mandatory';
         }, 100);
@@ -226,7 +226,7 @@ function AutoScrollingFeatures() {
       if (scrollRef.current && !isResetting.current) {
         const container = scrollRef.current;
         let nextIndex = activeIndex + 1;
-        
+
         // If getting too close to the end, instantly reset to the middle set
         if (nextIndex > extendedFeatures.length - 3) {
           isResetting.current = true;
@@ -237,7 +237,7 @@ function AutoScrollingFeatures() {
             const scrollLeft = targetCard.offsetLeft - (container.clientWidth / 2) + (targetCard.clientWidth / 2);
             container.scrollTo({ left: scrollLeft }); // instant scroll
             setActiveIndex(nextIndex);
-            
+
             setTimeout(() => {
               if (scrollRef.current) scrollRef.current.style.scrollSnapType = 'x mandatory';
               isResetting.current = false;
@@ -261,10 +261,10 @@ function AutoScrollingFeatures() {
     if (!scrollRef.current || isResetting.current) return;
     const container = scrollRef.current;
     const centerPosition = container.scrollLeft + container.clientWidth / 2;
-    
+
     let closestIndex = 0;
     let minDistance = Infinity;
-    
+
     Array.from(container.children).forEach((child, index) => {
       const childCenter = child.offsetLeft + child.clientWidth / 2;
       const distance = Math.abs(childCenter - centerPosition);
@@ -273,16 +273,16 @@ function AutoScrollingFeatures() {
         closestIndex = index;
       }
     });
-    
+
     if (closestIndex !== activeIndex) {
       setActiveIndex(closestIndex);
-      
+
       // Infinite loop wrap for manual scrolling
       if (closestIndex <= 2 || closestIndex >= extendedFeatures.length - 3) {
         isResetting.current = true;
         const middleIndex = (closestIndex % originalLength) + originalLength * 2;
         const targetCard = container.children[middleIndex];
-        
+
         setTimeout(() => {
           if (scrollRef.current) {
             scrollRef.current.style.scrollSnapType = 'none';
@@ -313,13 +313,13 @@ function AutoScrollingFeatures() {
 
   return (
     <div>
-      <div 
-        ref={scrollRef} 
+      <div
+        ref={scrollRef}
         onScroll={handleScroll}
-        className="hide-scroll" 
-        style={{ 
+        className="hide-scroll"
+        style={{
           position: 'relative',
-          display: 'flex', overflowX: 'auto', gap: '2rem', 
+          display: 'flex', overflowX: 'auto', gap: '2rem',
           paddingTop: '3rem', paddingBottom: '3rem',
           paddingLeft: 'calc(50% - 190px)', paddingRight: 'calc(50% - 190px)',
           scrollBehavior: 'smooth', scrollbarWidth: 'none', msOverflowStyle: 'none',
@@ -329,7 +329,7 @@ function AutoScrollingFeatures() {
         {extendedFeatures.map((f, i) => {
           const isActive = i === activeIndex;
           return (
-            <div key={i} style={{ 
+            <div key={i} style={{
               minWidth: '380px', maxWidth: '380px', flexShrink: 0,
               transform: isActive ? 'scale(1.08)' : 'scale(0.9)',
               opacity: isActive ? 1 : 0.4,
@@ -358,7 +358,7 @@ function AutoScrollingFeatures() {
 // ── Hero Centered ────────────────────────────────────────────
 function HeroCentered() {
   return (
-    <section className="bg-dots" style={{ 
+    <section className="bg-dots" style={{
       position: 'relative', overflow: 'hidden', paddingTop: '7rem', paddingBottom: '7rem',
       background: 'var(--bg-main)', minHeight: '88vh', display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center', textAlign: 'center'
@@ -370,7 +370,7 @@ function HeroCentered() {
           .hero-float-el, .hero-float-img { display: none !important; }
         }
       `}</style>
-      
+
       {/* Ambient orbs */}
       <div className="orb orb-purple" style={{ top: '20%', left: '30%', opacity: 0.5 }} />
       <div className="orb orb-pink" style={{ top: '40%', right: '30%', opacity: 0.3 }} />
@@ -495,11 +495,11 @@ function HeroCentered() {
           boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-light)',
           width: 200, transform: 'rotate(6deg)'
         }}>
-           <div style={{ background: 'var(--bg-subtle)', height: 120, borderRadius: '0.6rem', padding: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <div style={{ width: '50%', height: 8, background: 'var(--border-light)', borderRadius: 4 }}></div>
-              <div style={{ width: '90%', height: 8, background: 'var(--border-light)', borderRadius: 4 }}></div>
-              <div style={{ width: '70%', height: 8, background: 'var(--border-light)', borderRadius: 4 }}></div>
-           </div>
+          <div style={{ background: 'var(--bg-subtle)', height: 120, borderRadius: '0.6rem', padding: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div style={{ width: '50%', height: 8, background: 'var(--border-light)', borderRadius: 4 }}></div>
+            <div style={{ width: '90%', height: 8, background: 'var(--border-light)', borderRadius: 4 }}></div>
+            <div style={{ width: '70%', height: 8, background: 'var(--border-light)', borderRadius: 4 }}></div>
+          </div>
         </div>
         {/* Front Card */}
         <div style={{
@@ -528,7 +528,7 @@ function HeroCentered() {
           Premium Signage &<br />
           <span className="gradient-text" style={{ backgroundImage: 'var(--grad-primary)' }}>Printing Solutions</span>
         </h1>
-        
+
         <p style={{
           fontSize: '1.15rem', color: 'var(--text-muted)',
           lineHeight: 1.6, maxWidth: 600, margin: '0 auto 2.5rem',
@@ -564,7 +564,7 @@ function HeroCentered() {
         >
           Explore More
         </Link>
-        
+
         <p style={{ marginTop: '1rem', fontSize: '0.85rem', color: 'var(--text-subtle)', fontWeight: 500, marginBottom: '3rem' }}>
           Free quote available. No upfront costs.
         </p>
@@ -575,21 +575,21 @@ function HeroCentered() {
           flexWrap: 'wrap', maxWidth: 400, margin: '0 auto'
         }}>
           {[
-            { 
+            {
               color: '#FF0000', label: 'YouTube',
-              svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg> 
+              svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
             },
-            { 
+            {
               color: '#E1306C', label: 'Instagram',
-              svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> 
+              svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
             },
-            { 
+            {
               color: '#0A66C2', label: 'LinkedIn',
-              svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
             },
-            { 
+            {
               color: '#000000', label: 'X (Twitter)',
-              svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> 
+              svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
             }
           ].map((item, idx) => (
             <div key={idx} className={idx % 2 === 0 ? "animate-float-slow" : "animate-float-fast"} style={{
@@ -611,12 +611,12 @@ function HeroCentered() {
 
 // ── Main Home Component ──────────────────────────────────────
 export default function Home() {
-  const [services,     setServices]     = useState([]);
-  const [portfolio,    setPortfolio]    = useState([]);
-  const [categories,   setCategories]   = useState([]);
-  const [allProducts,  setAllProducts]  = useState([]);
+  const [services, setServices] = useState([]);
+  const [portfolio, setPortfolio] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [catalogReady, setCatalogReady] = useState(false);
-  const [loading,      setLoading]      = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const categoryScrollRef = useRef(null);
   const scrollCategory = (dir) => {
@@ -656,7 +656,7 @@ export default function Home() {
     load();
   }, []);
 
-  const displayServices  = services.length > 0 ? services.slice(0, 6) : FALLBACK_SERVICES;
+  const displayServices = services.length > 0 ? services.slice(0, 6) : FALLBACK_SERVICES;
   const displayPortfolio = portfolio.length > 0 ? portfolio.slice(0, 6) : FALLBACK_PORTFOLIO;
 
   // Group the live catalog into one row per category; fall back to demo
@@ -664,11 +664,11 @@ export default function Home() {
   const categoryRows = [
     ...(catalogReady
       ? categories
-          .map(cat => ({
-            category: cat,
-            products: allProducts.filter(p => p.category_id === cat.id),
-          }))
-          .filter(row => row.products.length > 0)
+        .map(cat => ({
+          category: cat,
+          products: allProducts.filter(p => p.category_id === cat.id),
+        }))
+        .filter(row => row.products.length > 0)
       : FALLBACK_CATEGORY_ROWS),
     // Core signage/printing products — not part of the backend category
     // taxonomy yet, so shown as standalone rows on every load.
@@ -695,9 +695,9 @@ export default function Home() {
           }}>
             {[
               { Icon: Palette, title: 'Custom Designs', sub: '100% Original, Made for You' },
-              { Icon: Zap,     title: 'Fast Turnaround', sub: 'Delivery in 1–5 Days' },
+              { Icon: Zap, title: 'Fast Turnaround', sub: 'Delivery in 1–5 Days' },
               { Icon: MessageCircle, title: 'WhatsApp Support', sub: 'Chat 24/7 in Hindi & English' },
-              { Icon: Shield,  title: 'Premium Quality', sub: 'Durable & Print-Ready' },
+              { Icon: Shield, title: 'Premium Quality', sub: 'Durable & Print-Ready' },
             ].map(({ Icon, title, sub }, i) => (
               <div key={i} style={{
                 display: 'flex', alignItems: 'center', gap: '0.85rem',
@@ -898,9 +898,9 @@ const FALLBACK_CATEGORY_ROWS = [
   {
     category: { id: 'fc-card', slug: 'visiting-card', name: 'Visiting Card' },
     products: [
-      { id: 'fp-7',  name: 'Visiting Card Design', slug: 'visiting-card-design', starting_price: 299 },
-      { id: 'fp-8',  name: 'Premium Metal Card', slug: 'premium-metal-card', starting_price: 1999 },
-      { id: 'fp-9',  name: 'Foil Stamped Card', slug: 'foil-stamped-card', starting_price: 899 },
+      { id: 'fp-7', name: 'Visiting Card Design', slug: 'visiting-card-design', starting_price: 299 },
+      { id: 'fp-8', name: 'Premium Metal Card', slug: 'premium-metal-card', starting_price: 1999 },
+      { id: 'fp-9', name: 'Foil Stamped Card', slug: 'foil-stamped-card', starting_price: 899 },
       { id: 'fp-10', name: 'Double-Sided Card', slug: 'double-sided-card', starting_price: 399 },
       { id: 'fp-11', name: 'QR Digital Card', slug: 'qr-digital-card', starting_price: 499 },
       { id: 'fp-12', name: 'Eco-Friendly Card', slug: 'eco-friendly-card', starting_price: 449 },
