@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, MessageCircle } from 'lucide-react';
+import { Menu, X, MessageCircle, Search } from 'lucide-react';
 import { openWhatsApp } from '../../utils/helpers';
 import ThemeToggle from './ThemeToggle';
 
@@ -30,13 +30,13 @@ export default function Navbar() {
     <header style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 990,
       transition: 'all 0.3s ease',
-      padding: scrolled ? '0.75rem 1.5rem' : '1.25rem 1.5rem',
+      padding: scrolled ? '0.75rem 0' : '1.25rem 0',
       background: 'var(--nav-bg)',
       backdropFilter: 'blur(16px)',
       borderBottom: scrolled ? '1px solid var(--border-light)' : '1px solid transparent',
       boxShadow: scrolled ? 'var(--shadow-md)' : 'none',
     }}>
-      <div style={{ maxWidth: 1240, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* Brand Logo */}
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', textDecoration: 'none' }}>
           <div style={{
@@ -50,18 +50,12 @@ export default function Navbar() {
             <div style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
               Aarav <span className="gradient-text">Enterprises</span>
             </div>
-            <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#059669', display: 'inline-block' }} />
-              24/7 AI Online
-            </div>
           </div>
         </Link>
 
         {/* Desktop Nav Links */}
         <div style={{
-          display: 'flex', alignItems: 'center', gap: '0.35rem',
-          background: 'var(--nav-pill-bg)', padding: '0.35rem 0.5rem',
-          borderRadius: 999, border: '1px solid var(--border-light)',
+          display: 'flex', alignItems: 'center', gap: '1.5rem',
         }} className="desktop-nav">
           {NAV_LINKS.map(link => {
             const isActive = location.pathname === link.to || (link.to !== '/' && location.pathname.startsWith(link.to));
@@ -70,33 +64,54 @@ export default function Navbar() {
                 key={link.to}
                 to={link.to}
                 style={{
-                  padding: '0.5rem 1.1rem',
-                  color: isActive ? 'var(--brand-violet)' : 'var(--text-muted)',
-                  fontWeight: isActive ? 700 : 600,
-                  fontSize: '0.9rem',
+                  color: isActive ? 'var(--brand-violet)' : 'var(--text-main)',
+                  fontWeight: isActive ? 700 : 500,
+                  fontSize: '0.95rem',
                   textDecoration: 'none',
-                  borderRadius: 999,
-                  background: isActive ? 'var(--nav-pill-active)' : 'transparent',
-                  boxShadow: isActive ? 'var(--shadow-sm)' : 'none',
-                  transition: 'all 0.25s ease',
+                  transition: 'color 0.2s ease',
                 }}
-              >{link.label}</Link>
+              >
+                {link.label}
+              </Link>
             );
           })}
         </div>
 
         {/* Right Action Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          
+          {/* Search Bar */}
+          <div className="desktop-nav nav-search-wrap" style={{
+            position: 'relative',
+            display: 'flex', alignItems: 'center',
+            background: 'var(--bg-subtle)',
+            border: '1px solid var(--border-light)',
+            borderRadius: '999px',
+            padding: '0.4rem 1rem',
+            marginRight: '0.5rem'
+          }}>
+            <Search size={16} color="var(--text-muted)" style={{ marginRight: '0.5rem', flexShrink: 0 }} />
+            <input
+              type="text"
+              placeholder="Search services..."
+              className="nav-search-input"
+              style={{
+                background: 'transparent', border: 'none', outline: 'none',
+                color: 'var(--text-main)', fontSize: '0.9rem',
+              }}
+            />
+          </div>
+
           {/* Theme Toggle Button */}
           <ThemeToggle />
 
           <button
             onClick={() => openWhatsApp()}
             className="btn-whatsapp-navbar"
+            style={{ flexShrink: 0, whiteSpace: 'nowrap' }}
           >
-            <span className="wa-dot" />
             <MessageCircle size={19} className="wa-icon" />
-            <span className="desktop-nav">Chat on WhatsApp</span>
+            <span className="desktop-nav">Order Now</span>
           </button>
 
           {/* Mobile menu toggle */}
@@ -118,7 +133,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {menuOpen && (
-        <div style={{
+        <div className="container" style={{
           background: 'var(--bg-card)',
           border: '1px solid var(--border-light)', padding: '1.5rem',
           marginTop: '1rem', borderRadius: '1rem', boxShadow: 'var(--shadow-lg)',
@@ -143,13 +158,25 @@ export default function Navbar() {
             className="btn-whatsapp"
             style={{ width: '100%', justifyContent: 'center' }}
           >
-            <MessageCircle size={18} /> Chat on WhatsApp Now
+            <MessageCircle size={18} /> Order Now
           </button>
         </div>
       )}
 
       <style>{`
-        @media (max-width: 900px) {
+        .nav-search-input {
+          width: 130px;
+          transition: width 0.3s ease;
+        }
+        .nav-search-input:focus {
+          width: 220px;
+        }
+        /* Search bar is the first thing to give up its space — hidden before
+           the nav links + Order Now button would otherwise start crowding. */
+        @media (max-width: 1180px) {
+          .nav-search-wrap { display: none !important; }
+        }
+        @media (max-width: 980px) {
           .desktop-nav { display: none !important; }
           .mobile-menu-btn { display: flex !important; }
         }
