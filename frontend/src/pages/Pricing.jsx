@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MessageCircle, CheckCircle, ChevronDown, ChevronUp,
-  Ruler, Printer, Lightbulb, Zap, ArrowRight
+  Ruler, Printer, Lightbulb, Tag, Zap, ArrowRight
 } from 'lucide-react';
 import { openWhatsApp } from '../utils/helpers';
 
