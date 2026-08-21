@@ -30,13 +30,13 @@ export default function Navbar() {
     <header style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 990,
       transition: 'all 0.3s ease',
-      padding: scrolled ? '0.75rem 1.5rem' : '1.25rem 1.5rem',
+      padding: scrolled ? '0.75rem 0' : '1.25rem 0',
       background: 'var(--nav-bg)',
       backdropFilter: 'blur(16px)',
       borderBottom: scrolled ? '1px solid var(--border-light)' : '1px solid transparent',
       boxShadow: scrolled ? 'var(--shadow-md)' : 'none',
     }}>
-      <div style={{ width: '100%', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* Brand Logo */}
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', textDecoration: 'none' }}>
           <div style={{
@@ -81,7 +81,7 @@ export default function Navbar() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           
           {/* Search Bar */}
-          <div className="desktop-nav" style={{
+          <div className="desktop-nav nav-search-wrap" style={{
             position: 'relative',
             display: 'flex', alignItems: 'center',
             background: 'var(--bg-subtle)',
@@ -90,13 +90,14 @@ export default function Navbar() {
             padding: '0.4rem 1rem',
             marginRight: '0.5rem'
           }}>
-            <Search size={16} color="var(--text-muted)" style={{ marginRight: '0.5rem' }} />
-            <input 
-              type="text" 
-              placeholder="Search services..." 
+            <Search size={16} color="var(--text-muted)" style={{ marginRight: '0.5rem', flexShrink: 0 }} />
+            <input
+              type="text"
+              placeholder="Search services..."
+              className="nav-search-input"
               style={{
                 background: 'transparent', border: 'none', outline: 'none',
-                color: 'var(--text-main)', fontSize: '0.9rem', width: '150px'
+                color: 'var(--text-main)', fontSize: '0.9rem',
               }}
             />
           </div>
@@ -107,6 +108,7 @@ export default function Navbar() {
           <button
             onClick={() => openWhatsApp()}
             className="btn-whatsapp-navbar"
+            style={{ flexShrink: 0, whiteSpace: 'nowrap' }}
           >
             <MessageCircle size={19} className="wa-icon" />
             <span className="desktop-nav">Order Now</span>
@@ -131,7 +133,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {menuOpen && (
-        <div style={{
+        <div className="container" style={{
           background: 'var(--bg-card)',
           border: '1px solid var(--border-light)', padding: '1.5rem',
           marginTop: '1rem', borderRadius: '1rem', boxShadow: 'var(--shadow-lg)',
@@ -162,7 +164,19 @@ export default function Navbar() {
       )}
 
       <style>{`
-        @media (max-width: 900px) {
+        .nav-search-input {
+          width: 130px;
+          transition: width 0.3s ease;
+        }
+        .nav-search-input:focus {
+          width: 220px;
+        }
+        /* Search bar is the first thing to give up its space — hidden before
+           the nav links + Order Now button would otherwise start crowding. */
+        @media (max-width: 1180px) {
+          .nav-search-wrap { display: none !important; }
+        }
+        @media (max-width: 980px) {
           .desktop-nav { display: none !important; }
           .mobile-menu-btn { display: flex !important; }
         }

@@ -114,13 +114,6 @@ export default function Footer() {
                 Pune, Maharashtra, India
               </div>
             </div>
-            <button
-              onClick={() => openWhatsApp()}
-              className="btn-whatsapp"
-              style={{ marginTop: '1.5rem', width: '100%', justifyContent: 'center', fontSize: '0.875rem' }}
-            >
-              <MessageCircle size={15} /> Chat Now
-            </button>
           </div>
         </div>
 
