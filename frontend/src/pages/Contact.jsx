@@ -53,22 +53,6 @@ export default function Contact() {
 
   return (
     <div style={{ paddingTop: '80px', minHeight: '100vh', background: 'var(--bg-main)' }}>
-      {/* Header Banner */}
-      <div 
-        style={{ 
-          padding: '4.5rem 1.5rem', 
-          background: 'var(--bg-surface)', 
-          textAlign: 'center',
-          borderBottom: '1px solid var(--border-light)'
-        }}
-      >
-        <div className="container">
-          <h1 className="section-title">Get in <span className="gradient-text">Touch</span></h1>
-          <p className="section-subtitle">
-            Have a project in mind? Submit an enquiry or chat with us on WhatsApp. Our AI assistant responds 24/7.
-          </p>
-        </div>
-      </div>
 
       {/* Grid Content */}
       <div className="container section">

@@ -54,28 +54,52 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav Links */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '1.5rem',
+        <nav style={{
+          display: 'flex', alignItems: 'center', gap: '0.25rem',
+          background: 'var(--nav-pill-bg)',
+          borderRadius: 999,
+          padding: '0.35rem',
         }} className="desktop-nav">
           {NAV_LINKS.map(link => {
-            const isActive = location.pathname === link.to || (link.to !== '/' && location.pathname.startsWith(link.to));
+            const isActive = location.pathname === link.to ||
+              (link.to !== '/' && location.pathname.startsWith(link.to));
             return (
               <Link
                 key={link.to}
                 to={link.to}
                 style={{
-                  color: isActive ? 'var(--brand-violet)' : 'var(--text-main)',
+                  position: 'relative',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '0.45rem 1rem',
+                  borderRadius: 999,
+                  fontSize: '0.92rem',
                   fontWeight: isActive ? 700 : 500,
-                  fontSize: '0.95rem',
                   textDecoration: 'none',
-                  transition: 'color 0.2s ease',
+                  transition: 'all 0.22s ease',
+                  color: isActive ? 'white' : 'var(--text-main)',
+                  background: isActive ? 'var(--grad-primary)' : 'transparent',
+                  boxShadow: isActive ? '0 2px 12px rgba(124,58,237,0.35)' : 'none',
+                  letterSpacing: isActive ? '-0.01em' : '0',
+                }}
+                onMouseEnter={e => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = 'var(--brand-violet)';
+                    e.currentTarget.style.background = 'var(--nav-pill-active)';
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = 'var(--text-main)';
+                    e.currentTarget.style.background = 'transparent';
+                  }
                 }}
               >
                 {link.label}
               </Link>
             );
           })}
-        </div>
+        </nav>
 
         {/* Right Action Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -139,19 +163,37 @@ export default function Navbar() {
           marginTop: '1rem', borderRadius: '1rem', boxShadow: 'var(--shadow-lg)',
           animation: 'fadeIn 0.3s ease',
         }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
-            {NAV_LINKS.map(link => (
-              <Link
-                key={link.to}
-                to={link.to}
-                style={{
-                  padding: '0.85rem 1rem',
-                  color: location.pathname === link.to ? 'var(--brand-violet)' : 'var(--text-main)',
-                  fontWeight: 600, textDecoration: 'none', borderRadius: 8,
-                  background: location.pathname === link.to ? 'var(--bg-subtle)' : 'transparent',
-                }}
-              >{link.label}</Link>
-            ))}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '1.25rem' }}>
+            {NAV_LINKS.map(link => {
+              const isActive = location.pathname === link.to || (link.to !== '/' && location.pathname.startsWith(link.to));
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  style={{
+                    padding: '0.75rem 1rem',
+                    color: isActive ? 'white' : 'var(--text-main)',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    borderRadius: 10,
+                    background: isActive ? 'var(--grad-primary)' : 'transparent',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    fontSize: '0.95rem',
+                    boxShadow: isActive ? '0 2px 10px rgba(124,58,237,0.25)' : 'none',
+                  }}
+                >
+                  {isActive && (
+                    <span style={{
+                      width: 6, height: 6, borderRadius: '50%',
+                      background: 'rgba(255,255,255,0.8)', flexShrink: 0,
+                    }} />
+                  )}
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
           <button
             onClick={() => openWhatsApp()}

@@ -56,13 +56,6 @@ export default function Services() {
 
   return (
     <div style={{ paddingTop: 90 }}>
-      {/* Header */}
-      <div style={{ padding: '4rem 1.5rem', background: 'var(--bg-surface)', textAlign: 'center', borderBottom: '1px solid var(--border-light)' }}>
-        <div className="container">
-          <h1 className="section-title">Our <span className="gradient-text">Design Services</span></h1>
-          <p className="section-subtitle">Professional graphic design, branding, and printing solutions for every business requirement.</p>
-        </div>
-      </div>
 
       <div className="container section" style={{ paddingTop: '2.5rem' }}>
         <Breadcrumbs items={breadcrumbItems} />
