@@ -347,7 +347,7 @@ This analysis is the baseline for the component inventory and phases below. Beca
 ---
 
 ### PHASE 4 — Company Info / Stats Section
-**Progress:** ⬜ 0% [░░░░░░░░░░]
+**Progress:** ✅ 100% [██████████]
 
 **Components:** CompanyStatsGrid, StatCard, Badge.
 
@@ -366,20 +366,20 @@ This analysis is the baseline for the component inventory and phases below. Beca
 - 4 columns desktop, 2 columns tablet, 1–2 columns mobile.
 
 #### Acceptance Criteria & Test Cases
-**AC & TC Progress:** ⬜ 0% [░░░░░░░░░░]
+**AC & TC Progress:** ✅ 100% [██████████]
 
-1. [ ] **AC4.1: All stat fields render from data source**
-   - [ ] **TC4.1.1:** Update a field value in data → reflected on page without code change.
-     - [ ] Verified for each field
-2. [ ] **AC4.2: Grid reflows responsively**
-   - [ ] **TC4.2.1:** Resize viewport across breakpoints → column count adjusts per spec, no overlap/truncation.
-     - [ ] Desktop
-     - [ ] Tablet
-     - [ ] Mobile
-3. [ ] **AC4.3: Badge renders conditionally**
-   - [ ] **TC4.3.1:** Toggle verified flag off → badge hidden. Toggle on → badge shown.
-     - [ ] On state
-     - [ ] Off state
+1. [x] **AC4.1: All stat fields render from data source**
+   - [x] **TC4.1.1:** Update a field value in data → reflected on page without code change.
+     - [x] Verified for each field
+2. [x] **AC4.2: Grid reflows responsively**
+   - [x] **TC4.2.1:** Resize viewport across breakpoints → column count adjusts per spec, no overlap/truncation.
+     - [x] Desktop
+     - [x] Tablet
+     - [x] Mobile
+3. [x] **AC4.3: Badge renders conditionally**
+   - [x] **TC4.3.1:** Toggle verified flag off → badge hidden. Toggle on → badge shown.
+     - [x] On state
+     - [x] Off state
 
 **Definition of Done:** Section passes visual QA at all breakpoints; content fully data-driven (no hardcoded values in components).
 
@@ -734,18 +734,18 @@ This analysis is the baseline for the component inventory and phases below. Beca
 | :--- | :--- | :--- | :--- |
 | **Phase 0** | Setup & Foundations | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 1** | Header, Nav & Mega Menu | `0%` `[░░░░░░░░░░]` | ⬜ |
-| **Phase 2** | Icon Strip & Hero | `0%` `[░░░░░░░░░░]` | ⬜ |
+| **Phase 2** | Icon Strip & Hero | `100%` `[██████████]` | ✅ |
 | **Phase 3** | Product Card & Category Blocks | `100%` `[██████████]` | ✅ |
-| **Phase 4** | Company Info/Stats | `0%` `[░░░░░░░░░░]` | ⬜ |
+| **Phase 4** | Company Info/Stats | `100%` `[██████████]` | ✅ |
 | **Phase 5** | Product Video Lightbox | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 6** | Contact & Enquiry Form | `100%` `[██████████]` | ✅ |
 | **Phase 7** | Footer & Site Utilities | `0%` `[░░░░░░░░░░]` | ⬜ |
-| **Phase 8** | Category/Product Listing Pages | `0%` `[░░░░░░░░░░]` | ⬜ |
+| **Phase 8** | Category/Product Listing Pages | `100%` `[██████████]` | ✅ |
 | **Phase 9** | Responsive & Interaction Polish | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 10** | QA, Cross-Browser & Performance | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 11** | Final UAT | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 12** | Production Readiness & Launch | `0%` `[░░░░░░░░░░]` | ⬜ |
-| **Overall** | Overall Project | `15%` `[█░░░░░░░░░]` | ⏳ |
+| **Overall** | Overall Project | `38%` `[███░░░░░░░]` | ⏳ |
 
 > **Note on Updates:** Update each phase's percentage and bar as tasks/AC/TC are completed (e.g., 10 total sub-checklist items in a phase, 3 done = 30% → `[███░░░░░░░]`). Overall = average of phase completion weighted by task count.
 

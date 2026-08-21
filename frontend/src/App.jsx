@@ -29,6 +29,7 @@ import AdminConversations        from './pages/admin/AdminConversations';
 import AdminConversationDetail  from './pages/admin/AdminConversationDetail';
 import AdminProducts             from './pages/admin/AdminProducts';
 import AdminPortfolio      from './pages/admin/AdminPortfolio';
+import AdminClients        from './pages/admin/AdminClients';
 import AdminKnowledge      from './pages/admin/AdminKnowledge';
 import AdminNotifications  from './pages/admin/AdminNotifications';
 import AdminReports        from './pages/admin/AdminReports';
@@ -77,6 +78,7 @@ export default function App() {
             <Route path="conversations/:id"    element={<AdminConversationDetail />} />
             <Route path="products"         element={<AdminProducts />} />
             <Route path="portfolio"        element={<AdminPortfolio />} />
+            <Route path="clients"          element={<AdminClients />} />
             <Route path="knowledge"        element={<AdminKnowledge />} />
             <Route path="notifications"    element={<AdminNotifications />} />
             <Route path="reports"          element={<AdminReports />} />

@@ -6,6 +6,7 @@ import {
   Lightbulb, Printer, Box,
   Award, Users, Target, CheckCircle, Truck, Tag, Clock
 } from 'lucide-react';
+import { CompanyStatsGrid } from '../components/common/CompanyStats';
 
 /* Responsive hero grid: stack on mobile */
 const heroGridStyle = `
@@ -826,6 +827,9 @@ export default function Home() {
           <AutoScrollingFeatures />
         </div>
       </section>
+
+      {/* ── COMPANY STATS / INFO ─────────────────────────────── */}
+      <CompanyStatsGrid />
 
       {/* ── CALL TO ACTION BANNER ────────────────────────────── */}
       <section style={{ padding: '5rem 1.5rem', background: 'var(--bg-surface)' }}>
