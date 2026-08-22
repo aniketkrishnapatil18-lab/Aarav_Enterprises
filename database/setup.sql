@@ -21,6 +21,8 @@ SOURCE migrations/007_create_conversations.sql;
 SOURCE migrations/008_create_ai_knowledge.sql;
 SOURCE migrations/009_create_notifications.sql;
 SOURCE migrations/010_create_attachments.sql;
+SOURCE migrations/011_add_portfolio_wa_fields.sql;
+SOURCE migrations/012_add_portfolio_image_url_unique.sql;
 
 -- Run seeds in order
 SOURCE seeds/001_seed_admin.sql;
@@ -28,5 +30,8 @@ SOURCE seeds/002_seed_categories.sql;
 SOURCE seeds/003_seed_products.sql;
 SOURCE seeds/004_seed_ai_knowledge.sql;
 SOURCE seeds/005_seed_portfolio.sql;
+SOURCE seeds/006_seed_more_products.sql;
+SOURCE seeds/007_seed_signage_category.sql;
+SOURCE seeds/008_seed_led_portfolio.sql;
 
 SELECT 'Aarav Enterprises database setup complete!' AS status;
