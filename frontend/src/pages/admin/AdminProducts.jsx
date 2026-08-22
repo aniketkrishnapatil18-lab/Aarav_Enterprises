@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { productAPI, categoryAPI } from '../../services/api';
 import toast from 'react-hot-toast';
-import { Plus, Edit2, Trash2, ToggleLeft, ToggleRight, Package } from 'lucide-react';
+import { Plus, Edit2, Trash2, ToggleLeft, ToggleRight, Package, Image as ImageIcon } from 'lucide-react';
+import UnsplashImageSearch from '../../components/common/UnsplashImageSearch';
 
 export default function AdminProducts() {
   const [products,    setProducts]    = useState([]);
@@ -11,8 +12,10 @@ export default function AdminProducts() {
   const [editItem,    setEditItem]    = useState(null);
   const [form,        setForm]        = useState(defaultForm());
 
+  const [showUnsplash, setShowUnsplash] = useState(false);
+
   function defaultForm() {
-    return { name: '', slug: '', category_id: '', short_desc: '', description: '', starting_price: '', price_label: 'onwards', delivery_days: '', revisions: 2, file_formats: 'AI, PDF, PNG, JPEG', is_featured: false, is_active: true };
+    return { name: '', slug: '', category_id: '', short_desc: '', description: '', starting_price: '', price_label: 'onwards', delivery_days: '', revisions: 2, file_formats: 'AI, PDF, PNG, JPEG', is_featured: false, is_active: true, thumbnail_url: '' };
   }
 
   useEffect(() => {
@@ -30,7 +33,7 @@ export default function AdminProducts() {
 
   function openEdit(item) {
     setEditItem(item);
-    setForm({ name: item.name, slug: item.slug, category_id: item.category_id, short_desc: item.short_desc || '', description: item.description || '', starting_price: item.starting_price || '', price_label: item.price_label || 'onwards', delivery_days: item.delivery_days || '', revisions: item.revisions || 2, file_formats: item.file_formats || 'AI, PDF, PNG, JPEG', is_featured: !!item.is_featured, is_active: !!item.is_active });
+    setForm({ name: item.name, slug: item.slug, category_id: item.category_id, short_desc: item.short_desc || '', description: item.description || '', starting_price: item.starting_price || '', price_label: item.price_label || 'onwards', delivery_days: item.delivery_days || '', revisions: item.revisions || 2, file_formats: item.file_formats || 'AI, PDF, PNG, JPEG', is_featured: !!item.is_featured, is_active: !!item.is_active, thumbnail_url: item.thumbnail_url || '' });
     setShowForm(true);
   }
 
@@ -89,6 +92,27 @@ export default function AdminProducts() {
                 <div><label className="form-label">Revisions</label><input type="number" className="form-input" value={form.revisions} onChange={e => setForm(f => ({ ...f, revisions: e.target.value }))} /></div>
                 <div><label className="form-label">File Formats</label><input className="form-input" value={form.file_formats} onChange={e => setForm(f => ({ ...f, file_formats: e.target.value }))} /></div>
               </div>
+              
+              {/* Thumbnail field with Unsplash Search */}
+              <div style={{ marginBottom: '1rem' }}>
+                <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>Thumbnail Image URL</span>
+                  <button 
+                    type="button" 
+                    onClick={() => setShowUnsplash(true)}
+                    style={{ background: 'none', border: 'none', color: '#A78BFA', cursor: 'pointer', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                  >
+                    <ImageIcon size={14} /> Search Unsplash
+                  </button>
+                </label>
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                  <input className="form-input" style={{ flex: 1 }} value={form.thumbnail_url} onChange={e => setForm(f => ({ ...f, thumbnail_url: e.target.value }))} placeholder="https://..." />
+                  {form.thumbnail_url && (
+                    <img src={form.thumbnail_url} alt="Thumbnail preview" style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: '4px' }} />
+                  )}
+                </div>
+              </div>
+
               <div style={{ marginBottom: '1rem' }}><label className="form-label">Short Description</label><input className="form-input" value={form.short_desc} onChange={e => setForm(f => ({ ...f, short_desc: e.target.value }))} /></div>
               <div style={{ marginBottom: '1rem' }}><label className="form-label">Full Description</label><textarea className="form-input" rows={3} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} /></div>
               <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
@@ -104,6 +128,25 @@ export default function AdminProducts() {
                 <button type="submit" className="btn-primary">Save Service</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Unsplash Modal */}
+      {showUnsplash && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+          <div className="glass-card" style={{ width: '100%', maxWidth: 800, height: '80vh', display: 'flex', flexDirection: 'column', padding: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+              <h3>Select Image from Unsplash</h3>
+              <button onClick={() => setShowUnsplash(false)} style={{ background: 'none', border: 'none', color: '#EF4444', cursor: 'pointer' }}>Close</button>
+            </div>
+            <UnsplashImageSearch 
+              initialQuery={form.name || 'business'}
+              onSelect={(img) => {
+                setForm(f => ({ ...f, thumbnail_url: img.url }));
+                setShowUnsplash(false);
+              }} 
+            />
           </div>
         </div>
       )}

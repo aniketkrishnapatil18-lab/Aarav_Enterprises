@@ -38,10 +38,31 @@ const heroGridStyle = `
 import { productAPI, portfolioAPI, categoryAPI } from "../services/api";
 import { openWhatsApp } from "../utils/helpers";
 
+const DEFAULT_CATEGORY_IMAGES = {
+  'logo-design': '/assets/portfolio/Logo Design/logo-coffee.jpg',
+  'visiting-card': '/assets/portfolio/Visiting Card/visiting-card-design.jpg',
+  'brochure-design': '/assets/portfolio/Brochure Design/brochure-trifold.jpg',
+  'menu-card-design': '/assets/portfolio/Menu Cards & Brochures/flavors-menu.jpg',
+  '3d-logo-design': '/assets/portfolio/3D Logo Design/3d-logo-gold.jpg',
+  'banner-design': '/assets/portfolio/Banner Design/banner-furniture.jpg',
+  'flex-printing': '/assets/portfolio/Flex Banners/flex-1.jpg',
+  'advertisement': 'https://images.pexels.com/photos/518543/pexels-photo-518543.jpeg?auto=compress&cs=tinysrgb&w=400',
+  'social-media-design': 'https://images.pexels.com/photos/3178818/pexels-photo-3178818.jpeg?auto=compress&cs=tinysrgb&w=400',
+  'pamphlet-flyer': 'https://images.pexels.com/photos/6476254/pexels-photo-6476254.jpeg?auto=compress&cs=tinysrgb&w=400',
+  'led-sign-board': '/assets/portfolio/LED Sign Boards/led-1.jpg',
+};
+
+function resolveProductImage(service) {
+  if (service?.thumbnail_url) return service.thumbnail_url;
+  const slug = service?.category_slug || service?.category?.slug || service?.slug;
+  return DEFAULT_CATEGORY_IMAGES[slug] || DEFAULT_CATEGORY_IMAGES['logo-design'];
+}
+
 // ── Service Card Component (discount badge + rating + strike price) ──
 function ServiceCard({ service }) {
   const filledStars = Math.round(service.rating || 0);
   const detailHref = `/services/${service.slug || service.id}`;
+  const imageUrl = resolveProductImage(service);
   return (
     <div
       style={{
@@ -62,10 +83,8 @@ function ServiceCard({ service }) {
         <div
           style={{
             position: "relative",
-            aspectRatio: "1 / 1",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            aspectRatio: "4 / 3",
+            overflow: "hidden",
             background: "var(--bg-subtle)",
           }}
         >
@@ -87,24 +106,18 @@ function ServiceCard({ service }) {
               -{service.discount_percent}%
             </span>
           )}
-          {service.thumbnail_url ? (
-            <img
-              src={service.thumbnail_url}
-              alt={service.name}
-              loading="lazy"
-              style={{
-                maxWidth: "100%",
-                maxHeight: "100%",
-                objectFit: "contain",
-              }}
-            />
-          ) : (
-            <Palette
-              size={40}
-              color="var(--brand-violet)"
-              style={{ opacity: 0.5 }}
-            />
-          )}
+          <img
+            src={imageUrl}
+            alt={service.name}
+            loading="lazy"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              position: "absolute",
+              inset: 0,
+            }}
+          />
         </div>
       </Link>
       <div
@@ -238,8 +251,9 @@ function ServiceCard({ service }) {
   );
 }
 
-// ── Simple Service Card (Shop by Category strip — image, name, price only) ──
+// ── Simple Service Card (Shop by Category strip — image fills full card) ──
 function SimpleServiceCard({ service }) {
+  const imageUrl = resolveProductImage(service);
   return (
     <Link
       to={`/services/${service.slug || service.id}`}
@@ -249,47 +263,57 @@ function SimpleServiceCard({ service }) {
         style={{
           background: "var(--bg-card)",
           borderRadius: "1rem",
-          padding: "1.25rem",
           boxShadow: "var(--shadow-sm)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: "0.75rem",
-          aspectRatio: "1 / 1",
+          border: "1px solid var(--border-light)",
           overflow: "hidden",
         }}
       >
-        {service.thumbnail_url ? (
+        {/* Image fills entire top — no padding */}
+        <div
+          style={{
+            aspectRatio: "1 / 1",
+            overflow: "hidden",
+            position: "relative",
+            background: "var(--bg-subtle)",
+          }}
+        >
           <img
-            src={service.thumbnail_url}
+            src={imageUrl}
             alt={service.name}
             loading="lazy"
             style={{
-              maxWidth: "100%",
-              maxHeight: "100%",
-              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              position: "absolute",
+              inset: 0,
+              transition: "transform 0.35s ease",
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.06)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
           />
-        ) : (
-          <Palette size={48} color="var(--brand-violet)" style={{ opacity: 0.5 }} />
-        )}
-      </div>
-      <div>
-        <h3
-          style={{
-            fontSize: "0.95rem",
-            fontWeight: 700,
-            color: "var(--text-main)",
-            marginBottom: "0.1rem",
-          }}
-        >
-          {service.name}
-        </h3>
-        <p style={{ fontSize: "0.75rem", color: "var(--text-subtle)" }}>
-          {service.starting_price > 0
-            ? `Starting from ₹${service.starting_price}`
-            : "Explore"}
-        </p>
+        </div>
+        {/* Text below image */}
+        <div style={{ padding: "0.75rem 1rem" }}>
+          <h3
+            style={{
+              fontSize: "0.9rem",
+              fontWeight: 700,
+              color: "var(--text-main)",
+              marginBottom: "0.2rem",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {service.name}
+          </h3>
+          <p style={{ fontSize: "0.75rem", color: "var(--text-subtle)", margin: 0 }}>
+            {service.starting_price > 0
+              ? `Starting from ₹${service.starting_price}`
+              : "Explore"}
+          </p>
+        </div>
       </div>
     </Link>
   );
@@ -319,7 +343,7 @@ function PortfolioThumb({ item }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-start",
-          marginBottom: "1rem",
+          marginBottom: "0.75rem",
         }}
       >
         {item.category_name ? (
@@ -346,19 +370,26 @@ function PortfolioThumb({ item }) {
       {/* Center Image */}
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 1,
-          marginBottom: "1.5rem",
-          minHeight: "140px",
+          position: "relative",
+          borderRadius: "0.85rem",
+          overflow: "hidden",
+          marginBottom: "0.85rem",
+          aspectRatio: "4 / 3",
+          width: "100%",
+          background: "var(--bg-subtle)",
         }}
       >
         <img
           src={item.image_url}
           alt={item.title}
           loading="lazy"
-          style={{ maxWidth: "100%", maxHeight: "140px", objectFit: "contain" }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
           onError={(e) => {
             e.target.src = `https://placehold.co/500x500/160C33/A78BFA?text=${encodeURIComponent(item.category_name || "Design")}`;
           }}
@@ -382,7 +413,7 @@ function PortfolioThumb({ item }) {
           style={{
             fontSize: "0.75rem",
             color: "var(--text-subtle)",
-            marginBottom: "1rem",
+            marginBottom: "0.65rem",
           }}
         >
           {item.category_name || "Design"}
@@ -407,8 +438,8 @@ function PortfolioThumb({ item }) {
           </span>
           <div
             style={{
-              background: "var(--text-main)",
-              color: "var(--bg-main)",
+              background: "var(--brand-violet)",
+              color: "#FFFFFF",
               width: 34,
               height: 34,
               borderRadius: "0.6rem",
@@ -1153,7 +1184,7 @@ function HeroCentered() {
           }}
         >
           <img
-            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=80"
+            src="/assets/portfolio/LED Sign Boards/led-2.jpg"
             alt="LED Board"
             style={{
               width: "100%",
@@ -1179,7 +1210,7 @@ function HeroCentered() {
           }}
         >
           <img
-            src="https://images.unsplash.com/photo-1636633762833-5d1658f1e29b?auto=format&fit=crop&w=400&q=80"
+            src="/assets/portfolio/UV Printing/uv-3.jpg"
             alt="UV Printing"
             style={{
               width: "100%",
@@ -1290,7 +1321,7 @@ function HeroCentered() {
           }}
         >
           <img
-            src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=400&q=80"
+            src="/assets/portfolio/Acrylic Sign Boards/acrylic-2.jpg"
             alt="Acrylic Sign Boards"
             style={{
               width: "100%",
@@ -1534,6 +1565,7 @@ export default function Home() {
   const [allProducts, setAllProducts] = useState([]);
   const [catalogReady, setCatalogReady] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   const categoryScrollRef = useRef(null);
   const scrollCategory = (dir) => {
@@ -1602,6 +1634,11 @@ export default function Home() {
     // taxonomy yet, so shown as standalone rows on every load.
     ...SIGNAGE_PRINTING_ROWS,
   ];
+
+  const visibleCategoryRows =
+    categoryFilter === "all"
+      ? categoryRows
+      : categoryRows.filter((row) => row.category.id === categoryFilter);
 
   return (
     <>
@@ -1739,74 +1776,74 @@ export default function Home() {
             ref={categoryScrollRef}
             className="hide-scroll"
             style={{
-              display: "flex",
-              overflowX: "auto",
-              gap: "1.5rem",
+              display: "grid",
+              gridTemplateColumns: "repeat(8, 180px)",
+              gap: "1rem",
               paddingBottom: "1rem",
+              overflowX: "auto",
               scrollbarWidth: "none",
               msOverflowStyle: "none",
-              scrollBehavior: "smooth",
             }}
           >
             {[
               {
                 id: "cat-1",
                 name: "UV Printing Service",
-                thumbnail_url:
-                  "https://images.unsplash.com/photo-1636633762833-5d1658f1e29b?auto=format&fit=crop&w=400&q=80",
+                slug: "uv-printing",
+                thumbnail_url: "/assets/portfolio/UV Printing/uv-1.jpg",
                 starting_price: 999,
               },
               {
                 id: "cat-2",
                 name: "Acrylic Sign Board",
-                thumbnail_url:
-                  "https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=400&q=80",
+                slug: "acrylic-sign-boards",
+                thumbnail_url: "/assets/portfolio/Acrylic Sign Boards/acrylic-1.jpg",
                 starting_price: 1499,
               },
               {
                 id: "cat-3",
                 name: "Roll Up Standee",
-                thumbnail_url:
-                  "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=400&q=80",
+                slug: "roll-up-standees",
+                thumbnail_url: "/assets/portfolio/Roll Up Standees/standee-1.jpg",
                 starting_price: 1999,
               },
               {
                 id: "cat-4",
                 name: "LED Sign Board",
-                thumbnail_url:
-                  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=80",
+                slug: "led-sign-boards",
+                thumbnail_url: "/assets/portfolio/LED Sign Boards/led-1.jpg",
                 starting_price: 2499,
               },
               {
                 id: "cat-5",
                 name: "Glow Sign Board",
-                thumbnail_url:
-                  "https://images.unsplash.com/photo-1563298723-dcfebaa392e3?auto=format&fit=crop&w=400&q=80",
+                slug: "glow-sign-boards",
+                thumbnail_url: "/assets/portfolio/Glow Sign Boards/glow-1.jpg",
                 starting_price: 2999,
               },
               {
                 id: "cat-6",
                 name: "Flex Banner",
-                thumbnail_url:
-                  "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=400&q=80",
+                slug: "flex-banners",
+                thumbnail_url: "/assets/portfolio/Flex Banners/flex-1.jpg",
                 starting_price: 499,
               },
               {
                 id: "cat-7",
                 name: "Letter Sign Board",
-                thumbnail_url:
-                  "https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=400&q=80",
+                slug: "letter-sign-boards",
+                thumbnail_url: "/assets/portfolio/Letter Sign Boards/letter-1.jpg",
                 starting_price: 1299,
               },
               {
                 id: "cat-8",
                 name: "LED Acrylic Letter",
-                thumbnail_url:
-                  "https://images.unsplash.com/photo-1601662528567-526cd06f6582?auto=format&fit=crop&w=400&q=80",
+                slug: "led-acrylic-letters",
+                thumbnail_url: "/assets/portfolio/Letter Sign Boards/letter-3.jpg",
                 starting_price: 3499,
               },
             ].map((s) => (
-              <div key={s.id} style={{ width: "220px", flexShrink: 0 }}>
+              <div key={s.id} style={{ flexShrink: 0 }}>
                 <SimpleServiceCard service={s} />
               </div>
             ))}
@@ -1978,7 +2015,7 @@ export default function Home() {
           }}
         >
           <div className="container">
-            <div style={{ marginBottom: "2rem" }}>
+            <div style={{ marginBottom: "1.5rem" }}>
               <h2
                 style={{
                   fontSize: "1.75rem",
@@ -1995,7 +2032,78 @@ export default function Home() {
               </p>
             </div>
 
-            {categoryRows.map((row) => (
+            <div
+              className="hide-scroll"
+              style={{
+                display: "flex",
+                gap: "0.6rem",
+                overflowX: "auto",
+                paddingBottom: "0.5rem",
+                marginBottom: "2rem",
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+              }}
+            >
+              <button
+                onClick={() => setCategoryFilter("all")}
+                style={{
+                  flexShrink: 0,
+                  padding: "0.55rem 1.25rem",
+                  borderRadius: 999,
+                  fontSize: "0.85rem",
+                  fontWeight: 700,
+                  border: "1px solid",
+                  borderColor:
+                    categoryFilter === "all"
+                      ? "var(--brand-violet)"
+                      : "var(--border-light)",
+                  background:
+                    categoryFilter === "all"
+                      ? "var(--badge-bg-purple)"
+                      : "var(--bg-card)",
+                  color:
+                    categoryFilter === "all"
+                      ? "var(--brand-violet)"
+                      : "var(--text-muted)",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                All
+              </button>
+              {categoryRows.map((row) => (
+                <button
+                  key={row.category.id}
+                  onClick={() => setCategoryFilter(row.category.id)}
+                  style={{
+                    flexShrink: 0,
+                    padding: "0.55rem 1.25rem",
+                    borderRadius: 999,
+                    fontSize: "0.85rem",
+                    fontWeight: 700,
+                    border: "1px solid",
+                    borderColor:
+                      categoryFilter === row.category.id
+                        ? "var(--brand-violet)"
+                        : "var(--border-light)",
+                    background:
+                      categoryFilter === row.category.id
+                        ? "var(--badge-bg-purple)"
+                        : "var(--bg-card)",
+                    color:
+                      categoryFilter === row.category.id
+                        ? "var(--brand-violet)"
+                        : "var(--text-muted)",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  {row.category.name}
+                </button>
+              ))}
+            </div>
+
+            {visibleCategoryRows.map((row) => (
               <CategoryRow
                 key={row.category.id}
                 category={row.category}
@@ -2192,45 +2300,39 @@ const FALLBACK_SERVICES = [
 const FALLBACK_PORTFOLIO = [
   {
     id: 1,
-    title: "Luxury Tech Brand Logo",
-    category_name: "Logo Design",
-    image_url:
-      "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=600&q=80",
+    title: "LED Shop Sign Board",
+    category_name: "LED Sign Board",
+    image_url: "/assets/portfolio/LED Sign Boards/led-1.jpg",
   },
   {
     id: 2,
-    title: "Gold Embossed Business Card",
-    category_name: "Visiting Card",
-    image_url:
-      "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=600&q=80",
+    title: "Acrylic Store Board",
+    category_name: "Acrylic Sign Board",
+    image_url: "/assets/portfolio/Acrylic Sign Boards/acrylic-1.jpg",
   },
   {
     id: 3,
-    title: "3D Corporate Metallic Logo",
-    category_name: "3D Logo",
-    image_url:
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    title: "Premium Glow Sign",
+    category_name: "Glow Sign Board",
+    image_url: "/assets/portfolio/Glow Sign Boards/glow-1.jpg",
   },
   {
     id: 4,
-    title: "Restaurant Food Menu Card",
-    category_name: "Menu Design",
-    image_url:
-      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80",
+    title: "Roll Up Standee — Event",
+    category_name: "Roll Up Standee",
+    image_url: "/assets/portfolio/Roll Up Standees/standee-1.jpg",
   },
   {
     id: 5,
-    title: "Instagram Product Campaign",
-    category_name: "Social Media",
-    image_url:
-      "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=600&q=80",
+    title: "UV Printed Branding Board",
+    category_name: "UV Printing",
+    image_url: "/assets/portfolio/UV Printing/uv-1.jpg",
   },
   {
     id: 6,
-    title: "Festival Grand Hoarding Banner",
+    title: "Flex Hoarding Banner",
     category_name: "Flex Banner",
-    image_url:
-      "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80",
+    image_url: "/assets/portfolio/Flex Banners/flex-1.jpg",
   },
 ];
 
@@ -2246,36 +2348,49 @@ const FALLBACK_CATEGORY_ROWS = [
         name: "Logo Design",
         slug: "logo-design-service",
         starting_price: 999,
+        thumbnail_url: "/assets/portfolio/Logo Design/logo-coffee.jpg",
       },
       {
         id: "fp-2",
         name: "3D Logo Design",
         slug: "3d-logo-design-service",
         starting_price: 1499,
+        thumbnail_url: "https://images.pexels.com/photos/5926389/pexels-photo-5926389.jpeg?auto=compress&cs=tinysrgb&w=400",
       },
       {
         id: "fp-3",
         name: "Mascot Logo Design",
         slug: "mascot-logo-design",
         starting_price: 1799,
+        thumbnail_url: "/assets/portfolio/Logo Design/logo-mascot.jpg",
       },
       {
         id: "fp-4",
-        name: "Minimalist Logo Design",
-        slug: "minimalist-logo-design",
+        name: "Monogram Logo Design",
+        slug: "monogram-logo-design",
         starting_price: 899,
+        thumbnail_url: "/assets/portfolio/Logo Design/logo-monogram.jpg",
       },
       {
         id: "fp-5",
         name: "Wordmark Logo Design",
         slug: "wordmark-logo-design",
         starting_price: 999,
+        thumbnail_url: "/assets/portfolio/Logo Design/logo-wordmark.jpg",
       },
       {
         id: "fp-6",
+        name: "Vintage Logo Design",
+        slug: "vintage-logo-design",
+        starting_price: 1299,
+        thumbnail_url: "/assets/portfolio/Logo Design/logo-vintage.jpg",
+      },
+      {
+        id: "fp-7",
         name: "Logo Redesign & Rebrand",
         slug: "logo-redesign",
         starting_price: 1299,
+        thumbnail_url: "/assets/portfolio/Logo Design/logo-redesign.jpg",
       },
     ],
   },
@@ -2287,52 +2402,204 @@ const FALLBACK_CATEGORY_ROWS = [
         name: "Visiting Card Design",
         slug: "visiting-card-design",
         starting_price: 299,
+        thumbnail_url: "/assets/portfolio/Visiting Card/visiting-card-design.jpg",
       },
       {
         id: "fp-8",
         name: "Premium Metal Card",
         slug: "premium-metal-card",
         starting_price: 1999,
+        thumbnail_url: "/assets/portfolio/Visiting Card/visiting-card-metal.jpg",
       },
       {
         id: "fp-9",
         name: "Foil Stamped Card",
         slug: "foil-stamped-card",
         starting_price: 899,
+        thumbnail_url: "/assets/portfolio/Visiting Card/visiting-card-foil.jpg",
       },
       {
         id: "fp-10",
         name: "Double-Sided Card",
         slug: "double-sided-card",
         starting_price: 399,
+        thumbnail_url: "https://images.pexels.com/photos/8867432/pexels-photo-8867432.jpeg?auto=compress&cs=tinysrgb&w=400",
       },
       {
         id: "fp-11",
         name: "QR Digital Card",
         slug: "qr-digital-card",
         starting_price: 499,
+        thumbnail_url: "/assets/portfolio/Visiting Card/visiting-card-qr.jpg",
       },
       {
         id: "fp-12",
-        name: "Eco-Friendly Card",
-        slug: "eco-friendly-card",
+        name: "Corporate Business Card",
+        slug: "corporate-business-card",
         starting_price: 449,
+        thumbnail_url: "https://images.pexels.com/photos/6804100/pexels-photo-6804100.jpeg?auto=compress&cs=tinysrgb&w=400",
       },
+      {
+        id: "fp-13",
+        name: "Eco-Friendly Visiting Card",
+        slug: "eco-friendly-visiting-card",
+        starting_price: 599,
+        thumbnail_url: "/assets/portfolio/Visiting Card/visiting-card-eco.jpg",
+      },
+    ],
+  },
+  {
+    category: { id: "fc-social", slug: "social-media-design", name: "Social Media Design" },
+    products: [
+      { id: "fp-13", name: "Instagram Post Design", slug: "instagram-post-design", starting_price: 299,
+        thumbnail_url: "https://images.pexels.com/photos/3178818/pexels-photo-3178818.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-14", name: "Facebook Cover Design", slug: "facebook-cover-design", starting_price: 399,
+        thumbnail_url: "https://images.pexels.com/photos/267350/pexels-photo-267350.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-15", name: "WhatsApp Status Design", slug: "whatsapp-status-design", starting_price: 199,
+        thumbnail_url: "https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-16", name: "YouTube Thumbnail Design", slug: "youtube-thumbnail-design", starting_price: 349,
+        thumbnail_url: "https://images.pexels.com/photos/1591060/pexels-photo-1591060.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-17", name: "Festival Post Design", slug: "festival-post-design", starting_price: 299,
+        thumbnail_url: "https://images.pexels.com/photos/3184325/pexels-photo-3184325.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-18", name: "Product Promotion Post", slug: "product-promotion-post", starting_price: 499,
+        thumbnail_url: "https://images.pexels.com/photos/6476808/pexels-photo-6476808.jpeg?auto=compress&cs=tinysrgb&w=400" },
+    ],
+  },
+  {
+    category: { id: "fc-pamphlet", slug: "pamphlet-flyer", name: "Pamphlet & Flyer" },
+    products: [
+      { id: "fp-19", name: "A4 Pamphlet Design", slug: "a4-pamphlet-design", starting_price: 399,
+        thumbnail_url: "https://images.pexels.com/photos/6476254/pexels-photo-6476254.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-20", name: "Event Flyer Design", slug: "event-flyer-design", starting_price: 349,
+        thumbnail_url: "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-21", name: "Restaurant Pamphlet", slug: "restaurant-pamphlet", starting_price: 499,
+        thumbnail_url: "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-22", name: "Offer & Sale Flyer", slug: "offer-sale-flyer", starting_price: 299,
+        thumbnail_url: "https://images.pexels.com/photos/3184298/pexels-photo-3184298.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-23", name: "Real Estate Pamphlet", slug: "real-estate-pamphlet", starting_price: 599,
+        thumbnail_url: "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-24", name: "Educational Flyer", slug: "educational-flyer", starting_price: 349,
+        thumbnail_url: "https://images.pexels.com/photos/5427654/pexels-photo-5427654.jpeg?auto=compress&cs=tinysrgb&w=400" },
+    ],
+  },
+  {
+    category: { id: "fc-banner", slug: "banner-design", name: "Banner Design" },
+    products: [
+      { id: "fp-25", name: "Shop Banner Design", slug: "shop-banner-design", starting_price: 599,
+        thumbnail_url: "/assets/portfolio/Banner Design/banner-furniture.jpg" },
+      { id: "fp-26", name: "Event Banner Design", slug: "event-banner-design", starting_price: 699,
+        thumbnail_url: "/assets/portfolio/Banner Design/banner-event.jpg" },
+      { id: "fp-27", name: "Hoarding Banner", slug: "hoarding-banner", starting_price: 999,
+        thumbnail_url: "https://images.pexels.com/photos/2608517/pexels-photo-2608517.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-28", name: "Sale & Offer Banner", slug: "sale-offer-banner", starting_price: 449,
+        thumbnail_url: "/assets/portfolio/Banner Design/banner-sale.jpg" },
+      { id: "fp-29", name: "Wedding Banner Design", slug: "wedding-banner-design", starting_price: 799,
+        thumbnail_url: "https://images.pexels.com/photos/1456613/pexels-photo-1456613.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-30", name: "Outdoor Hoarding Design", slug: "outdoor-hoarding-design", starting_price: 1299,
+        thumbnail_url: "https://images.pexels.com/photos/3184423/pexels-photo-3184423.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-30b", name: "Website Banner Design", slug: "website-banner-design", starting_price: 499,
+        thumbnail_url: "/assets/portfolio/Banner Design/banner-website.jpg" },
+      { id: "fp-30c", name: "Social Media Banner Design", slug: "social-media-banner-design", starting_price: 399,
+        thumbnail_url: "/assets/portfolio/Banner Design/banner-social.jpg" },
+      { id: "fp-30d", name: "Corporate Banner Design", slug: "corporate-banner-design", starting_price: 699,
+        thumbnail_url: "/assets/portfolio/Banner Design/banner-corporate.jpg" },
+    ],
+  },
+  {
+    category: { id: "fc-flex", slug: "flex-printing", name: "Flex & Printing" },
+    products: [
+      { id: "fp-31", name: "Flex Printing", slug: "flex-printing-service", starting_price: 499,
+        thumbnail_url: "/assets/portfolio/Flex Banners/flex-1.jpg" },
+      { id: "fp-32", name: "Vinyl Flex Print", slug: "vinyl-flex-print", starting_price: 599,
+        thumbnail_url: "/assets/portfolio/Flex Banners/flex-2.jpg" },
+      { id: "fp-33", name: "Star Flex Printing", slug: "star-flex-printing", starting_price: 699,
+        thumbnail_url: "/assets/portfolio/Flex Banners/flex-3.jpg" },
+      { id: "fp-34", name: "Sunboard Printing", slug: "sunboard-printing", starting_price: 799,
+        thumbnail_url: "/assets/portfolio/Flex Banners/flex-4.jpg" },
+      { id: "fp-35", name: "ACP Board Printing", slug: "acp-board-printing", starting_price: 1499,
+        thumbnail_url: "/assets/portfolio/Flex Banners/flex-5.jpg" },
+      { id: "fp-36", name: "One Way Vision Print", slug: "one-way-vision-print", starting_price: 999,
+        thumbnail_url: "/assets/portfolio/Flex Banners/flex-6.jpg" },
+    ],
+  },
+  {
+    category: { id: "fc-ad", slug: "advertisement", name: "Advertisement" },
+    products: [
+      { id: "fp-37", name: "Newspaper Ad Design", slug: "newspaper-ad-design", starting_price: 799,
+        thumbnail_url: "https://images.pexels.com/photos/518543/pexels-photo-518543.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-38", name: "Digital Ad Design", slug: "digital-ad-design", starting_price: 499,
+        thumbnail_url: "https://images.pexels.com/photos/905163/pexels-photo-905163.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-39", name: "Magazine Ad Design", slug: "magazine-ad-design", starting_price: 999,
+        thumbnail_url: "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-40", name: "Billboard Ad Design", slug: "billboard-ad-design", starting_price: 1499,
+        thumbnail_url: "https://images.pexels.com/photos/1543793/pexels-photo-1543793.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-41", name: "Google Display Ad", slug: "google-display-ad", starting_price: 699,
+        thumbnail_url: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=400" },
+      { id: "fp-42", name: "Festival Sale Ad", slug: "festival-sale-ad", starting_price: 599,
+        thumbnail_url: "https://images.pexels.com/photos/5632374/pexels-photo-5632374.jpeg?auto=compress&cs=tinysrgb&w=400" },
+    ],
+  },
+  {
+    category: { id: "fc-3dlogo", slug: "3d-logo-design", name: "3D Logo Design" },
+    products: [
+      { id: "fp-43", name: "3D Brand Logo", slug: "3d-brand-logo", starting_price: 1499,
+        thumbnail_url: "/assets/portfolio/3D Logo Design/3d-logo-gold.jpg" },
+      { id: "fp-44", name: "3D Metallic Logo", slug: "3d-metallic-logo", starting_price: 1999,
+        thumbnail_url: "/assets/portfolio/3D Logo Design/3d-logo-metallic.jpg" },
+      { id: "fp-45", name: "3D Wooden Logo Design", slug: "3d-wooden-logo-design", starting_price: 2499,
+        thumbnail_url: "/assets/portfolio/3D Logo Design/3d-logo-wooden.jpg" },
+      { id: "fp-46", name: "3D Embossed Logo", slug: "3d-embossed-logo", starting_price: 1799,
+        thumbnail_url: "/assets/portfolio/3D Logo Design/3d-logo-embossed.jpg" },
+      { id: "fp-47", name: "3D Animated Logo", slug: "3d-animated-logo", starting_price: 2999,
+        thumbnail_url: "/assets/portfolio/3D Logo Design/3d-logo-animated.jpg" },
+      { id: "fp-48", name: "3D Glass Logo", slug: "3d-glass-logo", starting_price: 2199,
+        thumbnail_url: "/assets/portfolio/3D Logo Design/3d-logo-glass.jpg" },
+    ],
+  },
+  {
+    category: { id: "fc-menu", slug: "menu-card-design", name: "Menu Card Design" },
+    products: [
+      { id: "fp-49", name: "Restaurant Menu Card", slug: "restaurant-menu-card", starting_price: 599,
+        thumbnail_url: "/assets/portfolio/Menu Cards & Brochures/flavors-menu.jpg" },
+      { id: "fp-50", name: "Takeaway Menu Design", slug: "takeaway-menu-design", starting_price: 499,
+        thumbnail_url: "/assets/portfolio/Menu Cards & Brochures/takeaway-menu.jpg" },
+      { id: "fp-51", name: "Wine & Beverage Menu Design", slug: "wine-beverage-menu-design", starting_price: 699,
+        thumbnail_url: "/assets/portfolio/Menu Cards & Brochures/wine-menu.jpg" },
+      { id: "fp-52", name: "Festive Special Menu Design", slug: "festive-special-menu-design", starting_price: 699,
+        thumbnail_url: "/assets/portfolio/Menu Cards & Brochures/festive-menu.jpg" },
+      { id: "fp-53", name: "Digital Menu Design", slug: "digital-menu-design", starting_price: 899,
+        thumbnail_url: "/assets/portfolio/Menu Cards & Brochures/digital-menu-board.jpg" },
+      { id: "fp-54", name: "Multi-Page Menu Booklet", slug: "multi-page-menu-booklet", starting_price: 899,
+        thumbnail_url: "/assets/portfolio/Menu Cards & Brochures/menu-booklet.jpg" },
+    ],
+  },
+  {
+    category: { id: "fc-brochure", slug: "brochure-design", name: "Brochure Design" },
+    products: [
+      { id: "fp-55", name: "Bi-Fold Brochure", slug: "bi-fold-brochure", starting_price: 799,
+        thumbnail_url: "/assets/portfolio/Brochure Design/brochure-bifold.jpg" },
+      { id: "fp-56", name: "Tri-Fold Brochure", slug: "tri-fold-brochure", starting_price: 999,
+        thumbnail_url: "/assets/portfolio/Brochure Design/brochure-trifold-creative.jpg" },
+      { id: "fp-57", name: "Company Profile Brochure", slug: "corporate-catalog", starting_price: 1299,
+        thumbnail_url: "/assets/portfolio/Brochure Design/brochure-company-profile.jpg" },
+      { id: "fp-58", name: "Real Estate Brochure", slug: "real-estate-brochure", starting_price: 1499,
+        thumbnail_url: "/assets/portfolio/Brochure Design/brochure-real-estate.jpg" },
+      { id: "fp-59", name: "Product Catalog Design", slug: "product-catalog-design", starting_price: 1199,
+        thumbnail_url: "/assets/portfolio/Brochure Design/catalog-product.jpg" },
+      { id: "fp-60", name: "School/College Brochure", slug: "school-college-brochure", starting_price: 899,
+        thumbnail_url: "https://images.pexels.com/photos/3184325/pexels-photo-3184325.jpeg?auto=compress&cs=tinysrgb&w=400" },
     ],
   },
 ].map((row) => ({ ...row, products: row.products.map(withDemoStats) }));
 
 // Core signage/printing products (not part of the backend category
 // taxonomy) — each shown as its own row of 6-7 variant cards, always
-// rendered regardless of API state. The first card in each row reuses
-// the same photo as the "Shop by Category" strip above, for consistency;
-// the variant cards use the icon placeholder until real photos/products
-// are added via /admin/products.
+// rendered regardless of API state.
 const SIGNAGE_PRINTING_ROWS = [
   {
     category: {
       id: "signage-uv-printing",
-      slug: "signage-printing",
+      slug: "uv-printing",
       name: "UV Printing Service",
     },
     viewAllHref: "/services",
@@ -2342,51 +2609,56 @@ const SIGNAGE_PRINTING_ROWS = [
         name: "UV Printing Service",
         slug: "uv-printing-service",
         starting_price: 999,
-        thumbnail_url:
-          "https://images.unsplash.com/photo-1636633762833-5d1658f1e29b?auto=format&fit=crop&w=400&q=80",
+        thumbnail_url: "/assets/portfolio/UV Printing/uv-1.jpg",
       },
       {
         id: "sp-uv-2",
         name: "UV Printing on Acrylic",
         slug: "uv-printing-acrylic",
         starting_price: 1299,
+        thumbnail_url: "/assets/portfolio/UV Printing/uv-2.jpg",
       },
       {
         id: "sp-uv-3",
-        name: "UV Printing on Wood",
-        slug: "uv-printing-wood",
+        name: "UV Printing on Board",
+        slug: "uv-printing-board",
         starting_price: 1199,
+        thumbnail_url: "/assets/portfolio/UV Printing/uv-3.jpg",
       },
       {
         id: "sp-uv-4",
-        name: "UV Printing on Metal",
-        slug: "uv-printing-metal",
+        name: "UV Printing on PVC",
+        slug: "uv-printing-pvc",
         starting_price: 1499,
+        thumbnail_url: "/assets/portfolio/UV Printing/uv-4.jpg",
       },
       {
         id: "sp-uv-5",
-        name: "UV Printing on Glass",
-        slug: "uv-printing-glass",
+        name: "UV Printing on Sheet",
+        slug: "uv-printing-sheet",
         starting_price: 1399,
+        thumbnail_url: "/assets/portfolio/UV Printing/uv-5.jpg",
       },
       {
         id: "sp-uv-6",
-        name: "UV Printing on PVC Sheet",
-        slug: "uv-printing-pvc",
+        name: "UV Printing — Premium",
+        slug: "uv-printing-premium",
         starting_price: 999,
+        thumbnail_url: "/assets/portfolio/UV Printing/uv-6.jpg",
       },
       {
         id: "sp-uv-7",
-        name: "UV Printing on Canvas",
-        slug: "uv-printing-canvas",
+        name: "UV Printing — Custom Size",
+        slug: "uv-printing-custom",
         starting_price: 899,
+        thumbnail_url: "/assets/portfolio/UV Printing/uv-7.jpg",
       },
     ],
   },
   {
     category: {
       id: "signage-acrylic-board",
-      slug: "signage-printing",
+      slug: "acrylic-sign-boards",
       name: "Acrylic Sign Board",
     },
     viewAllHref: "/services",
@@ -2396,51 +2668,56 @@ const SIGNAGE_PRINTING_ROWS = [
         name: "Acrylic Sign Board",
         slug: "acrylic-sign-board",
         starting_price: 1499,
-        thumbnail_url:
-          "https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=400&q=80",
+        thumbnail_url: "/assets/portfolio/Acrylic Sign Boards/acrylic-1.jpg",
       },
       {
         id: "sp-ac-2",
         name: "3D Acrylic Sign Board",
         slug: "3d-acrylic-sign-board",
         starting_price: 2499,
+        thumbnail_url: "/assets/portfolio/Acrylic Sign Boards/acrylic-2.jpg",
       },
       {
         id: "sp-ac-3",
         name: "Backlit Acrylic Sign Board",
         slug: "backlit-acrylic-sign-board",
         starting_price: 2999,
+        thumbnail_url: "/assets/portfolio/Acrylic Sign Boards/acrylic-3.jpg",
       },
       {
         id: "sp-ac-4",
         name: "Frosted Acrylic Sign Board",
         slug: "frosted-acrylic-sign-board",
         starting_price: 1799,
+        thumbnail_url: "/assets/portfolio/Acrylic Sign Boards/acrylic-4.jpg",
       },
       {
         id: "sp-ac-5",
         name: "Colored Acrylic Sign Board",
         slug: "colored-acrylic-sign-board",
         starting_price: 1699,
+        thumbnail_url: "/assets/portfolio/Acrylic Sign Boards/acrylic-5.jpg",
       },
       {
         id: "sp-ac-6",
         name: "Acrylic Nameplate",
         slug: "acrylic-nameplate",
         starting_price: 599,
+        thumbnail_url: "/assets/portfolio/Acrylic Sign Boards/acrylic-6.jpg",
       },
       {
         id: "sp-ac-7",
         name: "Transparent Acrylic Board",
         slug: "transparent-acrylic-board",
         starting_price: 1399,
+        thumbnail_url: "/assets/portfolio/Acrylic Sign Boards/acrylic-7.jpg",
       },
     ],
   },
   {
     category: {
       id: "signage-roll-up",
-      slug: "signage-printing",
+      slug: "roll-up-standees",
       name: "Roll Up Standee",
     },
     viewAllHref: "/services",
@@ -2450,51 +2727,56 @@ const SIGNAGE_PRINTING_ROWS = [
         name: "Roll Up Standee",
         slug: "roll-up-standee",
         starting_price: 1999,
-        thumbnail_url:
-          "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=400&q=80",
+        thumbnail_url: "/assets/portfolio/Roll Up Standees/standee-1.jpg",
       },
       {
         id: "sp-ru-2",
         name: "Premium Roll Up Standee",
         slug: "premium-roll-up-standee",
         starting_price: 2999,
+        thumbnail_url: "/assets/portfolio/Roll Up Standees/standee-2.jpg",
       },
       {
         id: "sp-ru-3",
         name: "Retractable Banner Stand",
         slug: "retractable-banner-stand",
         starting_price: 2499,
+        thumbnail_url: "/assets/portfolio/Roll Up Standees/standee-3.jpg",
       },
       {
         id: "sp-ru-4",
         name: "X-Banner Stand",
         slug: "x-banner-stand",
         starting_price: 1499,
+        thumbnail_url: "/assets/portfolio/Roll Up Standees/standee-4.jpg",
       },
       {
         id: "sp-ru-5",
         name: "Table Top Standee",
         slug: "table-top-standee",
         starting_price: 999,
+        thumbnail_url: "/assets/portfolio/Roll Up Standees/standee-5.jpg",
       },
       {
         id: "sp-ru-6",
         name: "Double-Sided Standee",
         slug: "double-sided-standee",
         starting_price: 3499,
+        thumbnail_url: "/assets/portfolio/Roll Up Standees/standee-6.jpg",
       },
       {
         id: "sp-ru-7",
         name: "Outdoor Roll Up Standee",
         slug: "outdoor-roll-up-standee",
         starting_price: 3999,
+        thumbnail_url: "/assets/portfolio/Roll Up Standees/standee-7.jpg",
       },
     ],
   },
   {
     category: {
       id: "signage-led-board",
-      slug: "signage-printing",
+      slug: "led-sign-boards",
       name: "LED Sign Board",
     },
     viewAllHref: "/services",
@@ -2504,51 +2786,56 @@ const SIGNAGE_PRINTING_ROWS = [
         name: "LED Sign Board",
         slug: "led-sign-board",
         starting_price: 2499,
-        thumbnail_url:
-          "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=80",
+        thumbnail_url: "/assets/portfolio/LED Sign Boards/led-1.jpg",
       },
       {
         id: "sp-led-2",
         name: "LED Backlit Sign Board",
         slug: "led-backlit-sign-board",
         starting_price: 3499,
+        thumbnail_url: "/assets/portfolio/LED Sign Boards/led-2.jpg",
       },
       {
         id: "sp-led-3",
         name: "LED Channel Letter Sign",
         slug: "led-channel-letter-sign",
         starting_price: 3999,
+        thumbnail_url: "/assets/portfolio/LED Sign Boards/led-3.jpg",
       },
       {
         id: "sp-led-4",
         name: "LED Display Board",
         slug: "led-display-board",
         starting_price: 4999,
+        thumbnail_url: "/assets/portfolio/LED Sign Boards/led-4.jpg",
       },
       {
         id: "sp-led-5",
         name: "LED Illuminated Box Sign",
         slug: "led-illuminated-box-sign",
         starting_price: 2999,
+        thumbnail_url: "/assets/portfolio/LED Sign Boards/led-5.jpg",
       },
       {
         id: "sp-led-6",
-        name: "RGB LED Sign Board",
-        slug: "rgb-led-sign-board",
+        name: "LED Shop Front Board",
+        slug: "led-shop-front-board",
         starting_price: 5999,
+        thumbnail_url: "/assets/portfolio/LED Sign Boards/led-6.jpg",
       },
       {
         id: "sp-led-7",
-        name: "Solar LED Sign Board",
-        slug: "solar-led-sign-board",
+        name: "LED Custom Sign Board",
+        slug: "led-custom-sign-board",
         starting_price: 4499,
+        thumbnail_url: "/assets/portfolio/LED Sign Boards/led-7.jpg",
       },
     ],
   },
   {
     category: {
       id: "signage-glow-board",
-      slug: "signage-printing",
+      slug: "glow-sign-boards",
       name: "Glow Sign Board",
     },
     viewAllHref: "/services",
@@ -2558,51 +2845,56 @@ const SIGNAGE_PRINTING_ROWS = [
         name: "Glow Sign Board",
         slug: "glow-sign-board",
         starting_price: 2999,
-        thumbnail_url:
-          "https://images.unsplash.com/photo-1563298723-dcfebaa392e3?auto=format&fit=crop&w=400&q=80",
+        thumbnail_url: "/assets/portfolio/Glow Sign Boards/glow-1.jpg",
       },
       {
         id: "sp-gl-2",
         name: "Single-Sided Glow Sign",
         slug: "single-sided-glow-sign",
         starting_price: 2499,
+        thumbnail_url: "/assets/portfolio/Glow Sign Boards/glow-2.jpg",
       },
       {
         id: "sp-gl-3",
         name: "Double-Sided Glow Sign",
         slug: "double-sided-glow-sign",
         starting_price: 3999,
+        thumbnail_url: "/assets/portfolio/Glow Sign Boards/glow-3.jpg",
       },
       {
         id: "sp-gl-4",
         name: "Flex Glow Sign Board",
         slug: "flex-glow-sign-board",
         starting_price: 2199,
+        thumbnail_url: "/assets/portfolio/Glow Sign Boards/glow-4.jpg",
       },
       {
         id: "sp-gl-5",
         name: "Acrylic Glow Sign Board",
         slug: "acrylic-glow-sign-board",
         starting_price: 3499,
+        thumbnail_url: "/assets/portfolio/Glow Sign Boards/glow-5.jpg",
       },
       {
         id: "sp-gl-6",
         name: "Vinyl Glow Sign Board",
         slug: "vinyl-glow-sign-board",
         starting_price: 1999,
+        thumbnail_url: "/assets/portfolio/Glow Sign Boards/glow-6.jpg",
       },
       {
         id: "sp-gl-7",
         name: "Outdoor Glow Sign Board",
         slug: "outdoor-glow-sign-board",
         starting_price: 4299,
+        thumbnail_url: "/assets/portfolio/Glow Sign Boards/glow-7.jpg",
       },
     ],
   },
   {
     category: {
       id: "signage-flex-banner",
-      slug: "signage-printing",
+      slug: "flex-banners",
       name: "Flex Banner",
     },
     viewAllHref: "/services",
@@ -2612,44 +2904,28 @@ const SIGNAGE_PRINTING_ROWS = [
         name: "Flex Banner",
         slug: "flex-banner",
         starting_price: 499,
-        thumbnail_url:
-          "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=400&q=80",
+        thumbnail_url: "https://printo-s3.dietpixels.net/Soldout/Large-Format-Banners_1781499483.jpg?quality=70&format=webp&w=1920",
       },
       {
         id: "sp-fb-2",
         name: "Vinyl Flex Banner",
         slug: "vinyl-flex-banner",
         starting_price: 599,
+        thumbnail_url: "https://printpeek.in/images/large-format/flex-vinyl-banners.jpeg",
       },
       {
         id: "sp-fb-3",
         name: "Mesh Flex Banner",
         slug: "mesh-flex-banner",
         starting_price: 799,
-      },
-      {
-        id: "sp-fb-4",
-        name: "Backlit Flex Banner",
-        slug: "backlit-flex-banner",
-        starting_price: 999,
-      },
-      {
-        id: "sp-fb-5",
-        name: "Frontlit Flex Banner",
-        slug: "frontlit-flex-banner",
-        starting_price: 899,
-      },
-      {
-        id: "sp-fb-6",
-        name: "Hoarding Flex Banner",
-        slug: "hoarding-flex-banner",
-        starting_price: 1999,
+        thumbnail_url: "https://cdn.printinglimitless.com/media/catalog/product/cache/product_page_image_large/650x650/f/a/fabric-mesh-banners_1.jpg",
       },
       {
         id: "sp-fb-7",
         name: "Event Flex Banner",
         slug: "event-flex-banner",
         starting_price: 699,
+        thumbnail_url: "https://deq64r0ss2hgl.cloudfront.net/images/opt/products_gallery_images/flex-banners-12553475664391.jpg?v=7543",
       },
     ],
   },

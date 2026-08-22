@@ -130,4 +130,9 @@ export const whatsappAPI = {
   testMessage: (data) => api.post('/whatsapp/test', data),
 };
 
+// ── Unsplash API ────────────────────────────────────────────
+export const unsplashAPI = {
+  search: (params) => api.get('/unsplash/search', { params }),
+};
+
 export default api;

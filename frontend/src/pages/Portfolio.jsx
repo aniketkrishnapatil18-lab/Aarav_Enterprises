@@ -122,15 +122,15 @@ function FilterBtn({ label, value, active, onClick }) {
 }
 
 const FALLBACK_PORTFOLIO = [
-  { id: 1, title: 'Modern Tech Logo', category_name: 'Logo Design', category_slug: 'logo-design', image_url: 'https://placehold.co/400x300/1A1033/A78BFA?text=Logo+Design' },
-  { id: 2, title: 'Premium Business Card', category_name: 'Visiting Card', category_slug: 'visiting-card', image_url: 'https://placehold.co/400x300/231845/EC4899?text=Business+Card' },
-  { id: 3, title: '3D Corporate Brand', category_name: '3D Logo', category_slug: '3d-logo-design', image_url: 'https://placehold.co/400x300/1A1033/7C3AED?text=3D+Logo' },
-  { id: 4, title: 'Instagram Post', category_name: 'Social Media', category_slug: 'social-media-design', image_url: 'https://placehold.co/400x300/231845/A78BFA?text=Social+Media' },
-  { id: 5, title: 'Restaurant Menu', category_name: 'Menu Card', category_slug: 'menu-card-design', image_url: 'https://placehold.co/400x300/1A1033/EC4899?text=Menu+Card' },
-  { id: 6, title: 'Festival Banner', category_name: 'Banner Design', category_slug: 'banner-design', image_url: 'https://placehold.co/400x300/231845/7C3AED?text=Banner' },
-  { id: 7, title: 'Business Brochure', category_name: 'Brochure', category_slug: 'brochure-design', image_url: 'https://placehold.co/400x300/1A1033/A78BFA?text=Brochure' },
-  { id: 8, title: 'Event Flyer', category_name: 'Pamphlet/Flyer', category_slug: 'pamphlet-flyer', image_url: 'https://placehold.co/400x300/231845/EC4899?text=Flyer' },
-  { id: 9, title: 'Advertisement Creative', category_name: 'Advertisement', category_slug: 'advertisement', image_url: 'https://placehold.co/400x300/1A1033/7C3AED?text=Advertisement' },
+  { id: 1, title: 'Modern Tech Logo', category_name: 'Logo Design', category_slug: 'logo-design', image_url: 'https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=600' },
+  { id: 2, title: 'Premium Business Card', category_name: 'Visiting Card', category_slug: 'visiting-card', image_url: 'https://images.pexels.com/photos/6804104/pexels-photo-6804104.jpeg?auto=compress&cs=tinysrgb&w=600' },
+  { id: 3, title: '3D Corporate Brand', category_name: '3D Logo', category_slug: '3d-logo-design', image_url: 'https://images.pexels.com/photos/5926389/pexels-photo-5926389.jpeg?auto=compress&cs=tinysrgb&w=600' },
+  { id: 4, title: 'Instagram Post', category_name: 'Social Media', category_slug: 'social-media-design', image_url: 'https://images.pexels.com/photos/3178818/pexels-photo-3178818.jpeg?auto=compress&cs=tinysrgb&w=600' },
+  { id: 5, title: 'Restaurant Menu', category_name: 'Menu Card', category_slug: 'menu-card-design', image_url: 'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=600' },
+  { id: 6, title: 'Festival Banner', category_name: 'Banner Design', category_slug: 'banner-design', image_url: 'https://images.pexels.com/photos/1036936/pexels-photo-1036936.jpeg?auto=compress&cs=tinysrgb&w=600' },
+  { id: 7, title: 'Business Brochure', category_name: 'Brochure', category_slug: 'brochure-design', image_url: 'https://images.pexels.com/photos/6476254/pexels-photo-6476254.jpeg?auto=compress&cs=tinysrgb&w=600' },
+  { id: 8, title: 'Event Flyer', category_name: 'Pamphlet/Flyer', category_slug: 'pamphlet-flyer', image_url: 'https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=600' },
+  { id: 9, title: 'Advertisement Creative', category_name: 'Advertisement', category_slug: 'advertisement', image_url: 'https://images.pexels.com/photos/518543/pexels-photo-518543.jpeg?auto=compress&cs=tinysrgb&w=600' },
 ];
 const FALLBACK_CATS = [
   { id: 1, name: 'Logo Design', slug: 'logo-design' },
