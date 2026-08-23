@@ -21,6 +21,8 @@ SOURCE migrations/007_create_conversations.sql;
 SOURCE migrations/008_create_ai_knowledge.sql;
 SOURCE migrations/009_create_notifications.sql;
 SOURCE migrations/010_create_attachments.sql;
+SOURCE migrations/012_create_clients.sql;
+SOURCE migrations/013_create_videos.sql;
 
 -- Run seeds in order
 SOURCE seeds/001_seed_admin.sql;
