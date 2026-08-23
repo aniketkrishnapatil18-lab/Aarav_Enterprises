@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   ArrowRight, MessageCircle, Palette, Zap, Shield,
   Eye, ChevronLeft, ChevronRight, Sparkles,
-  Lightbulb, Printer, Box,
+  Lightbulb, Printer, Box, Star, ShoppingCart,
   Award, Users, Target, CheckCircle, Truck, Tag, Clock
 } from 'lucide-react';
 import { CompanyStatsGrid } from '../components/common/CompanyStats';
@@ -23,35 +23,85 @@ import { productAPI, portfolioAPI, categoryAPI } from '../services/api';
 import { openWhatsApp } from '../utils/helpers';
 import ProductCard from '../components/common/ProductCard';
 
-// ── Service Card Component (Shop by Category Style) ───────────
+// ── Service Card Component (discount badge + rating + strike price) ──
 function ServiceCard({ service }) {
+  const filledStars = Math.round(service.rating || 0);
+  const detailHref = `/services/${service.slug || service.id}`;
   return (
-    <Link to={`/services/${service.slug || service.id}`} style={{ textDecoration: 'none', display: 'block' }}>
-      <div style={{
-        background: 'var(--bg-card)',
-        borderRadius: '1rem',
-        padding: '1.25rem',
-        boxShadow: 'var(--shadow-sm)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        marginBottom: '0.75rem',
-        aspectRatio: '1 / 1',
-        overflow: 'hidden',
-      }}>
-        {service.thumbnail_url ? (
-          <img src={service.thumbnail_url} alt={service.name} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
-        ) : (
-          <Palette size={48} color="var(--brand-violet)" style={{ opacity: 0.5 }} />
+    <div style={{
+      background: 'var(--bg-card)', borderRadius: '1rem',
+      boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border-light)',
+      overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column',
+    }}>
+      <Link to={detailHref} style={{ textDecoration: 'none', display: 'block' }}>
+        <div style={{ position: 'relative', aspectRatio: '1 / 1', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-subtle)' }}>
+          {service.discount_percent > 0 && (
+            <span style={{
+              position: 'absolute', top: 10, left: 10, zIndex: 2,
+              background: '#EF4444', color: 'white', fontSize: '0.7rem', fontWeight: 800,
+              padding: '0.25rem 0.55rem', borderRadius: 999,
+            }}>-{service.discount_percent}%</span>
+          )}
+          {service.thumbnail_url ? (
+            <img src={service.thumbnail_url} alt={service.name} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+          ) : (
+            <Palette size={40} color="var(--brand-violet)" style={{ opacity: 0.5 }} />
+          )}
+        </div>
+      </Link>
+      <div style={{ padding: '1rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <Link to={detailHref} style={{ textDecoration: 'none' }}>
+          <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.45rem', lineHeight: 1.3 }}>
+            {service.name}
+          </h3>
+        </Link>
+        {service.rating != null && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.15rem' }}>
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} size={13} color="#F59E0B" fill={i < filledStars ? '#F59E0B' : 'none'} />
+              ))}
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-subtle)', marginLeft: '0.25rem' }}>
+                ({service.review_count?.toLocaleString('en-IN')})
+              </span>
+            </div>
+            <button
+              onClick={() => openWhatsApp(`Hi! I'm interested in your ${service.name}.`, service.name)}
+              aria-label={`Enquire about ${service.name}`}
+              style={{
+                background: 'none', border: 'none', padding: 2, cursor: 'pointer',
+                display: 'flex', alignItems: 'center', color: 'var(--text-subtle)', flexShrink: 0,
+              }}
+            >
+              <ShoppingCart size={16} />
+            </button>
+          </div>
         )}
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.9rem' }}>
+          <span style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-main)' }}>
+            {service.starting_price > 0 ? `₹${parseInt(service.starting_price).toLocaleString('en-IN')}` : 'Configurable'}
+          </span>
+          {service.original_price > service.starting_price && (
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-subtle)', textDecoration: 'line-through' }}>
+              ₹{service.original_price.toLocaleString('en-IN')}
+            </span>
+          )}
+        </div>
+        <Link
+          to={detailHref}
+          style={{
+            marginTop: 'auto', textDecoration: 'none',
+            background: 'linear-gradient(135deg, #F59E0B, #D97706)', color: 'white',
+            fontSize: '0.8rem', fontWeight: 800, letterSpacing: '0.03em', textTransform: 'uppercase',
+            borderRadius: 'var(--radius-md)', padding: '0.7rem 1rem',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            boxShadow: '0 4px 14px rgba(217, 119, 6, 0.3)',
+          }}
+        >
+          Learn More <ChevronRight size={16} />
+        </Link>
       </div>
-      <div>
-        <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.1rem' }}>
-          {service.name}
-        </h3>
-        <p style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>
-          {service.starting_price > 0 ? `Starting from ₹${service.starting_price}` : 'Explore'}
-        </p>
-      </div>
-    </Link>
+    </div>
   );
 }
 
@@ -664,11 +714,11 @@ export default function Home() {
   const categoryRows = [
     ...(catalogReady
       ? categories
-        .map(cat => ({
-          category: cat,
-          products: allProducts.filter(p => p.category_id === cat.id),
-        }))
-        .filter(row => row.products.length > 0)
+          .map(cat => ({
+            category: cat,
+            products: allProducts.filter(p => p.category_id === cat.id).map(withDemoStats),
+          }))
+          .filter(row => row.products.length > 0)
       : FALLBACK_CATEGORY_ROWS),
     // Core signage/printing products — not part of the backend category
     // taxonomy yet, so shown as standalone rows on every load.
@@ -745,7 +795,7 @@ export default function Home() {
               { id: 'cat-6', name: 'Flex Banner', thumbnail_url: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=400&q=80', starting_price: 499 },
               { id: 'cat-7', name: 'Letter Sign Board', thumbnail_url: 'https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=400&q=80', starting_price: 1299 },
               { id: 'cat-8', name: 'LED Acrylic Letter', thumbnail_url: 'https://images.unsplash.com/photo-1601662528567-526cd06f6582?auto=format&fit=crop&w=400&q=80', starting_price: 3499 },
-            ].map(s => (
+            ].map(withDemoStats).map(s => (
               <div key={s.id} style={{ width: '220px', flexShrink: 0 }}>
                 <ServiceCard service={s} />
               </div>
@@ -861,6 +911,29 @@ export default function Home() {
   );
 }
 
+// Discount/rating/review data isn't in the backend schema yet, so every
+// product card (Shop by Category, Browse by Category, Signage rows, and
+// live API products alike) gets a deterministic demo rating/discount cycled
+// from this small set, purely for visual consistency until real
+// rating/discount/review columns exist on `products`.
+const DEMO_STATS_CYCLE = [
+  { rating: 4.6, review_count: 842,  discount_percent: 23 },
+  { rating: 4.5, review_count: 528,  discount_percent: 21 },
+  { rating: 4.4, review_count: 356,  discount_percent: 20 },
+  { rating: 4.7, review_count: 615,  discount_percent: 22 },
+  { rating: 4.3, review_count: 1204, discount_percent: 18 },
+  { rating: 4.8, review_count: 97,   discount_percent: 25 },
+  { rating: 4.2, review_count: 463,  discount_percent: 17 },
+];
+
+function withDemoStats(product, index) {
+  const stats = DEMO_STATS_CYCLE[index % DEMO_STATS_CYCLE.length];
+  const original_price = product.starting_price > 0
+    ? Math.round(product.starting_price / (1 - stats.discount_percent / 100) / 10) * 10
+    : 0;
+  return { ...product, ...stats, original_price };
+}
+
 // Fallback data if backend is offline
 const FALLBACK_SERVICES = [
   { id: 1, name: 'Logo Design', slug: 'logo-design-service', short_desc: 'Unique 2D & 3D brand logo designs with vector files', starting_price: 999, price_label: 'onwards', delivery_days: 3, category_name: 'Logo', category_slug: 'logo-design', is_featured: true },
@@ -906,7 +979,7 @@ const FALLBACK_CATEGORY_ROWS = [
       { id: 'fp-12', name: 'Eco-Friendly Card', slug: 'eco-friendly-card', starting_price: 449 },
     ],
   },
-];
+].map(row => ({ ...row, products: row.products.map(withDemoStats) }));
 
 // Core signage/printing products (not part of the backend category
 // taxonomy) — each shown as its own row of 6-7 variant cards, always
@@ -993,4 +1066,4 @@ const SIGNAGE_PRINTING_ROWS = [
       { id: 'sp-fb-7', name: 'Event Flex Banner', slug: 'event-flex-banner', starting_price: 699 },
     ],
   },
-];
+].map(row => ({ ...row, products: row.products.map(withDemoStats) }));
