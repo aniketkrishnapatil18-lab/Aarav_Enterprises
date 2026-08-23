@@ -1,30 +1,36 @@
 import { useState, useEffect } from 'react';
-import { portfolioAPI, categoryAPI, clientAPI } from '../services/api';
+import { portfolioAPI, categoryAPI, clientAPI, videoAPI } from '../services/api';
 import { openWhatsApp } from '../utils/helpers';
 import { CheckCircle2, Factory, Info, Award, MessageSquare, Download, Briefcase, ChevronRight } from 'lucide-react';
 import AdminAccessSection from '../components/AdminAccess/AdminAccessSection';
+import VideoCard from '../components/common/VideoCard';
+import VideoLightboxModal from '../components/common/VideoLightboxModal';
 
 export default function Portfolio() {
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [clients, setClients] = useState([]);
+  const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('intro');
   const [activeCat, setActiveCat] = useState('all');
   const [selected, setSelected] = useState(null);
+  const [activeVideo, setActiveVideo] = useState(null);
 
   useEffect(() => {
     document.title = 'Portfolio — Aarav Enterprises';
     async function load() {
       try {
-        const [pRes, cRes, clRes] = await Promise.all([
+        const [pRes, cRes, clRes, vRes] = await Promise.all([
           portfolioAPI.list({ active: true }),
           categoryAPI.list({ active: true }),
           clientAPI.list({ active: true }),
+          videoAPI.list({ active: true }),
         ]);
         setItems(pRes.data.data || []);
         setCategories(cRes.data.data || []);
         setClients(clRes.data.data || []);
+        setVideos(vRes.data.data || []);
       } catch {
         setItems(FALLBACK_PORTFOLIO);
         setCategories(FALLBACK_CATS);
@@ -43,6 +49,7 @@ export default function Portfolio() {
     { id: 'about', label: 'About The Company' },
     { id: 'brochure', label: 'Download Brochure' },
     { id: 'clients', label: 'Our Clients' },
+    { id: 'videos', label: 'Videos' },
   ];
 
   const renderContent = () => {
@@ -146,6 +153,24 @@ export default function Portfolio() {
             <AdminAccessSection isPageTab={true} dynamicClients={clients} />
           </div>
         );
+
+      case 'videos':
+        return (
+          <div className="tab-content-animation" style={{ width: '100%' }}>
+            <h2 style={{ fontSize: '1.75rem', marginBottom: '1.5rem', color: 'var(--text-main)', fontFamily: 'Outfit' }}>Product Videos</h2>
+
+            {videos.length === 0 ? (
+              <p style={{ color: 'var(--text-muted)' }}>No videos are currently available.</p>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                {videos.map((video) => (
+                  <VideoCard key={video.id} video={video} onOpen={setActiveVideo} />
+                ))}
+              </div>
+            )}
+          </div>
+        );
+
       default: return null;
     }
   };
@@ -213,6 +238,11 @@ export default function Portfolio() {
         </div>
       )}
 
+      {/* Lightbox for Videos Tab */}
+      {activeVideo && (
+        <VideoLightboxModal video={activeVideo} onClose={() => setActiveVideo(null)} />
+      )}
+
       <style dangerouslySetInnerHTML={{
         __html: `
         .tab-content-animation { animation: fadeIn 0.4s ease-out; }
@@ -234,4 +264,28 @@ const FALLBACK_CATS = [
   { id: 1, name: 'Logo Design', slug: 'logo-design' },
   { id: 2, name: 'Visiting Card', slug: 'visiting-card' },
   { id: 9, name: 'Social Media', slug: 'social-media-design' },
+];
+
+const FALLBACK_VIDEOS = [
+  {
+    id: 1,
+    title: 'Aarav Enterprises Overview',
+    description: 'Learn about our journey, values, and the printing services we offer to businesses in Pune.',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4'
+  },
+  {
+    id: 2,
+    title: 'UV Printing Demo',
+    description: 'Watch our advanced UV flatbed printer in action, creating stunning large-format displays.',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1620601831868-b80c9a444a77?auto=format&fit=crop&w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4'
+  },
+  {
+    id: 3,
+    title: 'Manufacturing Facility Tour',
+    description: 'Take a virtual tour of our 10,000 sq ft manufacturing warehouse located in the heart of Pune.',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4'
+  },
 ];

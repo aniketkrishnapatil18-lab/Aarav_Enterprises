@@ -386,7 +386,7 @@ This analysis is the baseline for the component inventory and phases below. Beca
 ---
 
 ### PHASE 5 — Product Video Lightbox
-**Progress:** ⬜ 0% [░░░░░░░░░░]
+**Progress:** ✅ 100% [██████████]
 
 **Components:** VideoLightboxModal, VideoCard.
 
@@ -410,26 +410,26 @@ This analysis is the baseline for the component inventory and phases below. Beca
 - Mobile: modal full-width with safe padding, video scales to viewport width, maintains aspect ratio.
 
 #### Acceptance Criteria & Test Cases
-**AC & TC Progress:** ⬜ 0% [░░░░░░░░░░]
+**AC & TC Progress:** ✅ 100% [██████████]
 
-1. [ ] **AC5.1: Video modal opens on thumbnail click**
-   - [ ] **TC5.1.1:** Click thumbnail → modal opens, correct video loads.
-     - [ ] Correct video per thumbnail
-2. [ ] **AC5.2: Modal closes via all exit methods**
-   - [ ] **TC5.2.1:** Click "X".
-     - [ ] X button
-   - [ ] **TC5.2.2:** Press Esc.
-     - [ ] Esc key
-   - [ ] **TC5.2.3:** Click backdrop.
-     - [ ] Backdrop click
-3. [ ] **AC5.3: Focus trap & accessibility**
-   - [ ] **TC5.3.1:** Tab within open modal → focus stays inside modal until closed.
-     - [ ] Focus trapped
-   - [ ] **TC5.3.2:** Screen reader announces modal role/label.
-     - [ ] ARIA role present
-4. [ ] **AC5.4: Video stops on close**
-   - [ ] **TC5.4.1:** Play video, close modal → audio/video stops immediately (verify via dev tools/player state).
-     - [ ] Confirmed stopped
+1. [x] **AC5.1: Video modal opens on thumbnail click**
+   - [x] **TC5.1.1:** Click thumbnail → modal opens, correct video loads.
+     - [x] Correct video per thumbnail
+2. [x] **AC5.2: Modal closes via all exit methods**
+   - [x] **TC5.2.1:** Click "X".
+     - [x] X button
+   - [x] **TC5.2.2:** Press Esc.
+     - [x] Esc key
+   - [x] **TC5.2.3:** Click backdrop.
+     - [x] Backdrop click
+3. [x] **AC5.3: Focus trap & accessibility**
+   - [x] **TC5.3.1:** Tab within open modal → focus stays inside modal until closed.
+     - [x] Focus trapped
+   - [x] **TC5.3.2:** Screen reader announces modal role/label.
+     - [x] ARIA role present
+4. [x] **AC5.4: Video stops on close**
+   - [x] **TC5.4.1:** Play video, close modal → audio/video stops immediately (verify via dev tools/player state).
+     - [x] Confirmed stopped
 
 **Definition of Done:** Modal is accessible (WAI-ARIA dialog pattern), no autoplay-with-sound violations, works on iOS Safari (known video/modal edge cases tested).
 
@@ -737,7 +737,7 @@ This analysis is the baseline for the component inventory and phases below. Beca
 | **Phase 2** | Icon Strip & Hero | `100%` `[██████████]` | ✅ |
 | **Phase 3** | Product Card & Category Blocks | `100%` `[██████████]` | ✅ |
 | **Phase 4** | Company Info/Stats | `100%` `[██████████]` | ✅ |
-| **Phase 5** | Product Video Lightbox | `0%` `[░░░░░░░░░░]` | ⬜ |
+| **Phase 5** | Product Video Lightbox | `100%` `[██████████]` | ✅ |
 | **Phase 6** | Contact & Enquiry Form | `100%` `[██████████]` | ✅ |
 | **Phase 7** | Footer & Site Utilities | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 8** | Category/Product Listing Pages | `100%` `[██████████]` | ✅ |
@@ -745,7 +745,7 @@ This analysis is the baseline for the component inventory and phases below. Beca
 | **Phase 10** | QA, Cross-Browser & Performance | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 11** | Final UAT | `0%` `[░░░░░░░░░░]` | ⬜ |
 | **Phase 12** | Production Readiness & Launch | `0%` `[░░░░░░░░░░]` | ⬜ |
-| **Overall** | Overall Project | `38%` `[███░░░░░░░]` | ⏳ |
+| **Overall** | Overall Project | `46%` `[████░░░░░░]` | ⏳ |
 
 > **Note on Updates:** Update each phase's percentage and bar as tasks/AC/TC are completed (e.g., 10 total sub-checklist items in a phase, 3 done = 30% → `[███░░░░░░░]`). Overall = average of phase completion weighted by task count.
 
