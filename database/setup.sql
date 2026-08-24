@@ -30,8 +30,10 @@ SOURCE seeds/002_seed_categories.sql;
 SOURCE seeds/003_seed_products.sql;
 SOURCE seeds/004_seed_ai_knowledge.sql;
 SOURCE seeds/005_seed_portfolio.sql;
-SOURCE seeds/006_seed_more_products.sql;
 SOURCE seeds/007_seed_signage_category.sql;
 SOURCE seeds/008_seed_led_portfolio.sql;
+SOURCE seeds/009_seed_more_products.sql;
+SOURCE seeds/010_seed_product_thumbnails.sql;
+SOURCE seeds/011_fix_portfolio_images.sql;
 
 SELECT 'Aarav Enterprises database setup complete!' AS status;
