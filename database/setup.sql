@@ -23,10 +23,12 @@ SOURCE migrations/009_create_notifications.sql;
 SOURCE migrations/010_create_attachments.sql;
 SOURCE migrations/011_add_portfolio_wa_fields.sql;
 SOURCE migrations/012_add_portfolio_image_url_unique.sql;
+SOURCE migrations/013_add_portfolio_title_category_unique.sql;
 
 -- Run seeds in order
 SOURCE seeds/001_seed_admin.sql;
 SOURCE seeds/002_seed_categories.sql;
+SOURCE seeds/002_seed_portfolio.sql;
 SOURCE seeds/003_seed_products.sql;
 SOURCE seeds/004_seed_ai_knowledge.sql;
 SOURCE seeds/005_seed_portfolio.sql;
