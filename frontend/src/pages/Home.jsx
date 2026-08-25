@@ -37,6 +37,7 @@ const heroGridStyle = `
 `;
 import { productAPI, portfolioAPI, categoryAPI } from "../services/api";
 import { openWhatsApp } from "../utils/helpers";
+import { CompanyStatsGrid } from "../components/common/CompanyStats";
 
 const DEFAULT_CATEGORY_IMAGES = {
   'logo-design': '/assets/portfolio/Logo Design/logo-coffee.jpg',
