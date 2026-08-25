@@ -1381,7 +1381,6 @@ function HeroCentered() {
           lineHeight: 1.6, maxWidth: 600, margin: '0 auto 2.5rem',
         }}>
           Custom LED Sign Boards, UV Printing, and Acrylic Letters designed to make your brand stand out. Built to last, delivered fast.
->>>>>>> 74e53c0495df1f296d7a1279d3a6cf579d8f38b6
         </p>
 
         {/* Happy Customers Row */}
