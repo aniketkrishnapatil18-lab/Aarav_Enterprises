@@ -1467,7 +1467,6 @@ function HeroCentered() {
         >
           {[
             {
-            {
               color: "#FF0000",
               label: "YouTube",
               svg: (
