@@ -1,31 +1,36 @@
+// Express Application Setup
+
 // ============================================================
 // Express Application Setup
 // ============================================================
 
 require('dotenv').config();
 
-const express     = require('express');
-const cors        = require('cors');
-const helmet      = require('helmet');
-const path        = require('path');
-const rateLimit   = require('express-rate-limit');
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const path = require('path');
+const rateLimit = require('express-rate-limit');
 
 const errorHandler = require('./middleware/errorHandler');
 
 // Routes
-const authRoutes         = require('./routes/auth.routes');
-const categoryRoutes     = require('./routes/category.routes');
-const productRoutes      = require('./routes/product.routes');
-const portfolioRoutes    = require('./routes/portfolio.routes');
-const customerRoutes     = require('./routes/customer.routes');
-const inquiryRoutes      = require('./routes/inquiry.routes');
+const authRoutes = require('./routes/auth.routes');
+const categoryRoutes = require('./routes/category.routes');
+const productRoutes = require('./routes/product.routes');
+const portfolioRoutes = require('./routes/portfolio.routes');
+const customerRoutes = require('./routes/customer.routes');
+const inquiryRoutes = require('./routes/inquiry.routes');
 const conversationRoutes = require('./routes/conversation.routes');
-const knowledgeRoutes    = require('./routes/knowledge.routes');
+const knowledgeRoutes = require('./routes/knowledge.routes');
 const notificationRoutes = require('./routes/notification.routes');
-const reportRoutes       = require('./routes/report.routes');
-const settingsRoutes     = require('./routes/settings.routes');
-const whatsappRoutes     = require('./routes/whatsapp.routes');
-const unsplashRoutes     = require('./routes/unsplash.routes');
+const reportRoutes = require('./routes/report.routes');
+const settingsRoutes = require('./routes/settings.routes');
+const whatsappRoutes = require('./routes/whatsapp.routes');
+const unsplashRoutes = require('./routes/unsplash.routes');
+const clientRoutes = require('./routes/client.routes');
+const adminAccessRoutes = require('./routes/adminAccess.routes');
+const videoRoutes = require('./routes/video.routes');
 
 const app = express();
 
@@ -72,19 +77,22 @@ app.get('/health', (_req, res) => {
 });
 
 // ── API Routes ─────────────────────────────────────────────────
-app.use('/api/auth',          authRoutes);
-app.use('/api/categories',    categoryRoutes);
-app.use('/api/products',      productRoutes);
-app.use('/api/portfolio',     portfolioRoutes);
-app.use('/api/customers',     customerRoutes);
-app.use('/api/inquiries',     inquiryRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/portfolio', portfolioRoutes);
+app.use('/api/customers', customerRoutes);
+app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/conversations', conversationRoutes);
-app.use('/api/ai/knowledge',  knowledgeRoutes);
+app.use('/api/ai/knowledge', knowledgeRoutes);
 app.use('/api/notifications', notificationRoutes);
-app.use('/api/reports',       reportRoutes);
-app.use('/api/settings',      settingsRoutes);
-app.use('/api/whatsapp',      whatsappRoutes);
-app.use('/api/unsplash',      unsplashRoutes);
+app.use('/api/reports', reportRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
+app.use('/api/unsplash', unsplashRoutes);
+app.use('/api/clients', clientRoutes);
+app.use('/api/admins', adminAccessRoutes);
+app.use('/api/videos', videoRoutes);
 
 // ── 404 Handler ────────────────────────────────────────────────
 app.use((_req, res) => {

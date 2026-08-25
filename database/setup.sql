@@ -24,6 +24,8 @@ SOURCE migrations/010_create_attachments.sql;
 SOURCE migrations/011_add_portfolio_wa_fields.sql;
 SOURCE migrations/012_add_portfolio_image_url_unique.sql;
 SOURCE migrations/013_add_portfolio_title_category_unique.sql;
+SOURCE migrations/014_create_clients.sql;
+SOURCE migrations/015_create_videos.sql;
 
 -- Run seeds in order
 SOURCE seeds/001_seed_admin.sql;

@@ -55,8 +55,17 @@ async function runSetup() {
     for (const file of migrationFiles) {
       const filePath = path.join(migrationsDir, file);
       const sql = fs.readFileSync(filePath, 'utf8');
-      await connection.query(sql);
-      console.log(`  ✔ Migrated: ${file}`);
+      try {
+        await connection.query(sql);
+        console.log(`  ✔ Migrated: ${file}`);
+      } catch (mErr) {
+        if (mErr.code === 'ER_DUP_FIELDNAME' || mErr.code === 'ER_DUP_KEYNAME' || mErr.errno === 1060 || mErr.errno === 1061) {
+          console.log(`  ✔ Migrated (already applied / column exists): ${file}`);
+        } else {
+          console.error(`  ❌ Error in migration ${file}:`, mErr.message);
+          throw mErr;
+        }
+      }
     }
 
     // 4. Run Seeds
@@ -69,8 +78,12 @@ async function runSetup() {
     for (const file of seedFiles) {
       const filePath = path.join(seedsDir, file);
       const sql = fs.readFileSync(filePath, 'utf8');
-      await connection.query(sql);
-      console.log(`  ✔ Seeded: ${file}`);
+      try {
+        await connection.query(sql);
+        console.log(`  ✔ Seeded: ${file}`);
+      } catch (sErr) {
+        console.warn(`  ⚠ Note in seed ${file}:`, sErr.message);
+      }
     }
 
     console.log(`\n==================================================`);

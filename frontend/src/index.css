@@ -569,6 +569,69 @@ h1, h2, h3, h4, h5, h6 {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── Custom Utilities ─────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.underline-grow {
+  position: relative;
+}
+.underline-grow::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--brand-violet);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+.underline-grow:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* ── Highlighted Card (Pulse Interaction) ── */
+.highlighted-card {
+  border-color: var(--brand-violet) !important;
+  animation: highlightPulse 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 25px var(--border-glow), var(--shadow-lg) !important;
+}
+
+@keyframes highlightPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: var(--shadow-md);
+  }
+  15% {
+    transform: scale(1.03);
+    box-shadow: 0 0 35px var(--border-glow), var(--shadow-lg);
+  }
+  30% {
+    transform: scale(0.99);
+    box-shadow: 0 0 15px var(--border-glow), var(--shadow-md);
+  }
+  45% {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px var(--border-glow), var(--shadow-lg);
+  }
+  60% {
+    transform: scale(1.0);
+    box-shadow: 0 0 20px var(--border-glow), var(--shadow-md);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: var(--shadow-md);
+  }
+}
+
 /* ── HERO DOTTED BACKGROUND & FLOATING ──────────────── */
 .bg-dots {
   background-image: radial-gradient(var(--border-light) 1.5px, transparent 1.5px);

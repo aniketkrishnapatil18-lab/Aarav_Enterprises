@@ -1,20 +1,22 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Users, MessageSquare, MessageCircle,
-  Package, Image, BookOpen, Bell, BarChart2, Settings, LogOut, X, Sparkles
+  Package, Image, BookOpen, Bell, BarChart2, Settings, LogOut, X, Sparkles, Video
 } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { to: '/admin',              label: 'Dashboard',       icon: LayoutDashboard, exact: true },
-  { to: '/admin/inquiries',    label: 'Inquiries',       icon: MessageSquare },
-  { to: '/admin/customers',    label: 'Customers',       icon: Users },
-  { to: '/admin/conversations',label: 'WhatsApp Chat',   icon: MessageCircle },
-  { to: '/admin/products',     label: 'Services Catalog',icon: Package },
-  { to: '/admin/portfolio',    label: 'Portfolio Showcase', icon: Image },
-  { to: '/admin/knowledge',    label: 'AI Knowledge Base',icon: BookOpen },
-  { to: '/admin/notifications',label: 'Notifications',   icon: Bell },
-  { to: '/admin/reports',      label: 'Reports & Analytics', icon: BarChart2 },
-  { to: '/admin/settings',     label: 'System Settings', icon: Settings },
+  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+  { to: '/admin/inquiries', label: 'Inquiries', icon: MessageSquare },
+  { to: '/admin/customers', label: 'Customers', icon: Users },
+  { to: '/admin/conversations', label: 'WhatsApp Chat', icon: MessageCircle },
+  { to: '/admin/products', label: 'Services Catalog', icon: Package },
+  { to: '/admin/portfolio', label: 'Portfolio Showcase', icon: Image },
+  { to: '/admin/clients', label: 'Clients', icon: Users },
+  { to: '/admin/videos', label: 'Product Videos', icon: Video },
+  { to: '/admin/knowledge', label: 'AI Knowledge Base', icon: BookOpen },
+  { to: '/admin/notifications', label: 'Notifications', icon: Bell },
+  { to: '/admin/reports', label: 'Reports & Analytics', icon: BarChart2 },
+  { to: '/admin/settings', label: 'System Settings', icon: Settings },
 ];
 
 export default function AdminSidebar({ isOpen, onClose }) {
