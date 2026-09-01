@@ -108,6 +108,8 @@ export const inquiryAPI = {
   updateStatus: (id, data)  => api.put(`/inquiries/${id}/status`, data),
   addNote:      (id, data)  => api.post(`/inquiries/${id}/messages`, data),
   submitPublic: (data)      => api.post('/inquiries', data),
+  uploadDesign: (id, fd)    => api.post(`/inquiries/${id}/upload-design`, fd, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  publish:      (id)        => api.post(`/inquiries/${id}/publish`),
 };
 
 // ── Conversations ───────────────────────────────────────────

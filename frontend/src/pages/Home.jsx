@@ -230,21 +230,16 @@ function ServiceCard({ service }) {
           style={{
             marginTop: "auto",
             textDecoration: "none",
-            background: "var(--brand-violet)",
-            color: "white",
-            fontSize: "0.8rem",
+            color: "var(--brand-violet)",
+            fontSize: "0.85rem",
             fontWeight: 700,
-            letterSpacing: "0.02em",
-            textTransform: "uppercase",
-            borderRadius: "var(--radius-md)",
-            padding: "0.7rem 1rem",
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            boxShadow: "var(--shadow-sm)",
+            justifyContent: "flex-end",
+            gap: "0.25rem",
           }}
         >
-          Get Quote <ChevronRight size={16} />
+          View Details <ArrowRight size={16} />
         </Link>
       </div>
     </div>
@@ -323,7 +318,7 @@ function SimpleServiceCard({ service }) {
 function PortfolioThumb({ item }) {
   return (
     <Link
-      to="/portfolio"
+      to={`/portfolio/${item.id}`}
       style={{
         textDecoration: "none",
         display: "flex",
@@ -1268,41 +1263,34 @@ function HeroCentered() {
             transform: "rotate(6deg)",
           }}
         >
+          <img
+            src="/assets/portfolio/LED Sign Boards/led-1.jpg"
+            alt="LED Sign Boards"
+            style={{
+              width: "100%",
+              height: 120,
+              objectFit: "cover",
+              borderRadius: "0.6rem",
+            }}
+          />
           <div
             style={{
-              background: "var(--bg-subtle)",
-              height: 120,
-              borderRadius: "0.6rem",
-              padding: "0.8rem",
+              padding: "0.5rem 0.25rem 0.1rem",
               display: "flex",
-              flexDirection: "column",
+              alignItems: "center",
               gap: "0.5rem",
             }}
           >
-            <div
+            <Zap size={12} color="var(--brand-violet)" />
+            <span
               style={{
-                width: "50%",
-                height: 8,
-                background: "var(--border-light)",
-                borderRadius: 4,
+                fontWeight: 700,
+                fontSize: "0.7rem",
+                color: "var(--text-main)",
               }}
-            ></div>
-            <div
-              style={{
-                width: "90%",
-                height: 8,
-                background: "var(--border-light)",
-                borderRadius: 4,
-              }}
-            ></div>
-            <div
-              style={{
-                width: "70%",
-                height: 8,
-                background: "var(--border-light)",
-                borderRadius: 4,
-              }}
-            ></div>
+            >
+              LED Sign Boards
+            </span>
           </div>
         </div>
         {/* Front Card */}
@@ -1606,28 +1594,20 @@ export default function Home() {
     load();
   }, []);
 
-  const displayServices =
-    services.length > 0 ? services.slice(0, 6) : FALLBACK_SERVICES;
-  const displayPortfolio =
-    portfolio.length > 0 ? portfolio.slice(0, 6) : FALLBACK_PORTFOLIO;
+  const displayServices = services.slice(0, 6);
+  const displayPortfolio = portfolio.slice(0, 6);
 
-  // Group the live catalog into one row per category; fall back to demo
-  // rows (offline / catalog not yet populated) so the section never looks empty.
-  const categoryRows = [
-    ...(catalogReady
-      ? categories
-          .map((cat) => ({
-            category: cat,
-            products: allProducts
-              .filter((p) => p.category_id === cat.id)
-              .map(withDemoStats),
-          }))
-          .filter((row) => row.products.length > 0)
-      : FALLBACK_CATEGORY_ROWS),
-    // Core signage/printing products — not part of the backend category
-    // taxonomy yet, so shown as standalone rows on every load.
-    ...SIGNAGE_PRINTING_ROWS,
-  ];
+  // Group the live catalog into one row per category
+  const categoryRows = catalogReady
+    ? categories
+        .map((cat) => ({
+          category: cat,
+          products: allProducts
+            .filter((p) => p.category_id === cat.id)
+            .map(withDemoStats),
+        }))
+        .filter((row) => row.products.length > 0)
+    : [];
 
   const visibleCategoryRows =
     categoryFilter === "all"
@@ -1651,7 +1631,7 @@ export default function Home() {
           };
         })
         .filter(Boolean)
-    : FALLBACK_SHOP_BY_CATEGORY;
+    : [];
 
   return (
     <>

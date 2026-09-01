@@ -90,7 +90,7 @@ async function updateStatus(id, status, adminId = null, note = null) {
 
 async function update(id, fields) {
   const allowed = ['status','assigned_to','priority','notes','ai_summary','collected_data',
-    'business_name','requirements','budget','deadline','preferred_colors','quantity','human_handoff'];
+    'business_name','requirements','budget','deadline','preferred_colors','quantity','human_handoff', 'final_design_url', 'is_published'];
   const setClauses = [];
   const values     = [];
   for (const key of allowed) {

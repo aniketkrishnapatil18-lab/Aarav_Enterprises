@@ -51,6 +51,7 @@ export default function Select({ value, onChange, options, placeholder = 'Select
         <ListboxOptions
           anchor="bottom start"
           transition
+          className="hide-scrollbar"
           style={{
             width: 'var(--button-width)',
             marginTop: '0.4rem',
