@@ -15,7 +15,16 @@ exports.getVideos = async (req, res) => {
 // Create Video
 exports.createVideo = async (req, res) => {
     try {
-        const id = await Video.create(req.body);
+        const data = { ...req.body };
+        if (req.files) {
+            if (req.files.thumbnail && req.files.thumbnail[0]) {
+                data.thumbnail_url = `/uploads/videos/${req.files.thumbnail[0].filename}`;
+            }
+            if (req.files.video && req.files.video[0]) {
+                data.video_url = `/uploads/videos/${req.files.video[0].filename}`;
+            }
+        }
+        const id = await Video.create(data);
         res.status(201).json({ success: true, message: 'Video created successfully', id });
     } catch (error) {
         console.error('Error creating video:', error);
@@ -27,7 +36,16 @@ exports.createVideo = async (req, res) => {
 exports.updateVideo = async (req, res) => {
     try {
         const { id } = req.params;
-        const affected = await Video.update(id, req.body);
+        const data = { ...req.body };
+        if (req.files) {
+            if (req.files.thumbnail && req.files.thumbnail[0]) {
+                data.thumbnail_url = `/uploads/videos/${req.files.thumbnail[0].filename}`;
+            }
+            if (req.files.video && req.files.video[0]) {
+                data.video_url = `/uploads/videos/${req.files.video[0].filename}`;
+            }
+        }
+        const affected = await Video.update(id, data);
         if (affected === 0) return res.status(404).json({ success: false, message: 'Video not found' });
         res.json({ success: true, message: 'Video updated successfully' });
     } catch (error) {

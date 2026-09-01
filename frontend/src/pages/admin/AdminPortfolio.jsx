@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { portfolioAPI, categoryAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 import { Plus, Edit2, Trash2, ToggleLeft, ToggleRight, Image as ImageIcon } from 'lucide-react';
+import Select from '../../components/common/Select';
 
 export default function AdminPortfolio() {
   const [items,      setItems]      = useState([]);
@@ -98,7 +99,7 @@ export default function AdminPortfolio() {
       {showForm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
           <div className="glass-card" style={{ width: '100%', maxWidth: 520, maxHeight: '90vh', overflow: 'hidden', padding: 0 }}>
-          <div style={{ maxHeight: '90vh', overflowY: 'auto', padding: '2rem' }}>
+          <div className="hide-scrollbar" style={{ maxHeight: '90vh', overflowY: 'auto', padding: '2rem' }}>
             <h3 style={{ marginBottom: '1.5rem' }}>{editItem ? 'Edit Portfolio Sample' : 'Add Portfolio Sample'}</h3>
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: '1rem' }}>
@@ -107,10 +108,15 @@ export default function AdminPortfolio() {
               </div>
               <div style={{ marginBottom: '1rem' }}>
                 <label className="form-label">Category *</label>
-                <select className="form-input" required value={form.category_id} onChange={e => setForm(f => ({ ...f, category_id: e.target.value }))}>
-                  <option value="">Select Category</option>
-                  {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                </select>
+                <Select
+                  value={form.category_id}
+                  onChange={val => setForm(f => ({ ...f, category_id: val }))}
+                  options={[
+                    { value: '', label: 'Select Category' },
+                    ...categories.map(c => ({ value: c.id, label: c.name }))
+                  ]}
+                  required={true}
+                />
               </div>
               <div style={{ marginBottom: '1rem' }}>
                 <label className="form-label">Image {editItem ? '(Optional to replace)' : '*'}</label>

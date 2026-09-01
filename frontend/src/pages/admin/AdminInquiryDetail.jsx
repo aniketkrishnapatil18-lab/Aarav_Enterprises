@@ -23,6 +23,7 @@ export default function AdminInquiryDetail() {
   const [loading,  setLoading]  = useState(true);
   const [note,     setNote]     = useState('');
   const [updating, setUpdating] = useState(false);
+  const [designFile, setDesignFile] = useState(null);
 
   useEffect(() => {
     document.title = 'Inquiry Detail — Admin';
@@ -57,6 +58,32 @@ export default function AdminInquiryDetail() {
       setNote('');
       load();
     } catch { toast.error('Failed to add note.'); }
+    finally { setUpdating(false); }
+  }
+
+  async function uploadFinalDesign() {
+    if (!designFile) return;
+    setUpdating(true);
+    try {
+      const fd = new FormData();
+      fd.append('image', designFile);
+      await inquiryAPI.uploadDesign(id, fd);
+      toast.success('Final design uploaded');
+      setDesignFile(null);
+      load();
+    } catch { toast.error('Failed to upload design'); }
+    finally { setUpdating(false); }
+  }
+
+  async function publishToPortfolio() {
+    setUpdating(true);
+    try {
+      await inquiryAPI.publish(id);
+      toast.success('Published to Portfolio (Recent Work)');
+      load();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to publish');
+    }
     finally { setUpdating(false); }
   }
 
@@ -170,6 +197,36 @@ export default function AdminInquiryDetail() {
                 >{action.label}</button>
               ))}
             </div>
+          </div>
+
+          {/* Final Design Upload */}
+          <div className="glass-card" style={{ padding: '1.25rem' }}>
+            <h3 style={{ fontSize: '0.95rem', marginBottom: '1rem' }}>Final Design</h3>
+            
+            {inquiry.final_design_url ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <img src={import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') + inquiry.final_design_url : `http://localhost:5000${inquiry.final_design_url}`} alt="Final Design" style={{ width: '100%', borderRadius: 8, border: '1px solid var(--border-light)', aspectRatio: '1/1', objectFit: 'cover' }} />
+                
+                {inquiry.status === 'COMPLETED' ? (
+                  inquiry.is_published ? (
+                    <div className="badge badge-accepted" style={{ display: 'flex', justifyContent: 'center', padding: '0.6rem' }}>✅ Published to Recent Work</div>
+                  ) : (
+                    <button onClick={publishToPortfolio} disabled={updating} className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+                      🚀 Publish to Portfolio
+                    </button>
+                  )
+                ) : (
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-subtle)', textAlign: 'center' }}>Complete inquiry to publish.</div>
+                )}
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <input type="file" accept="image/*" onChange={e => setDesignFile(e.target.files[0])} className="form-input" style={{ fontSize: '0.8rem', padding: '0.5rem' }} />
+                <button onClick={uploadFinalDesign} disabled={updating || !designFile} className="btn-secondary" style={{ width: '100%', justifyContent: 'center', padding: '0.6rem' }}>
+                  Upload Design
+                </button>
+              </div>
+            )}
           </div>
 
           {/* WhatsApp */}

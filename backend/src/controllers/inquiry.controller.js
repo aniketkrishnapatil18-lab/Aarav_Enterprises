@@ -138,4 +138,35 @@ async function createPublic(req, res, next) {
   } catch (err) { next(err); }
 }
 
-module.exports = { list, detail, updateStatus, addNote, update, createPublic };
+async function uploadDesign(req, res, next) {
+  try {
+    if (!req.file) return res.status(400).json({ success: false, message: 'No image uploaded' });
+    const final_design_url = `/uploads/portfolio/${req.file.filename}`;
+    const inquiry = await inquiryModel.update(req.params.id, { final_design_url });
+    res.json({ success: true, data: inquiry });
+  } catch (err) { next(err); }
+}
+
+async function publishToPortfolio(req, res, next) {
+  try {
+    const inquiry = await inquiryModel.getById(req.params.id);
+    if (!inquiry) return res.status(404).json({ success: false, message: 'Inquiry not found' });
+    if (!inquiry.final_design_url) return res.status(400).json({ success: false, message: 'No final design uploaded' });
+    if (inquiry.is_published) return res.status(400).json({ success: false, message: 'Already published' });
+
+    const portfolioModel = require('../models/portfolio.model');
+    const portfolioItem = await portfolioModel.create({
+      category_id: 1, // Fallback to first category, admin can edit later
+      title: inquiry.service_name || 'Design Service',
+      description: `Completed project for ${inquiry.business_name || inquiry.customer_name}`,
+      image_url: inquiry.final_design_url,
+      client_name: inquiry.business_name || inquiry.customer_name || 'Client',
+      is_featured: 1
+    });
+
+    const updatedInquiry = await inquiryModel.update(req.params.id, { is_published: 1 });
+    res.json({ success: true, data: updatedInquiry, portfolioItem });
+  } catch (err) { next(err); }
+}
+
+module.exports = { list, detail, updateStatus, addNote, update, createPublic, uploadDesign, publishToPortfolio };
