@@ -1,10 +1,49 @@
 import { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { Search, Filter, ArrowRight, MessageCircle, Palette, Eye } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { Search, Palette } from 'lucide-react';
 import { productAPI, categoryAPI } from '../services/api';
-import { openWhatsApp } from '../utils/helpers';
 import Breadcrumbs from '../components/common/Breadcrumbs';
 import ProductCard from '../components/common/ProductCard';
+
+function findCategoryMatch(query, catState, catList) {
+  if (!catList || catList.length === 0) return null;
+
+  // 1. Explicit activeCategory match (if not 'all')
+  if (catState && catState !== 'all') {
+    const byCat = catList.find(
+      c => c.slug === catState || c.id?.toString() === catState || c.name.toLowerCase() === catState.toLowerCase()
+    );
+    if (byCat) return byCat;
+  }
+
+  // 2. Search query match
+  if (query && query.trim()) {
+    const qLower = query.trim().toLowerCase();
+    const qSlug = qLower.replace(/[^a-z0-9]/g, '');
+
+    // Exact slug or ID match
+    let match = catList.find(c => c.slug === qLower || c.id?.toString() === qLower);
+    if (match) return match;
+
+    // Exact name match
+    match = catList.find(c => c.name.toLowerCase() === qLower);
+    if (match) return match;
+
+    // Normalized slug/name match (e.g. "banner design" vs "banner-design")
+    match = catList.find(
+      c => c.slug.replace(/-/g, '') === qSlug || c.name.toLowerCase().replace(/[^a-z0-9]/g, '') === qSlug
+    );
+    if (match) return match;
+
+    // Substring match
+    match = catList.find(
+      c => c.name.toLowerCase().includes(qLower) || qLower.includes(c.name.toLowerCase())
+    );
+    if (match) return match;
+  }
+
+  return null;
+}
 
 export default function Services() {
   const [products,    setProducts]    = useState([]);
@@ -22,8 +61,10 @@ export default function Services() {
           productAPI.list({ active: true }),
           categoryAPI.list({ active: true }),
         ]);
-        setProducts(pRes.data.data || []);
-        setCategories(cRes.data.data || []);
+        const catData = cRes.data.data || [];
+        const prodData = pRes.data.data || [];
+        setProducts(prodData.length ? prodData : FALLBACK_SERVICES);
+        setCategories(catData.length ? catData : FALLBACK_CATS);
       } catch {
         setProducts(FALLBACK_SERVICES);
         setCategories(FALLBACK_CATS);
@@ -32,16 +73,32 @@ export default function Services() {
       }
     }
     load();
-    const cat = searchParams.get('category');
-    if (cat) setActiveCategory(cat);
-    
-    const q = searchParams.get('q');
-    if (q) setSearch(q);
-  }, [searchParams]);
+  }, []);
 
-  const activeCategoryName = categories.find(
-    c => c.slug === activeCategory || c.id?.toString() === activeCategory
-  )?.name;
+  useEffect(() => {
+    const catParam = searchParams.get('category');
+    const qParam = searchParams.get('q');
+
+    if (qParam) {
+      setSearch(qParam);
+      const match = findCategoryMatch(qParam, 'all', categories);
+      if (match) {
+        setActiveCategory(match.slug || match.id?.toString());
+      }
+    } else if (catParam) {
+      setActiveCategory(catParam);
+      const match = categories.find(c => c.slug === catParam || c.id?.toString() === catParam);
+      if (match) {
+        setSearch(match.name);
+      }
+    }
+  }, [searchParams, categories]);
+
+  const matchedCategory = findCategoryMatch(search, activeCategory, categories);
+
+  const activeCategoryName = matchedCategory?.name || (
+    categories.find(c => c.slug === activeCategory || c.id?.toString() === activeCategory)?.name
+  );
 
   const breadcrumbItems = [
     { label: 'Home', path: '/' },
@@ -51,15 +108,52 @@ export default function Services() {
     breadcrumbItems.push({ label: activeCategoryName });
   }
 
+  const handleSelectCategory = (catObj) => {
+    if (!catObj || catObj === 'all') {
+      setActiveCategory('all');
+      setSearch('');
+    } else {
+      const slugOrId = catObj.slug || catObj.id?.toString();
+      setActiveCategory(slugOrId);
+      setSearch(catObj.name);
+    }
+  };
+
   const filtered = products.filter(p => {
-    const matchCat    = activeCategory === 'all' || p.category_slug === activeCategory || p.category_id?.toString() === activeCategory;
-    const matchSearch = !search || p.name.toLowerCase().includes(search.toLowerCase());
+    // 1. Category match
+    const matchCat =
+      activeCategory === 'all' ||
+      !activeCategory ||
+      p.category_slug === activeCategory ||
+      p.category_id?.toString() === activeCategory ||
+      p.category_name?.toLowerCase() === activeCategory.toLowerCase() ||
+      (matchedCategory && (
+        p.category_slug === matchedCategory.slug ||
+        p.category_id?.toString() === matchedCategory.id?.toString() ||
+        p.category_name?.toLowerCase() === matchedCategory.name.toLowerCase()
+      ));
+
+    // 2. Search match
+    if (!search || !search.trim()) return matchCat;
+
+    const q = search.trim().toLowerCase();
+    const matchSearch =
+      (p.name && p.name.toLowerCase().includes(q)) ||
+      (p.short_desc && p.short_desc.toLowerCase().includes(q)) ||
+      (p.category_name && p.category_name.toLowerCase().includes(q)) ||
+      (p.category_slug && p.category_slug.toLowerCase().includes(q)) ||
+      (matchedCategory && (
+        p.category_slug === matchedCategory.slug ||
+        p.category_id?.toString() === matchedCategory.id?.toString()
+      ));
+
     return matchCat && matchSearch;
   });
 
+  const isAllActive = !matchedCategory && (activeCategory === 'all' || !activeCategory);
+
   return (
     <div style={{ paddingTop: 90 }}>
-
       <div className="container section" style={{ paddingTop: '2.5rem' }}>
         <Breadcrumbs items={breadcrumbItems} />
 
@@ -71,36 +165,51 @@ export default function Services() {
               type="text"
               placeholder="Search services..."
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={e => {
+                const val = e.target.value;
+                setSearch(val);
+                const match = findCategoryMatch(val, activeCategory, categories);
+                if (match) {
+                  setActiveCategory(match.slug || match.id?.toString());
+                } else if (!val.trim()) {
+                  setActiveCategory('all');
+                }
+              }}
               className="form-input"
               style={{ paddingLeft: '2.75rem' }}
             />
           </div>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
             <button
-              onClick={() => setActiveCategory('all')}
+              onClick={() => handleSelectCategory('all')}
               style={{
                 padding: '0.55rem 1.25rem', borderRadius: 999, fontSize: '0.85rem', fontWeight: 700,
                 border: '1px solid',
-                borderColor: activeCategory === 'all' ? 'var(--brand-violet)' : 'var(--border-light)',
-                background: activeCategory === 'all' ? 'var(--badge-bg-purple)' : 'var(--bg-card)',
-                color: activeCategory === 'all' ? 'var(--brand-violet)' : 'var(--text-muted)',
+                borderColor: isAllActive ? 'var(--brand-violet)' : 'var(--border-light)',
+                background: isAllActive ? 'var(--badge-bg-purple)' : 'var(--bg-card)',
+                color: isAllActive ? 'var(--brand-violet)' : 'var(--text-muted)',
                 cursor: 'pointer', transition: 'all 0.25s ease',
               }}
             >All</button>
-            {categories.map(cat => (
-              <button key={cat.id || cat.slug}
-                onClick={() => setActiveCategory(cat.slug || cat.id?.toString())}
-                style={{
-                  padding: '0.55rem 1.25rem', borderRadius: 999, fontSize: '0.85rem', fontWeight: 700,
-                  border: '1px solid',
-                  borderColor: (activeCategory === cat.slug || activeCategory === cat.id?.toString()) ? 'var(--brand-violet)' : 'var(--border-light)',
-                  background: (activeCategory === cat.slug || activeCategory === cat.id?.toString()) ? 'var(--badge-bg-purple)' : 'var(--bg-card)',
-                  color: (activeCategory === cat.slug || activeCategory === cat.id?.toString()) ? 'var(--brand-violet)' : 'var(--text-muted)',
-                  cursor: 'pointer', transition: 'all 0.25s ease',
-                }}
-              >{cat.name}</button>
-            ))}
+            {categories.map(cat => {
+              const isSelected = matchedCategory
+                ? (cat.id === matchedCategory.id || cat.slug === matchedCategory.slug)
+                : (activeCategory === cat.slug || activeCategory === cat.id?.toString());
+
+              return (
+                <button key={cat.id || cat.slug}
+                  onClick={() => handleSelectCategory(cat)}
+                  style={{
+                    padding: '0.55rem 1.25rem', borderRadius: 999, fontSize: '0.85rem', fontWeight: 700,
+                    border: '1px solid',
+                    borderColor: isSelected ? 'var(--brand-violet)' : 'var(--border-light)',
+                    background: isSelected ? 'var(--badge-bg-purple)' : 'var(--bg-card)',
+                    color: isSelected ? 'var(--brand-violet)' : 'var(--text-muted)',
+                    cursor: 'pointer', transition: 'all 0.25s ease',
+                  }}
+                >{cat.name}</button>
+              );
+            })}
           </div>
         </div>
 
@@ -139,4 +248,13 @@ const FALLBACK_CATS = [
   { id: 1, name: 'Logo Design', slug: 'logo-design' },
   { id: 2, name: 'Visiting Card', slug: 'visiting-card' },
   { id: 3, name: 'Brochure Design', slug: 'brochure-design' },
+  { id: 4, name: 'Menu Card Design', slug: 'menu-card-design' },
+  { id: 5, name: '3D Logo Design', slug: '3d-logo-design' },
+  { id: 6, name: 'Banner Design', slug: 'banner-design' },
+  { id: 7, name: 'Flex & Printing', slug: 'flex-printing' },
+  { id: 8, name: 'Advertisement', slug: 'advertisement' },
+  { id: 9, name: 'Social Media Design', slug: 'social-media-design' },
+  { id: 10, name: 'Pamphlet & Flyer', slug: 'pamphlet-flyer' },
+  { id: 11, name: 'LED Sign Board', slug: 'led-sign-board' },
 ];
+

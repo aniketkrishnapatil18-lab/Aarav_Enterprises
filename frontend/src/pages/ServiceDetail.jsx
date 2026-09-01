@@ -3,12 +3,14 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, MessageCircle, Clock, RefreshCw, FileType, CheckCircle } from 'lucide-react';
 import { productAPI, portfolioAPI } from '../services/api';
 import { openWhatsApp } from '../utils/helpers';
+import { useEnquiryModal } from '../context/EnquiryModalContext';
 
 export default function ServiceDetail() {
   const { id } = useParams();
   const [service, setService] = useState(null);
   const [portfolio, setPortfolio] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { openModal } = useEnquiryModal();
 
   useEffect(() => {
     async function load() {
@@ -86,31 +88,31 @@ export default function ServiceDetail() {
                 : 'Price on Request'}
             </div>
 
-            <p style={{ color: 'var(--text-subtle)', lineHeight: 1.8, marginBottom: '2rem' }}>
+            <p style={{ color: 'var(--text-subtle)', lineHeight: 1.8, marginBottom: '1.5rem' }}>
               {service.description || service.short_desc}
             </p>
 
             {/* Meta */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>
               {service.delivery_days && (
-                <div className="glass-card" style={{ padding: '1rem', textAlign: 'center' }}>
-                  <Clock size={20} color="var(--brand-violet)" style={{ marginBottom: '0.5rem' }} />
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-subtle)' }}>Delivery Time</div>
-                  <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>{service.delivery_days} Days</div>
+                <div className="glass-card" style={{ padding: '0.6rem 0.8rem', textAlign: 'center' }}>
+                  <Clock size={16} color="var(--brand-violet)" style={{ marginBottom: '0.25rem' }} />
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>Delivery Time</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>{service.delivery_days} Days</div>
                 </div>
               )}
               {service.revisions && (
-                <div className="glass-card" style={{ padding: '1rem', textAlign: 'center' }}>
-                  <RefreshCw size={20} color="var(--brand-violet)" style={{ marginBottom: '0.5rem' }} />
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-subtle)' }}>Revisions</div>
-                  <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>{service.revisions} Free</div>
+                <div className="glass-card" style={{ padding: '0.6rem 0.8rem', textAlign: 'center' }}>
+                  <RefreshCw size={16} color="var(--brand-violet)" style={{ marginBottom: '0.25rem' }} />
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>Revisions</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>{service.revisions} Free</div>
                 </div>
               )}
             </div>
 
             {service.file_formats && (
-              <div style={{ marginBottom: '2rem' }}>
-                <div style={{ fontSize: '0.85rem', color: 'var(--text-subtle)', marginBottom: '0.5rem' }}>File Formats</div>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-subtle)', marginBottom: '0.4rem' }}>File Formats</div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   {service.file_formats.split(',').map(f => (
                     <span key={f} style={{ background: 'rgba(124,58,237,0.15)', color: 'var(--brand-violet)', padding: '0.25rem 0.65rem', borderRadius: 6, fontSize: '0.8rem', border: '1px solid rgba(124,58,237,0.3)' }}>
@@ -131,11 +133,11 @@ export default function ServiceDetail() {
                 <MessageCircle size={20} /> Get This Design
               </button>
               <button
-                onClick={() => openWhatsApp('', service.name)}
+                onClick={() => openModal({ id: service.id, name: service.name })}
                 className="btn-primary"
                 style={{ flex: 1, justifyContent: 'center' }}
               >
-                Get a Quote
+                Enquiry
               </button>
             </div>
           </div>

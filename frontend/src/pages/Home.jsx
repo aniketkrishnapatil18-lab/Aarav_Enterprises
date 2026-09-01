@@ -1989,21 +1989,17 @@ export default function Home() {
             </div>
 
             <div
-              className="hide-scroll"
               style={{
                 display: "flex",
+                flexWrap: "wrap",
                 gap: "0.6rem",
-                overflowX: "auto",
-                paddingBottom: "0.5rem",
                 marginBottom: "2rem",
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
+                alignItems: "center",
               }}
             >
               <button
                 onClick={() => setCategoryFilter("all")}
                 style={{
-                  flexShrink: 0,
                   padding: "0.55rem 1.25rem",
                   borderRadius: 999,
                   fontSize: "0.85rem",
@@ -2032,7 +2028,6 @@ export default function Home() {
                   key={row.category.id}
                   onClick={() => setCategoryFilter(row.category.id)}
                   style={{
-                    flexShrink: 0,
                     padding: "0.55rem 1.25rem",
                     borderRadius: 999,
                     fontSize: "0.85rem",

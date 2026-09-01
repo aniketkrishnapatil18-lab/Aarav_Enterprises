@@ -1,5 +1,28 @@
 import { Link } from 'react-router-dom';
-import { MessageCircle, Phone, Mail, MapPin, Globe, Share2, Send } from 'lucide-react';
+import { MessageCircle, Phone, Mail, MapPin } from 'lucide-react';
+
+const Youtube = ({ size = 24, color = "currentColor" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
+    <path d="m10 15 5-3-5-3z" />
+  </svg>
+);
+
+const Linkedin = ({ size = 24, color = "currentColor" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect width="4" height="12" x="2" y="9" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
+
+const Instagram = ({ size = 24, color = "currentColor" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
 import { openWhatsApp } from '../../utils/helpers';
 
 const SERVICES = [
@@ -38,16 +61,35 @@ export default function Footer() {
               Creative Designs. Professional Branding. Powerful Visuals. Your trusted partner for all graphic design needs.
             </p>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
-              {[Globe, Share2, Send].map((Icon, i) => (
-                <div key={i} style={{
-                  width: 38, height: 38, borderRadius: 8,
-                  background: 'var(--bg-subtle)',
-                  border: '1px solid var(--border-light)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  cursor: 'pointer', transition: 'all 0.2s ease',
-                }}>
-                  <Icon size={18} color="var(--text-subtle)" />
-                </div>
+              {[
+                { Icon: Youtube, href: 'https://www.youtube.com' },
+                { Icon: Linkedin, href: 'https://www.linkedin.com' },
+                { Icon: Instagram, href: 'https://www.instagram.com' }
+              ].map((item, i) => (
+                <a
+                  key={i}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    width: 38, height: 38, borderRadius: 8,
+                    background: 'var(--bg-subtle)',
+                    border: '1px solid var(--border-light)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer', transition: 'all 0.2s ease',
+                    textDecoration: 'none'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = 'var(--brand-violet)';
+                    e.currentTarget.children[0].style.color = 'var(--brand-violet)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = 'var(--border-light)';
+                    e.currentTarget.children[0].style.color = 'var(--text-subtle)';
+                  }}
+                >
+                  <item.Icon size={18} color="var(--text-subtle)" style={{ transition: 'color 0.2s ease' }} />
+                </a>
               ))}
             </div>
           </div>
@@ -57,12 +99,12 @@ export default function Footer() {
             <h4 style={{ color: 'var(--text-main)', marginBottom: '1.25rem', fontSize: '1rem' }}>Our Services</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               {SERVICES.map(s => (
-                <Link key={s} to="/services" style={{
+                <Link key={s} to={`/services?q=${encodeURIComponent(s)}`} style={{
                   color: 'var(--text-subtle)', fontSize: '0.875rem', textDecoration: 'none',
                   transition: 'color 0.2s ease',
                 }}
-                onMouseEnter={e => e.target.style.color = 'var(--brand-violet)'}
-                onMouseLeave={e => e.target.style.color = 'var(--text-subtle)'}
+                  onMouseEnter={e => e.target.style.color = 'var(--brand-violet)'}
+                  onMouseLeave={e => e.target.style.color = 'var(--text-subtle)'}
                 >{s}</Link>
               ))}
             </div>
@@ -82,8 +124,8 @@ export default function Footer() {
                 <Link key={l.to} to={l.to} style={{
                   color: 'var(--text-subtle)', fontSize: '0.875rem', textDecoration: 'none',
                 }}
-                onMouseEnter={e => e.target.style.color = 'var(--brand-violet)'}
-                onMouseLeave={e => e.target.style.color = 'var(--text-subtle)'}
+                  onMouseEnter={e => e.target.style.color = 'var(--brand-violet)'}
+                  onMouseLeave={e => e.target.style.color = 'var(--text-subtle)'}
                 >{l.label}</Link>
               ))}
             </div>
