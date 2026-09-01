@@ -26,20 +26,20 @@ export default function AdminConversations() {
   }
 
   const statusColor = s => ({
-    active: '#4ADE80', human_handoff: '#F87171', closed: '#64748B', archived: '#475569',
-  })[s] || '#94A3B8';
+    active: '#4ADE80', human_handoff: '#F87171', closed: 'var(--text-subtle)', archived: 'var(--text-muted)',
+  })[s] || 'var(--text-subtle)';
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>WhatsApp Conversations</h1>
-          <p style={{ color: '#64748B', fontSize: '0.9rem' }}>{total} conversations</p>
+          <p style={{ color: 'var(--text-subtle)', fontSize: '0.9rem' }}>{total} conversations</p>
         </div>
       </div>
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
         {[{v:'',l:'All'},{v:'active',l:'Active'},{v:'human_handoff',l:'🙋 Handoff'},{v:'closed',l:'Closed'}].map(s => (
-          <button key={s.v} onClick={() => setStatus(s.v)} style={{ padding: '0.4rem 0.85rem', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', border: `1px solid ${status===s.v?'#7C3AED':'rgba(255,255,255,0.1)'}`, background: status===s.v?'rgba(124,58,237,0.2)':'transparent', color: status===s.v?'#A78BFA':'#64748B' }}>
+          <button key={s.v} onClick={() => setStatus(s.v)} style={{ padding: '0.4rem 0.85rem', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', border: `1px solid ${status===s.v?'var(--brand-violet)':'var(--border-light)'}`, background: status===s.v?'rgba(124,58,237,0.15)':'transparent', color: status===s.v?'var(--brand-violet)':'var(--text-subtle)' }}>
             {s.l}
           </button>
         ))}
@@ -50,7 +50,7 @@ export default function AdminConversations() {
             {[...Array(5)].map((_, i) => <div key={i} className="skeleton" style={{ height: 52 }} />)}
           </div>
         ) : convs.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '4rem', color: '#64748B' }}>
+          <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-subtle)' }}>
             <MessageCircle size={40} style={{ marginBottom: '1rem', opacity: 0.3 }} />
             <p>No conversations yet.</p>
           </div>
@@ -61,8 +61,8 @@ export default function AdminConversations() {
               {convs.map(c => (
                 <tr key={c.id}>
                   <td>
-                    <div style={{ fontWeight: 600, color: '#F8FAFC' }}>{c.customer_name || 'Unknown'}</div>
-                    <div style={{ fontSize: '0.78rem', color: '#64748B', fontFamily: 'monospace' }}>{c.whatsapp_number}</div>
+                    <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>{c.customer_name || 'Unknown'}</div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-subtle)', fontFamily: 'monospace' }}>{c.whatsapp_number}</div>
                   </td>
                   <td>{getLanguageLabel(c.language)}</td>
                   <td>{c.message_count}</td>
@@ -71,9 +71,9 @@ export default function AdminConversations() {
                       {c.status === 'human_handoff' ? '⚠️ Handoff' : c.status}
                     </span>
                   </td>
-                  <td><span style={{ fontSize: '0.8rem', color: '#64748B' }}>{timeAgo(c.last_message_at)}</span></td>
+                  <td><span style={{ fontSize: '0.8rem', color: 'var(--text-subtle)' }}>{timeAgo(c.last_message_at)}</span></td>
                   <td>
-                    <Link to={`/admin/conversations/${c.id}`} style={{ color: '#A78BFA', textDecoration: 'none', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                    <Link to={`/admin/conversations/${c.id}`} style={{ color: 'var(--brand-violet)', textDecoration: 'none', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                       View <ArrowRight size={14} />
                     </Link>
                   </td>

@@ -34,6 +34,9 @@ export default function Services() {
     load();
     const cat = searchParams.get('category');
     if (cat) setActiveCategory(cat);
+    
+    const q = searchParams.get('q');
+    if (q) setSearch(q);
   }, [searchParams]);
 
   const activeCategoryName = categories.find(

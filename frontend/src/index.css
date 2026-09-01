@@ -112,11 +112,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ── Custom Scrollbar ─────────────────────────────────────── */
+/* Solid color, not var(--grad-primary): a gradient + border-radius on
+   ::-webkit-scrollbar-thumb renders seam/notch artifacts at the thumb's
+   rounded ends in Chromium (the corner clip doesn't composite cleanly
+   with the gradient paint). */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-main); }
 ::-webkit-scrollbar-thumb {
-  background: var(--grad-primary);
+  background: var(--brand-violet);
   border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-pink);
 }
 
 /* ── Gradient Text ─────────────────────────────────────────── */

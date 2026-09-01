@@ -13,7 +13,7 @@ export default function AdminLayout() {
   }, [navigate]);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--brand-dark)' }}>
+    <div style={{ display: 'flex', height: '100vh', background: 'var(--brand-dark)', overflow: 'hidden' }}>
       {/* Sidebar */}
       <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 

@@ -61,7 +61,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
       </div>
 
       {/* Navigation List */}
-      <nav style={{ flex: 1, padding: '1.25rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '0.25rem', overflowY: 'auto' }}>
+      <nav style={{ flex: 1, padding: '1.25rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '0.25rem', overflowY: 'hidden' }}>
         {NAV_ITEMS.map(item => (
           <NavLink
             key={item.to}

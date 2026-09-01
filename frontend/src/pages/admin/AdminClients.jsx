@@ -19,6 +19,12 @@ export default function AdminClients() {
     load();
   }, []);
 
+  // Lock background page scroll while the form modal is open.
+  useEffect(() => {
+    document.body.style.overflow = showForm ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [showForm]);
+
   async function load() {
     try {
       const res = await clientAPI.list({});
@@ -102,7 +108,8 @@ export default function AdminClients() {
 
       {showForm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-          <div className="glass-card" style={{ width: '100%', maxWidth: 520, padding: '2rem', maxHeight: '90vh', overflowY: 'auto' }}>
+          <div className="glass-card" style={{ width: '100%', maxWidth: 520, maxHeight: '90vh', overflow: 'hidden', padding: 0 }}>
+          <div style={{ maxHeight: '90vh', overflowY: 'auto', padding: '2rem' }}>
             <h3 style={{ marginBottom: '1.5rem' }}>{editClient ? 'Edit Client' : 'Add Client'}</h3>
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: '1rem' }}>
@@ -132,6 +139,7 @@ export default function AdminClients() {
                 <button type="submit" className="btn-primary">Save Client</button>
               </div>
             </form>
+          </div>
           </div>
         </div>
       )}

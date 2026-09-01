@@ -61,7 +61,7 @@ export default function AdminInquiryDetail() {
   }
 
   if (loading) return <div className="skeleton" style={{ height: 600, borderRadius: '1rem' }} />;
-  if (!inquiry) return <div style={{ textAlign: 'center', padding: '4rem', color: '#64748B' }}>Inquiry not found.</div>;
+  if (!inquiry) return <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-subtle)' }}>Inquiry not found.</div>;
 
   const st = getStatusConfig(inquiry.status);
   const cd = inquiry.collected_data ? (typeof inquiry.collected_data === 'string' ? JSON.parse(inquiry.collected_data) : inquiry.collected_data) : {};
@@ -69,7 +69,7 @@ export default function AdminInquiryDetail() {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.875rem' }}>
+        <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', color: 'var(--text-subtle)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.875rem' }}>
           <ArrowLeft size={16} /> Back
         </button>
         <h1 style={{ fontSize: '1.25rem', flex: 1 }}>{inquiry.inquiry_number}</h1>
@@ -82,7 +82,7 @@ export default function AdminInquiryDetail() {
           {/* Customer Info */}
           <div className="glass-card" style={{ padding: '1.5rem' }}>
             <h3 style={{ fontSize: '1rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <User size={18} color="#A78BFA" /> Customer Information
+              <User size={18} color="var(--brand-violet)" /> Customer Information
             </h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
               {[
@@ -96,15 +96,15 @@ export default function AdminInquiryDetail() {
                 { label: 'Colors',        value: inquiry.preferred_colors || '—' },
               ].map(({ label, value }) => (
                 <div key={label}>
-                  <div style={{ fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>{label}</div>
-                  <div style={{ fontSize: '0.9rem', color: '#F8FAFC', fontWeight: 500 }}>{value}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)', marginBottom: '0.25rem' }}>{label}</div>
+                  <div style={{ fontSize: '0.9rem', color: 'var(--text-main)', fontWeight: 500 }}>{value}</div>
                 </div>
               ))}
             </div>
             {inquiry.requirements && (
               <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                <div style={{ fontSize: '0.75rem', color: '#64748B', marginBottom: '0.5rem' }}>Requirements</div>
-                <p style={{ color: '#CBD5E1', lineHeight: 1.7, fontSize: '0.9rem' }}>{inquiry.requirements}</p>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)', marginBottom: '0.5rem' }}>Requirements</div>
+                <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, fontSize: '0.9rem' }}>{inquiry.requirements}</p>
               </div>
             )}
           </div>
@@ -112,8 +112,8 @@ export default function AdminInquiryDetail() {
           {/* AI Summary */}
           {inquiry.ai_summary && (
             <div className="glass-card" style={{ padding: '1.5rem', border: '1px solid rgba(124,58,237,0.3)' }}>
-              <h3 style={{ fontSize: '1rem', marginBottom: '1rem', color: '#A78BFA' }}>🤖 AI Summary</h3>
-              <p style={{ color: '#CBD5E1', lineHeight: 1.8, whiteSpace: 'pre-wrap', fontSize: '0.9rem' }}>{inquiry.ai_summary}</p>
+              <h3 style={{ fontSize: '1rem', marginBottom: '1rem', color: 'var(--brand-violet)' }}>🤖 AI Summary</h3>
+              <p style={{ color: 'var(--text-muted)', lineHeight: 1.8, whiteSpace: 'pre-wrap', fontSize: '0.9rem' }}>{inquiry.ai_summary}</p>
             </div>
           )}
 
@@ -121,16 +121,16 @@ export default function AdminInquiryDetail() {
           <div className="glass-card" style={{ padding: '1.5rem' }}>
             <h3 style={{ fontSize: '1rem', marginBottom: '1.25rem' }}>Activity & Notes</h3>
             {(inquiry.messages || []).length === 0 ? (
-              <p style={{ color: '#475569', fontSize: '0.9rem' }}>No messages yet.</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No messages yet.</p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: 300, overflowY: 'auto' }}>
                 {(inquiry.messages || []).map(msg => (
-                  <div key={msg.id} style={{ padding: '0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: 8, borderLeft: `3px solid ${msg.sender === 'admin' ? '#7C3AED' : msg.sender === 'system' ? '#64748B' : '#25D366'}` }}>
+                  <div key={msg.id} style={{ padding: '0.75rem', background: 'var(--bg-subtle)', borderRadius: 8, borderLeft: `3px solid ${msg.sender === 'admin' ? 'var(--brand-violet)' : msg.sender === 'system' ? 'var(--text-subtle)' : '#25D366'}` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.3rem' }}>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94A3B8', textTransform: 'capitalize' }}>{msg.sender === 'admin' ? (msg.admin_name || 'Admin') : msg.sender}</span>
-                      <span style={{ fontSize: '0.75rem', color: '#475569' }}>{formatDate(msg.created_at)}</span>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-subtle)', textTransform: 'capitalize' }}>{msg.sender === 'admin' ? (msg.admin_name || 'Admin') : msg.sender}</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{formatDate(msg.created_at)}</span>
                     </div>
-                    <p style={{ color: '#CBD5E1', fontSize: '0.875rem', lineHeight: 1.6 }}>{msg.message}</p>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.6 }}>{msg.message}</p>
                   </div>
                 ))}
               </div>
@@ -194,8 +194,8 @@ export default function AdminInquiryDetail() {
               { label: 'Human Handoff', value: inquiry.human_handoff ? '⚠️ Yes' : 'No' },
             ].map(({ label, value }) => (
               <div key={label} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
-                <span style={{ fontSize: '0.8rem', color: '#64748B' }}>{label}</span>
-                <span style={{ fontSize: '0.8rem', color: '#CBD5E1', fontWeight: 500 }}>{value}</span>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-subtle)' }}>{label}</span>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 500 }}>{value}</span>
               </div>
             ))}
           </div>

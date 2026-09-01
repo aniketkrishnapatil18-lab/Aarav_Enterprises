@@ -31,7 +31,7 @@ export default function EnquiryFormModal() {
   if (!isOpen) return null;
 
   return (
-    <Dialog open={isOpen} onClose={closeModal} className="relative z-50">
+    <Dialog open={isOpen} onClose={closeModal} className="relative z-[9999]">
       {/* Backdrop overlay */}
       <div 
         className="fixed inset-0 bg-black/65 backdrop-blur-sm transition-opacity duration-300" 
