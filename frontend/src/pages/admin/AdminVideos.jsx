@@ -19,6 +19,12 @@ export default function AdminVideos() {
         load();
     }, []);
 
+    // Lock background page scroll while the form modal is open.
+    useEffect(() => {
+        document.body.style.overflow = showForm ? 'hidden' : '';
+        return () => { document.body.style.overflow = ''; };
+    }, [showForm]);
+
     async function load() {
         try {
             const res = await videoAPI.list({});
@@ -44,13 +50,32 @@ export default function AdminVideos() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const payload = { ...form, active: form.active ? 1 : 0 };
+        const fd = new FormData();
+        fd.append('title', form.title);
+        fd.append('description', form.description);
+        fd.append('active', form.active ? 1 : 0);
+        if (form.thumbnail_url) fd.append('thumbnail_url', form.thumbnail_url);
+        if (form.video_url) fd.append('video_url', form.video_url);
+
+        const thumbFile = document.getElementById('thumbnail_file')?.files?.[0];
+        if (thumbFile) fd.append('thumbnail', thumbFile);
+
+        const videoFile = document.getElementById('video_file')?.files?.[0];
+        if (videoFile) fd.append('video', videoFile);
+
+        if (!editVideo && !thumbFile && !form.thumbnail_url) {
+            toast.error('Thumbnail file or URL is required.'); return;
+        }
+        if (!editVideo && !videoFile && !form.video_url) {
+            toast.error('Video file or URL is required.'); return;
+        }
+
         try {
             if (editVideo) {
-                await videoAPI.update(editVideo.id, payload);
+                await videoAPI.update(editVideo.id, fd);
                 toast.success('Video updated!');
             } else {
-                await videoAPI.create(payload);
+                await videoAPI.create(fd);
                 toast.success('Video added!');
             }
             setShowForm(false);
@@ -102,7 +127,8 @@ export default function AdminVideos() {
             {/* Inline Modal */}
             {showForm && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-                    <div className="glass-card" style={{ width: '100%', maxWidth: 560, padding: '2rem', maxHeight: '90vh', overflowY: 'auto' }}>
+                    <div className="glass-card" style={{ width: '100%', maxWidth: 560, maxHeight: '90vh', overflow: 'hidden', padding: 0 }}>
+                    <div style={{ maxHeight: '90vh', overflowY: 'auto', padding: '2rem' }}>
                         <h3 style={{ marginBottom: '1.5rem' }}>{editVideo ? 'Edit Video' : 'Add Video'}</h3>
                         <form onSubmit={handleSubmit}>
                             <div style={{ marginBottom: '1rem' }}>
@@ -113,13 +139,17 @@ export default function AdminVideos() {
                                 <label className="form-label">Description</label>
                                 <textarea className="form-input" rows={3} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Brief description of the video..." style={{ resize: 'vertical' }} />
                             </div>
-                            <div style={{ marginBottom: '1rem' }}>
-                                <label className="form-label">Thumbnail URL *</label>
-                                <input className="form-input" required type="url" value={form.thumbnail_url} onChange={e => setForm(f => ({ ...f, thumbnail_url: e.target.value }))} placeholder="https://..." />
+                            <div style={{ marginBottom: '1rem', background: 'var(--bg-subtle)', padding: '1rem', borderRadius: '0.5rem' }}>
+                                <label className="form-label" style={{ marginBottom: '0.75rem' }}>Thumbnail Image {editVideo ? '(Upload to replace)' : '*'}</label>
+                                <input id="thumbnail_file" type="file" accept="image/*" className="form-input" style={{ marginBottom: '0.5rem', background: 'var(--bg-card)' }} />
+                                <div style={{ fontSize: '0.75rem', color: '#94A3B8', margin: '0.5rem 0', textAlign: 'center', fontWeight: 600 }}>OR PROVIDE LINK</div>
+                                <input className="form-input" type="url" value={form.thumbnail_url} onChange={e => setForm(f => ({ ...f, thumbnail_url: e.target.value }))} placeholder="https://..." style={{ background: 'var(--bg-card)' }} />
                             </div>
-                            <div style={{ marginBottom: '1rem' }}>
-                                <label className="form-label">Video URL *</label>
-                                <input className="form-input" required type="url" value={form.video_url} onChange={e => setForm(f => ({ ...f, video_url: e.target.value }))} placeholder="https://..." />
+                            <div style={{ marginBottom: '1rem', background: 'var(--bg-subtle)', padding: '1rem', borderRadius: '0.5rem' }}>
+                                <label className="form-label" style={{ marginBottom: '0.75rem' }}>Video File {editVideo ? '(Upload to replace)' : '*'}</label>
+                                <input id="video_file" type="file" accept="video/*" className="form-input" style={{ marginBottom: '0.5rem', background: 'var(--bg-card)' }} />
+                                <div style={{ fontSize: '0.75rem', color: '#94A3B8', margin: '0.5rem 0', textAlign: 'center', fontWeight: 600 }}>OR PROVIDE LINK</div>
+                                <input className="form-input" type="url" value={form.video_url} onChange={e => setForm(f => ({ ...f, video_url: e.target.value }))} placeholder="https://..." style={{ background: 'var(--bg-card)' }} />
                             </div>
                             <div style={{ marginBottom: '1.5rem' }}>
                                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem', color: '#94A3B8' }}>
@@ -132,6 +162,7 @@ export default function AdminVideos() {
                                 <button type="submit" className="btn-primary">Save Video</button>
                             </div>
                         </form>
+                    </div>
                     </div>
                 </div>
             )}

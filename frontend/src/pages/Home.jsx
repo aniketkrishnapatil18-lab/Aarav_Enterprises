@@ -231,21 +231,16 @@ function ServiceCard({ service }) {
           style={{
             marginTop: "auto",
             textDecoration: "none",
-            background: "var(--brand-violet)",
-            color: "white",
-            fontSize: "0.8rem",
+            color: "var(--brand-violet)",
+            fontSize: "0.85rem",
             fontWeight: 700,
-            letterSpacing: "0.02em",
-            textTransform: "uppercase",
-            borderRadius: "var(--radius-md)",
-            padding: "0.7rem 1rem",
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            boxShadow: "var(--shadow-sm)",
+            justifyContent: "flex-end",
+            gap: "0.25rem",
           }}
         >
-          Get Quote <ChevronRight size={16} />
+          View Details <ArrowRight size={16} />
         </Link>
       </div>
     </div>
@@ -257,7 +252,7 @@ function SimpleServiceCard({ service }) {
   const imageUrl = resolveProductImage(service);
   return (
     <Link
-      to={`/services/${service.slug || service.id}`}
+      to={service.href || `/services/${service.slug || service.id}`}
       style={{ textDecoration: "none", display: "block" }}
     >
       <div
@@ -324,7 +319,7 @@ function SimpleServiceCard({ service }) {
 function PortfolioThumb({ item }) {
   return (
     <Link
-      to="/portfolio"
+      to={`/portfolio/${item.id}`}
       style={{
         textDecoration: "none",
         display: "flex",
@@ -1269,41 +1264,34 @@ function HeroCentered() {
             transform: "rotate(6deg)",
           }}
         >
+          <img
+            src="/assets/portfolio/LED Sign Boards/led-1.jpg"
+            alt="LED Sign Boards"
+            style={{
+              width: "100%",
+              height: 120,
+              objectFit: "cover",
+              borderRadius: "0.6rem",
+            }}
+          />
           <div
             style={{
-              background: "var(--bg-subtle)",
-              height: 120,
-              borderRadius: "0.6rem",
-              padding: "0.8rem",
+              padding: "0.5rem 0.25rem 0.1rem",
               display: "flex",
-              flexDirection: "column",
+              alignItems: "center",
               gap: "0.5rem",
             }}
           >
-            <div
+            <Zap size={12} color="var(--brand-violet)" />
+            <span
               style={{
-                width: "50%",
-                height: 8,
-                background: "var(--border-light)",
-                borderRadius: 4,
+                fontWeight: 700,
+                fontSize: "0.7rem",
+                color: "var(--text-main)",
               }}
-            ></div>
-            <div
-              style={{
-                width: "90%",
-                height: 8,
-                background: "var(--border-light)",
-                borderRadius: 4,
-              }}
-            ></div>
-            <div
-              style={{
-                width: "70%",
-                height: 8,
-                background: "var(--border-light)",
-                borderRadius: 4,
-              }}
-            ></div>
+            >
+              LED Sign Boards
+            </span>
           </div>
         </div>
         {/* Front Card */}
@@ -1607,33 +1595,44 @@ export default function Home() {
     load();
   }, []);
 
-  const displayServices =
-    services.length > 0 ? services.slice(0, 6) : FALLBACK_SERVICES;
-  const displayPortfolio =
-    portfolio.length > 0 ? portfolio.slice(0, 6) : FALLBACK_PORTFOLIO;
+  const displayServices = services.slice(0, 6);
+  const displayPortfolio = portfolio.slice(0, 6);
 
-  // Group the live catalog into one row per category; fall back to demo
-  // rows (offline / catalog not yet populated) so the section never looks empty.
-  const categoryRows = [
-    ...(catalogReady
-      ? categories
-          .map((cat) => ({
-            category: cat,
-            products: allProducts
-              .filter((p) => p.category_id === cat.id)
-              .map(withDemoStats),
-          }))
-          .filter((row) => row.products.length > 0)
-      : FALLBACK_CATEGORY_ROWS),
-    // Core signage/printing products — not part of the backend category
-    // taxonomy yet, so shown as standalone rows on every load.
-    ...SIGNAGE_PRINTING_ROWS,
-  ];
+  // Group the live catalog into one row per category
+  const categoryRows = catalogReady
+    ? categories
+        .map((cat) => ({
+          category: cat,
+          products: allProducts
+            .filter((p) => p.category_id === cat.id)
+            .map(withDemoStats),
+        }))
+        .filter((row) => row.products.length > 0)
+    : [];
 
   const visibleCategoryRows =
     categoryFilter === "all"
       ? categoryRows
       : categoryRows.filter((row) => row.category.id === categoryFilter);
+
+  // "Shop by Category" strip — one card per real admin category, using
+  // that category's first product as the representative thumbnail/price.
+  const shopByCategoryItems = catalogReady
+    ? categories
+        .map((cat) => {
+          const base = allProducts.find((p) => p.category_id === cat.id);
+          if (!base) return null;
+          return {
+            id: cat.id,
+            name: cat.name,
+            slug: cat.slug,
+            href: `/products/${cat.slug}`,
+            thumbnail_url: base.thumbnail_url,
+            starting_price: base.starting_price,
+          };
+        })
+        .filter(Boolean)
+    : [];
 
   return (
     <>
@@ -1772,7 +1771,7 @@ export default function Home() {
             className="hide-scroll"
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(8, 180px)",
+              gridTemplateColumns: `repeat(${shopByCategoryItems.length}, 180px)`,
               gap: "1rem",
               paddingBottom: "1rem",
               overflowX: "auto",
@@ -1780,64 +1779,7 @@ export default function Home() {
               msOverflowStyle: "none",
             }}
           >
-            {[
-              {
-                id: "cat-1",
-                name: "UV Printing Service",
-                slug: "uv-printing",
-                thumbnail_url: "/assets/portfolio/UV Printing/uv-1.jpg",
-                starting_price: 999,
-              },
-              {
-                id: "cat-2",
-                name: "Acrylic Sign Board",
-                slug: "acrylic-sign-boards",
-                thumbnail_url: "/assets/portfolio/Acrylic Sign Boards/acrylic-1.jpg",
-                starting_price: 1499,
-              },
-              {
-                id: "cat-3",
-                name: "Roll Up Standee",
-                slug: "roll-up-standees",
-                thumbnail_url: "/assets/portfolio/Roll Up Standees/standee-1.jpg",
-                starting_price: 1999,
-              },
-              {
-                id: "cat-4",
-                name: "LED Sign Board",
-                slug: "led-sign-boards",
-                thumbnail_url: "/assets/portfolio/LED Sign Boards/led-1.jpg",
-                starting_price: 2499,
-              },
-              {
-                id: "cat-5",
-                name: "Glow Sign Board",
-                slug: "glow-sign-boards",
-                thumbnail_url: "/assets/portfolio/Glow Sign Boards/glow-1.jpg",
-                starting_price: 2999,
-              },
-              {
-                id: "cat-6",
-                name: "Flex Banner",
-                slug: "flex-banners",
-                thumbnail_url: "/assets/portfolio/Flex Banners/flex-1.jpg",
-                starting_price: 499,
-              },
-              {
-                id: "cat-7",
-                name: "Letter Sign Board",
-                slug: "letter-sign-boards",
-                thumbnail_url: "/assets/portfolio/Letter Sign Boards/letter-1.jpg",
-                starting_price: 1299,
-              },
-              {
-                id: "cat-8",
-                name: "LED Acrylic Letter",
-                slug: "led-acrylic-letters",
-                thumbnail_url: "/assets/portfolio/Letter Sign Boards/letter-3.jpg",
-                starting_price: 3499,
-              },
-            ].map((s) => (
+            {shopByCategoryItems.map((s) => (
               <div key={s.id} style={{ flexShrink: 0 }}>
                 <SimpleServiceCard service={s} />
               </div>
@@ -2028,21 +1970,17 @@ export default function Home() {
             </div>
 
             <div
-              className="hide-scroll"
               style={{
                 display: "flex",
+                flexWrap: "wrap",
                 gap: "0.6rem",
-                overflowX: "auto",
-                paddingBottom: "0.5rem",
                 marginBottom: "2rem",
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
+                alignItems: "center",
               }}
             >
               <button
                 onClick={() => setCategoryFilter("all")}
                 style={{
-                  flexShrink: 0,
                   padding: "0.55rem 1.25rem",
                   borderRadius: 999,
                   fontSize: "0.85rem",
@@ -2071,7 +2009,6 @@ export default function Home() {
                   key={row.category.id}
                   onClick={() => setCategoryFilter(row.category.id)}
                   style={{
-                    flexShrink: 0,
                     padding: "0.55rem 1.25rem",
                     borderRadius: 999,
                     fontSize: "0.85rem",
@@ -2127,9 +2064,6 @@ export default function Home() {
           <AutoScrollingFeatures />
         </div>
       </section>
-
-      {/* ── COMPANY STATS / INFO ─────────────────────────────── */}
-      <CompanyStatsGrid />
 
       {/* ── CALL TO ACTION BANNER ────────────────────────────── */}
       <section
@@ -2331,6 +2265,74 @@ const FALLBACK_PORTFOLIO = [
     title: "Flex Hoarding Banner",
     category_name: "Flex Banner",
     image_url: "/assets/portfolio/Flex Banners/flex-1.jpg",
+  },
+];
+
+// Fallback "Shop by Category" strip (offline / catalog not yet populated).
+const FALLBACK_SHOP_BY_CATEGORY = [
+  {
+    id: "cat-1",
+    name: "UV Printing Service",
+    slug: "uv-printing",
+    href: "/products/uv-printing",
+    thumbnail_url: "/assets/portfolio/UV Printing/uv-1.jpg",
+    starting_price: 999,
+  },
+  {
+    id: "cat-2",
+    name: "Acrylic Sign Board",
+    slug: "acrylic-sign-boards",
+    href: "/products/acrylic-sign-boards",
+    thumbnail_url: "/assets/portfolio/Acrylic Sign Boards/acrylic-1.jpg",
+    starting_price: 1499,
+  },
+  {
+    id: "cat-3",
+    name: "Roll Up Standee",
+    slug: "roll-up-standees",
+    href: "/products/roll-up-standees",
+    thumbnail_url: "/assets/portfolio/Roll Up Standees/standee-1.jpg",
+    starting_price: 1999,
+  },
+  {
+    id: "cat-4",
+    name: "LED Sign Board",
+    slug: "led-sign-boards",
+    href: "/products/led-sign-boards",
+    thumbnail_url: "/assets/portfolio/LED Sign Boards/led-1.jpg",
+    starting_price: 2499,
+  },
+  {
+    id: "cat-5",
+    name: "Glow Sign Board",
+    slug: "glow-sign-boards",
+    href: "/products/glow-sign-boards",
+    thumbnail_url: "/assets/portfolio/Glow Sign Boards/glow-1.jpg",
+    starting_price: 2999,
+  },
+  {
+    id: "cat-6",
+    name: "Flex Banner",
+    slug: "flex-banners",
+    href: "/products/flex-banners",
+    thumbnail_url: "/assets/portfolio/Flex Banners/flex-1.jpg",
+    starting_price: 499,
+  },
+  {
+    id: "cat-7",
+    name: "Letter Sign Board",
+    slug: "letter-sign-boards",
+    href: "/products/letter-sign-boards",
+    thumbnail_url: "/assets/portfolio/Letter Sign Boards/letter-1.jpg",
+    starting_price: 1299,
+  },
+  {
+    id: "cat-8",
+    name: "LED Acrylic Letter",
+    slug: "led-acrylic-letters",
+    href: "/products/led-acrylic-letters",
+    thumbnail_url: "/assets/portfolio/Letter Sign Boards/letter-3.jpg",
+    starting_price: 3499,
   },
 ];
 

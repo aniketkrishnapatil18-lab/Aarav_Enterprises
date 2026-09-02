@@ -3,12 +3,14 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, MessageCircle, Clock, RefreshCw, FileType, CheckCircle } from 'lucide-react';
 import { productAPI, portfolioAPI } from '../services/api';
 import { openWhatsApp } from '../utils/helpers';
+import { useEnquiryModal } from '../context/EnquiryModalContext';
 
 export default function ServiceDetail() {
   const { id } = useParams();
   const [service, setService] = useState(null);
   const [portfolio, setPortfolio] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { openModal } = useEnquiryModal();
 
   useEffect(() => {
     async function load() {
@@ -30,7 +32,7 @@ export default function ServiceDetail() {
   }, [id]);
 
   if (loading) return (
-    <div style={{ paddingTop: 100, textAlign: 'center', color: '#64748B', minHeight: '50vh' }}>
+    <div style={{ paddingTop: 100, textAlign: 'center', color: 'var(--text-subtle)', minHeight: '50vh' }}>
       <div className="skeleton" style={{ height: 400, marginBottom: '1rem', borderRadius: '1rem' }} />
     </div>
   );
@@ -47,7 +49,7 @@ export default function ServiceDetail() {
   return (
     <div style={{ paddingTop: 70 }}>
       <div className="container section">
-        <Link to="/services" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: '#94A3B8', textDecoration: 'none', marginBottom: '2rem' }}>
+        <Link to="/services" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-subtle)', textDecoration: 'none', marginBottom: '2rem' }}>
           <ArrowLeft size={16} /> Back to Services
         </Link>
 
@@ -55,14 +57,14 @@ export default function ServiceDetail() {
           {/* Left: Image */}
           <div>
             <div style={{
-              borderRadius: '1rem', overflow: 'hidden', border: '1px solid var(--brand-border)',
+              borderRadius: '1rem', overflow: 'hidden', border: '1px solid var(--border-light)',
               background: 'linear-gradient(135deg, rgba(124,58,237,0.1), rgba(236,72,153,0.08))',
               aspectRatio: '4/3', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               {service.thumbnail_url ? (
                 <img src={service.thumbnail_url} alt={service.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <div style={{ textAlign: 'center', color: '#64748B' }}>
+                <div style={{ textAlign: 'center', color: 'var(--text-subtle)' }}>
                   <div style={{ fontSize: '4rem' }}>🎨</div>
                   <p>Design Preview</p>
                 </div>
@@ -72,13 +74,13 @@ export default function ServiceDetail() {
 
           {/* Right: Details */}
           <div>
-            <div style={{ fontSize: '0.8rem', color: '#A78BFA', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--brand-violet)', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase' }}>
               {service.category_name}
             </div>
             <h1 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', marginBottom: '1rem' }}>{service.name}</h1>
 
             <div style={{
-              fontSize: '2rem', fontWeight: 800, color: '#A78BFA',
+              fontSize: '2rem', fontWeight: 800, color: 'var(--brand-violet)',
               marginBottom: '1.5rem', fontFamily: 'Outfit',
             }}>
               {service.starting_price > 0
@@ -86,34 +88,34 @@ export default function ServiceDetail() {
                 : 'Price on Request'}
             </div>
 
-            <p style={{ color: '#94A3B8', lineHeight: 1.8, marginBottom: '2rem' }}>
+            <p style={{ color: 'var(--text-subtle)', lineHeight: 1.8, marginBottom: '1.5rem' }}>
               {service.description || service.short_desc}
             </p>
 
             {/* Meta */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>
               {service.delivery_days && (
-                <div className="glass-card" style={{ padding: '1rem', textAlign: 'center' }}>
-                  <Clock size={20} color="#A78BFA" style={{ marginBottom: '0.5rem' }} />
-                  <div style={{ fontSize: '0.8rem', color: '#64748B' }}>Delivery Time</div>
-                  <div style={{ fontWeight: 700, color: '#F8FAFC' }}>{service.delivery_days} Days</div>
+                <div className="glass-card" style={{ padding: '0.6rem 0.8rem', textAlign: 'center' }}>
+                  <Clock size={16} color="var(--brand-violet)" style={{ marginBottom: '0.25rem' }} />
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>Delivery Time</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>{service.delivery_days} Days</div>
                 </div>
               )}
               {service.revisions && (
-                <div className="glass-card" style={{ padding: '1rem', textAlign: 'center' }}>
-                  <RefreshCw size={20} color="#A78BFA" style={{ marginBottom: '0.5rem' }} />
-                  <div style={{ fontSize: '0.8rem', color: '#64748B' }}>Revisions</div>
-                  <div style={{ fontWeight: 700, color: '#F8FAFC' }}>{service.revisions} Free</div>
+                <div className="glass-card" style={{ padding: '0.6rem 0.8rem', textAlign: 'center' }}>
+                  <RefreshCw size={16} color="var(--brand-violet)" style={{ marginBottom: '0.25rem' }} />
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>Revisions</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>{service.revisions} Free</div>
                 </div>
               )}
             </div>
 
             {service.file_formats && (
-              <div style={{ marginBottom: '2rem' }}>
-                <div style={{ fontSize: '0.85rem', color: '#64748B', marginBottom: '0.5rem' }}>File Formats</div>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-subtle)', marginBottom: '0.4rem' }}>File Formats</div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   {service.file_formats.split(',').map(f => (
-                    <span key={f} style={{ background: 'rgba(124,58,237,0.15)', color: '#A78BFA', padding: '0.25rem 0.65rem', borderRadius: 6, fontSize: '0.8rem', border: '1px solid rgba(124,58,237,0.3)' }}>
+                    <span key={f} style={{ background: 'rgba(124,58,237,0.15)', color: 'var(--brand-violet)', padding: '0.25rem 0.65rem', borderRadius: 6, fontSize: '0.8rem', border: '1px solid rgba(124,58,237,0.3)' }}>
                       {f.trim()}
                     </span>
                   ))}
@@ -131,11 +133,11 @@ export default function ServiceDetail() {
                 <MessageCircle size={20} /> Get This Design
               </button>
               <button
-                onClick={() => openWhatsApp('', service.name)}
+                onClick={() => openModal({ id: service.id, name: service.name })}
                 className="btn-primary"
                 style={{ flex: 1, justifyContent: 'center' }}
               >
-                Get a Quote
+                Enquiry
               </button>
             </div>
           </div>

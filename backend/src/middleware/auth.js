@@ -30,4 +30,15 @@ function requireRole(...roles) {
   };
 }
 
-module.exports = { auth, requireRole };
+function optionalAuth(req, res, next) {
+  const header = req.headers['authorization'];
+  if (header && header.startsWith('Bearer ')) {
+    const token = header.split(' ')[1];
+    try {
+      req.admin = jwt.verify(token, process.env.JWT_SECRET || 'change_this_secret_in_production');
+    } catch (err) {}
+  }
+  return next();
+}
+
+module.exports = { auth, requireRole, optionalAuth };

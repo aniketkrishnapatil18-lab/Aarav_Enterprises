@@ -41,7 +41,7 @@ export default function AdminKnowledge() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>AI Knowledge Base</h1>
-          <p style={{ color: '#64748B', fontSize: '0.9rem' }}>Configure the knowledge and rules that guide the AI assistant on WhatsApp.</p>
+          <p style={{ color: 'var(--text-subtle)', fontSize: '0.9rem' }}>Configure the knowledge and rules that guide the AI assistant on WhatsApp.</p>
         </div>
         <button onClick={handleSave} disabled={saving} className="btn-primary" style={{ fontSize: '0.875rem' }}>
           <Save size={16} /> {saving ? 'Saving...' : 'Save Changes'}
@@ -52,7 +52,7 @@ export default function AdminKnowledge() {
         {loading ? (
           [...Array(5)].map((_, i) => <div key={i} className="skeleton" style={{ height: 90, borderRadius: '0.75rem' }} />)
         ) : items.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '4rem', color: '#64748B' }}>
+          <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-subtle)' }}>
             <BookOpen size={40} style={{ marginBottom: '1rem', opacity: 0.3 }} />
             <p>No knowledge base items loaded.</p>
           </div>
@@ -60,10 +60,10 @@ export default function AdminKnowledge() {
           items.map(item => (
             <div key={item.key_name} className="glass-card" style={{ padding: '1.25rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                <label className="form-label" style={{ marginBottom: 0, fontWeight: 600, color: '#F8FAFC' }}>
+                <label className="form-label" style={{ marginBottom: 0, fontWeight: 600, color: 'var(--text-main)' }}>
                   {item.label || item.key_name}
                 </label>
-                <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: '#A78BFA', background: 'rgba(124,58,237,0.15)', padding: '0.15rem 0.5rem', borderRadius: 4 }}>
+                <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: 'var(--brand-violet)', background: 'rgba(124,58,237,0.15)', padding: '0.15rem 0.5rem', borderRadius: 4 }}>
                   {item.key_name}
                 </span>
               </div>

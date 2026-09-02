@@ -34,14 +34,14 @@ export default function AdminReports() {
         {/* By Service */}
         <div className="glass-card" style={{ padding: '1.5rem' }}>
           <h3 style={{ fontSize: '1rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Tag size={18} color="#A78BFA" /> Inquiries by Service
+            <Tag size={18} color="var(--brand-violet)" /> Inquiries by Service
           </h3>
-          {loading ? <div className="skeleton" style={{ height: 180 }} /> : byService.length === 0 ? <p style={{ color: '#64748B' }}>No data available</p> : (
+          {loading ? <div className="skeleton" style={{ height: 180 }} /> : byService.length === 0 ? <p style={{ color: 'var(--text-subtle)' }}>No data available</p> : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {byService.map(item => (
-                <div key={item.service} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: 6 }}>
-                  <span style={{ fontSize: '0.9rem', color: '#CBD5E1' }}>{item.service}</span>
-                  <span style={{ fontWeight: 700, color: '#A78BFA', fontSize: '0.95rem' }}>{item.count}</span>
+                <div key={item.service} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0.75rem', background: 'var(--bg-subtle)', borderRadius: 6 }}>
+                  <span style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>{item.service}</span>
+                  <span style={{ fontWeight: 700, color: 'var(--brand-violet)', fontSize: '0.95rem' }}>{item.count}</span>
                 </div>
               ))}
             </div>
@@ -53,11 +53,11 @@ export default function AdminReports() {
           <h3 style={{ fontSize: '1rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Globe size={18} color="#EC4899" /> Customer Preferred Languages
           </h3>
-          {loading ? <div className="skeleton" style={{ height: 180 }} /> : byLang.length === 0 ? <p style={{ color: '#64748B' }}>No data available</p> : (
+          {loading ? <div className="skeleton" style={{ height: 180 }} /> : byLang.length === 0 ? <p style={{ color: 'var(--text-subtle)' }}>No data available</p> : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {byLang.map(item => (
-                <div key={item.language} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: 6 }}>
-                  <span style={{ fontSize: '0.9rem', color: '#CBD5E1' }}>{getLanguageLabel(item.language)}</span>
+                <div key={item.language} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0.75rem', background: 'var(--bg-subtle)', borderRadius: 6 }}>
+                  <span style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>{getLanguageLabel(item.language)}</span>
                   <span style={{ fontWeight: 700, color: '#EC4899', fontSize: '0.95rem' }}>{item.count}</span>
                 </div>
               ))}
@@ -70,11 +70,11 @@ export default function AdminReports() {
           <h3 style={{ fontSize: '1rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <BarChart2 size={18} color="#4ADE80" /> Inquiry Status Breakdown
           </h3>
-          {loading ? <div className="skeleton" style={{ height: 180 }} /> : byStatus.length === 0 ? <p style={{ color: '#64748B' }}>No data available</p> : (
+          {loading ? <div className="skeleton" style={{ height: 180 }} /> : byStatus.length === 0 ? <p style={{ color: 'var(--text-subtle)' }}>No data available</p> : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {byStatus.map(item => (
-                <div key={item.status} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: 6 }}>
-                  <span style={{ fontSize: '0.85rem', color: '#CBD5E1', textTransform: 'capitalize' }}>{item.status.replace(/_/g, ' ')}</span>
+                <div key={item.status} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0.75rem', background: 'var(--bg-subtle)', borderRadius: 6 }}>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-main)', textTransform: 'capitalize' }}>{item.status.replace(/_/g, ' ')}</span>
                   <span style={{ fontWeight: 700, color: '#4ADE80', fontSize: '0.95rem' }}>{item.count}</span>
                 </div>
               ))}

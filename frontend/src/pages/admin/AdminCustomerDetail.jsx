@@ -22,8 +22,8 @@ export default function AdminCustomerDetail() {
   async function load() {
     try {
       const res = await customerAPI.detail(id);
-      const cust = res.data.customer || res.data;
-      setData(res.data);
+      const cust = res.data.data;
+      setData(cust);
       setName(cust.name || '');
       setEmail(cust.email || '');
       setNotes(cust.notes || '');
@@ -53,7 +53,7 @@ export default function AdminCustomerDetail() {
     </div>
   );
 
-  const c           = data?.customer || data || {};
+  const c           = data || {};
   const inquiries   = data?.inquiries || [];
   const conversations = data?.conversations || [];
 

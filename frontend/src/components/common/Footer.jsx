@@ -1,5 +1,28 @@
 import { Link } from 'react-router-dom';
-import { MessageCircle, Phone, Mail, MapPin, Globe, Share2, Send } from 'lucide-react';
+import { MessageCircle, Phone, Mail, MapPin } from 'lucide-react';
+
+const Youtube = ({ size = 24, color = "currentColor" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
+    <path d="m10 15 5-3-5-3z" />
+  </svg>
+);
+
+const Linkedin = ({ size = 24, color = "currentColor" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect width="4" height="12" x="2" y="9" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
+
+const Instagram = ({ size = 24, color = "currentColor" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
 import { openWhatsApp } from '../../utils/helpers';
 
 const SERVICES = [
@@ -10,8 +33,8 @@ const SERVICES = [
 export default function Footer() {
   return (
     <footer style={{
-      background: 'var(--brand-surface)',
-      borderTop: '1px solid var(--brand-border)',
+      background: 'var(--bg-surface)',
+      borderTop: '1px solid var(--border-light)',
       padding: '4rem 0 2rem',
     }}>
       <div className="container">
@@ -30,39 +53,58 @@ export default function Footer() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontFamily: 'Outfit', fontWeight: 800, fontSize: '1.3rem', color: 'white',
               }}>A</div>
-              <span style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '1.1rem', color: '#F8FAFC' }}>
+              <span style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '1.1rem', color: 'var(--text-main)' }}>
                 Aarav Enterprises
               </span>
             </div>
-            <p style={{ color: '#64748B', lineHeight: 1.7, fontSize: '0.9rem', maxWidth: 240, marginBottom: '1.5rem' }}>
+            <p style={{ color: 'var(--text-subtle)', lineHeight: 1.7, fontSize: '0.9rem', maxWidth: 240, marginBottom: '1.5rem' }}>
               Creative Designs. Professional Branding. Powerful Visuals. Your trusted partner for all graphic design needs.
             </p>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
-              {[Globe, Share2, Send].map((Icon, i) => (
-                <div key={i} style={{
-                  width: 38, height: 38, borderRadius: 8,
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  cursor: 'pointer', transition: 'all 0.2s ease',
-                }}>
-                  <Icon size={18} color="#94A3B8" />
-                </div>
+              {[
+                { Icon: Youtube, href: 'https://www.youtube.com' },
+                { Icon: Linkedin, href: 'https://www.linkedin.com' },
+                { Icon: Instagram, href: 'https://www.instagram.com' }
+              ].map((item, i) => (
+                <a
+                  key={i}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    width: 38, height: 38, borderRadius: 8,
+                    background: 'var(--bg-subtle)',
+                    border: '1px solid var(--border-light)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer', transition: 'all 0.2s ease',
+                    textDecoration: 'none'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = 'var(--brand-violet)';
+                    e.currentTarget.children[0].style.color = 'var(--brand-violet)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = 'var(--border-light)';
+                    e.currentTarget.children[0].style.color = 'var(--text-subtle)';
+                  }}
+                >
+                  <item.Icon size={18} color="var(--text-subtle)" style={{ transition: 'color 0.2s ease' }} />
+                </a>
               ))}
             </div>
           </div>
 
           {/* Services */}
           <div>
-            <h4 style={{ color: '#F8FAFC', marginBottom: '1.25rem', fontSize: '1rem' }}>Our Services</h4>
+            <h4 style={{ color: 'var(--text-main)', marginBottom: '1.25rem', fontSize: '1rem' }}>Our Services</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               {SERVICES.map(s => (
-                <Link key={s} to="/services" style={{
-                  color: '#64748B', fontSize: '0.875rem', textDecoration: 'none',
+                <Link key={s} to={`/services?q=${encodeURIComponent(s)}`} style={{
+                  color: 'var(--text-subtle)', fontSize: '0.875rem', textDecoration: 'none',
                   transition: 'color 0.2s ease',
                 }}
-                onMouseEnter={e => e.target.style.color = '#A78BFA'}
-                onMouseLeave={e => e.target.style.color = '#64748B'}
+                  onMouseEnter={e => e.target.style.color = 'var(--brand-violet)'}
+                  onMouseLeave={e => e.target.style.color = 'var(--text-subtle)'}
                 >{s}</Link>
               ))}
             </div>
@@ -70,7 +112,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 style={{ color: '#F8FAFC', marginBottom: '1.25rem', fontSize: '1rem' }}>Quick Links</h4>
+            <h4 style={{ color: 'var(--text-main)', marginBottom: '1.25rem', fontSize: '1rem' }}>Quick Links</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               {[
                 { label: 'Home', to: '/' },
@@ -80,10 +122,10 @@ export default function Footer() {
                 { label: 'Contact', to: '/contact' },
               ].map(l => (
                 <Link key={l.to} to={l.to} style={{
-                  color: '#64748B', fontSize: '0.875rem', textDecoration: 'none',
+                  color: 'var(--text-subtle)', fontSize: '0.875rem', textDecoration: 'none',
                 }}
-                onMouseEnter={e => e.target.style.color = '#A78BFA'}
-                onMouseLeave={e => e.target.style.color = '#64748B'}
+                  onMouseEnter={e => e.target.style.color = 'var(--brand-violet)'}
+                  onMouseLeave={e => e.target.style.color = 'var(--text-subtle)'}
                 >{l.label}</Link>
               ))}
             </div>
@@ -91,26 +133,26 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 style={{ color: '#F8FAFC', marginBottom: '1.25rem', fontSize: '1rem' }}>Contact Us</h4>
+            <h4 style={{ color: 'var(--text-main)', marginBottom: '1.25rem', fontSize: '1rem' }}>Contact Us</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               <a
                 onClick={(e) => { e.preventDefault(); openWhatsApp(); }}
                 href="#"
-                style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', color: '#64748B', textDecoration: 'none', fontSize: '0.875rem' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', color: 'var(--text-subtle)', textDecoration: 'none', fontSize: '0.875rem' }}
               >
                 <MessageCircle size={16} color="#25D366" />
                 WhatsApp AI: +1 (555) 196-0714
               </a>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', color: '#64748B', fontSize: '0.875rem' }}>
-                <Phone size={16} color="#A78BFA" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', color: 'var(--text-subtle)', fontSize: '0.875rem' }}>
+                <Phone size={16} color="var(--brand-violet)" />
                 +91 9763530208
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', color: '#64748B', fontSize: '0.875rem' }}>
-                <Mail size={16} color="#A78BFA" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', color: 'var(--text-subtle)', fontSize: '0.875rem' }}>
+                <Mail size={16} color="var(--brand-violet)" />
                 info@aaraventerprises.com
               </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', color: '#64748B', fontSize: '0.875rem' }}>
-                <MapPin size={16} color="#A78BFA" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', color: 'var(--text-subtle)', fontSize: '0.875rem' }}>
+                <MapPin size={16} color="var(--brand-violet)" style={{ flexShrink: 0, marginTop: 2 }} />
                 Pune, Maharashtra, India
               </div>
             </div>
@@ -119,7 +161,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div style={{
-          borderTop: '1px solid var(--brand-border)',
+          borderTop: '1px solid var(--border-light)',
           paddingTop: '1.5rem',
           display: 'flex',
           justifyContent: 'space-between',
@@ -127,10 +169,10 @@ export default function Footer() {
           flexWrap: 'wrap',
           gap: '1rem',
         }}>
-          <p style={{ color: '#475569', fontSize: '0.85rem' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
             © {new Date().getFullYear()} Aarav Enterprises. All rights reserved.
           </p>
-          <p style={{ color: '#475569', fontSize: '0.85rem' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
             Crafted with ❤️ for creative businesses
           </p>
         </div>

@@ -61,9 +61,12 @@ const ALLOWED_UPLOAD_TYPES = [
   'image/webp',
   'image/gif',
   'application/pdf',
+  'video/mp4',
+  'video/webm',
+  'video/ogg',
 ];
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
 module.exports = {
   INQUIRY_STATUS,

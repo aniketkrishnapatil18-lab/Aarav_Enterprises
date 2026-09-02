@@ -1,10 +1,10 @@
 const express = require('express');
 const router  = express.Router();
 const ctrl    = require('../controllers/product.controller');
-const { auth } = require('../middleware/auth');
+const { auth, optionalAuth } = require('../middleware/auth');
 const upload  = require('../middleware/upload');
 
-router.get('/',             ctrl.list);
+router.get('/',             optionalAuth, ctrl.list);
 router.get('/:id',          ctrl.detail);
 router.post('/',            auth, (req, _res, next) => { req.uploadFolder = 'products'; next(); }, upload.single('thumbnail'), ctrl.create);
 router.put('/:id',          auth, (req, _res, next) => { req.uploadFolder = 'products'; next(); }, upload.single('thumbnail'), ctrl.update);

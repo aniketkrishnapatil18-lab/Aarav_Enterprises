@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, MessageCircle, Search } from 'lucide-react';
 import { openWhatsApp } from '../../utils/helpers';
 import ThemeToggle from './ThemeToggle';
@@ -16,7 +16,20 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled,  setScrolled]  = useState(false);
   const [menuOpen,  setMenuOpen]  = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      navigate(`/services?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
+  useEffect(() => {
+    const q = new URLSearchParams(location.search).get('q');
+    setSearchQuery(q || '');
+  }, [location.search]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -119,6 +132,9 @@ export default function Navbar() {
               type="text"
               placeholder="Search services..."
               className="nav-search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearch}
               style={{
                 background: 'transparent', border: 'none', outline: 'none',
                 color: 'var(--text-main)', fontSize: '0.9rem',

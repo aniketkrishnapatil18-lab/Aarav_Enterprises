@@ -17,6 +17,12 @@ export default function Portfolio() {
   const [selected, setSelected] = useState(null);
   const [activeVideo, setActiveVideo] = useState(null);
 
+  // Lock background page scroll while the image lightbox is open.
+  useEffect(() => {
+    document.body.style.overflow = selected ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [selected]);
+
   useEffect(() => {
     document.title = 'Portfolio — Aarav Enterprises';
     async function load() {

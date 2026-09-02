@@ -8,7 +8,7 @@ const path         = require('path');
 async function list(req, res, next) {
   try {
     const { category, featured, page = 1, limit = 50 } = req.query;
-    const activeOnly = !req.admin;
+    const activeOnly = req.query.active === 'true' || !req.admin;
     const products = await productModel.getAll({
       activeOnly,
       categoryId: category || null,

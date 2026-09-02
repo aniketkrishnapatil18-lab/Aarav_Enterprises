@@ -1,4 +1,6 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { notificationAPI } from '../../services/api';
 import {
   LayoutDashboard, Users, MessageSquare, MessageCircle,
   Package, Image, BookOpen, Bell, BarChart2, Settings, LogOut, X, Sparkles, Video
@@ -21,6 +23,18 @@ const NAV_ITEMS = [
 
 export default function AdminSidebar({ isOpen, onClose }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    async function fetchUnread() {
+      try {
+        const res = await notificationAPI.list({ limit: 1, unread: true });
+        setUnreadCount(res.data?.unreadCount || 0);
+      } catch (err) {}
+    }
+    fetchUnread();
+  }, [location.pathname]);
 
   function handleLogout() {
     localStorage.removeItem('ae_token');
@@ -61,7 +75,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
       </div>
 
       {/* Navigation List */}
-      <nav style={{ flex: 1, padding: '1.25rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '0.25rem', overflowY: 'auto' }}>
+      <nav style={{ flex: 1, padding: '1.25rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '0.25rem', overflowY: 'hidden' }}>
         {NAV_ITEMS.map(item => (
           <NavLink
             key={item.to}
@@ -71,7 +85,15 @@ export default function AdminSidebar({ isOpen, onClose }) {
             onClick={onClose}
           >
             <item.icon size={18} />
-            <span style={{ fontSize: '0.9rem' }}>{item.label}</span>
+            <span style={{ fontSize: '0.9rem', flex: 1 }}>{item.label}</span>
+            {item.label === 'Notifications' && unreadCount > 0 && (
+              <span style={{
+                background: '#EF4444', color: 'white', fontSize: '0.7rem',
+                fontWeight: 700, padding: '0.1rem 0.4rem', borderRadius: 999
+              }}>
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>
