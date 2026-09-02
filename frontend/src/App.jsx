@@ -35,6 +35,8 @@ import AdminVideos from './pages/admin/AdminVideos';
 import AdminKnowledge from './pages/admin/AdminKnowledge';
 import AdminNotifications from './pages/admin/AdminNotifications';
 import AdminReports from './pages/admin/AdminReports';
+import AdminInvoices from './pages/admin/AdminInvoices';
+import AdminPayments from './pages/admin/AdminPayments';
 import AdminSettings from './pages/admin/AdminSettings';
 
 export default function App() {
@@ -75,6 +77,8 @@ export default function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="inquiries" element={<AdminInquiries />} />
             <Route path="inquiries/:id" element={<AdminInquiryDetail />} />
+            <Route path="payments" element={<AdminPayments />} />
+            <Route path="invoices" element={<AdminInvoices />} />
             <Route path="customers" element={<AdminCustomers />} />
             <Route path="customers/:id" element={<AdminCustomerDetail />} />
             <Route path="conversations" element={<AdminConversations />} />

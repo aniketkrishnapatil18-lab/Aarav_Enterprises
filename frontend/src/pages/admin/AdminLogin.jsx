@@ -39,9 +39,20 @@ export default function AdminLogin() {
       <div className="glass-card" style={{ width: '100%', maxWidth: 420, padding: '2.5rem', position: 'relative' }}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{ width: 56, height: 56, borderRadius: 14, background: 'linear-gradient(135deg, #7C3AED, #EC4899)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', fontFamily: 'Outfit', fontWeight: 800, fontSize: '1.5rem', color: 'white' }}>A</div>
-          <h1 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>Admin Login</h1>
-          <p style={{ color: '#64748B', fontSize: '0.9rem' }}>Aarav Enterprises Management Panel</p>
+          <img
+            src="/logo.png"
+            alt="Aarav Enterprises Logo"
+            style={{
+              height: 72,
+              width: 'auto',
+              objectFit: 'contain',
+              margin: '0 auto 1.25rem',
+              display: 'block',
+              filter: 'drop-shadow(0 4px 18px rgba(124, 58, 237, 0.4))',
+            }}
+          />
+          <h1 style={{ fontSize: '1.5rem', marginBottom: '0.25rem', fontFamily: 'Outfit', fontWeight: 800 }}>Admin Login</h1>
+          <p style={{ color: '#94A3B8', fontSize: '0.9rem' }}>Aarav Enterprises Management Panel</p>
         </div>
 
         <form onSubmit={handleSubmit}>

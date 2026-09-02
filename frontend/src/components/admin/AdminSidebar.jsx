@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { notificationAPI } from '../../services/api';
 import {
   LayoutDashboard, Users, MessageSquare, MessageCircle,
-  Package, Image, BookOpen, Bell, BarChart2, Settings, LogOut, X, Sparkles, Video
+  Package, Image, BookOpen, Bell, BarChart2, Settings, LogOut, X, Sparkles, Video, Receipt, CreditCard
 } from 'lucide-react';
 
 const NAV_ITEMS = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { to: '/admin/inquiries', label: 'Inquiries', icon: MessageSquare },
+  { to: '/admin/payments', label: 'Payments & GST', icon: CreditCard },
+  { to: '/admin/invoices', label: 'Invoices & Ledger', icon: Receipt },
   { to: '/admin/customers', label: 'Customers', icon: Users },
   { to: '/admin/conversations', label: 'WhatsApp Chat', icon: MessageCircle },
   { to: '/admin/products', label: 'Services Catalog', icon: Package },
@@ -51,24 +53,27 @@ export default function AdminSidebar({ isOpen, onClose }) {
     }}>
       {/* Brand Header */}
       <div style={{
-        padding: '1.5rem 1.25rem', borderBottom: '1px solid var(--border-light)',
+        padding: '1.25rem 1.25rem', borderBottom: '1px solid var(--border-light)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: 10,
-            background: 'var(--grad-primary)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'Outfit', fontWeight: 800, color: 'white', fontSize: '1.2rem',
-            boxShadow: 'var(--shadow-glow)',
-          }}>A</div>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
+          <img
+            src="/logo.png"
+            alt="Aarav Enterprises"
+            style={{
+              height: 38,
+              width: 'auto',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 2px 6px rgba(124, 58, 237, 0.25))',
+            }}
+          />
           <div>
-            <div style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '1rem', color: 'var(--text-main)' }}>Aarav Enterprises</div>
+            <div style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '0.95rem', color: 'var(--text-main)', lineHeight: 1.15 }}>Aarav Enterprises</div>
             <div style={{ fontSize: '0.72rem', color: 'var(--brand-violet)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
               <Sparkles size={11} color="#D97706" /> Admin Console
             </div>
           </div>
-        </div>
+        </Link>
         <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'var(--text-subtle)', cursor: 'pointer', display: 'none' }} className="sidebar-close">
           <X size={20} />
         </button>

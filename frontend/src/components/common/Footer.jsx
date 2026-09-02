@@ -46,17 +46,26 @@ export default function Footer() {
         }}>
           {/* Brand */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-              <div style={{
-                width: 44, height: 44, borderRadius: 10,
-                background: 'linear-gradient(135deg, #7C3AED, #EC4899)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: 'Outfit', fontWeight: 800, fontSize: '1.3rem', color: 'white',
-              }}>A</div>
-              <span style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '1.1rem', color: 'var(--text-main)' }}>
-                Aarav Enterprises
-              </span>
-            </div>
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', textDecoration: 'none' }}>
+              <img
+                src="/logo.png"
+                alt="Aarav Enterprises Logo"
+                style={{
+                  height: 44,
+                  width: 'auto',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 2px 8px rgba(124, 58, 237, 0.2))',
+                }}
+              />
+              <div>
+                <div style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '1.15rem', color: 'var(--text-main)', letterSpacing: '-0.02em', lineHeight: 1.15 }}>
+                  Aarav <span className="gradient-text">Enterprises</span>
+                </div>
+                <div style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--text-subtle)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                  Signage & Printing
+                </div>
+              </div>
+            </Link>
             <p style={{ color: 'var(--text-subtle)', lineHeight: 1.7, fontSize: '0.9rem', maxWidth: 240, marginBottom: '1.5rem' }}>
               Creative Designs. Professional Branding. Powerful Visuals. Your trusted partner for all graphic design needs.
             </p>

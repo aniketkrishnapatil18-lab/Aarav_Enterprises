@@ -52,16 +52,24 @@ export default function Navbar() {
       <div className="nav-container">
         {/* Brand Logo */}
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', textDecoration: 'none' }}>
-          <div style={{
-            width: 44, height: 44, borderRadius: 12,
-            background: 'var(--grad-primary)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'Outfit', fontWeight: 800, fontSize: '1.3rem', color: 'white',
-            boxShadow: 'var(--shadow-glow)',
-          }}>A</div>
+          <img
+            src="/logo.png"
+            alt="Aarav Enterprises Logo"
+            style={{
+              height: 44,
+              width: 'auto',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 2px 8px rgba(124, 58, 237, 0.25))',
+              transition: 'transform 0.25s ease',
+            }}
+            className="nav-logo-img"
+          />
           <div>
-            <div style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
+            <div style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-main)', letterSpacing: '-0.02em', lineHeight: 1.15 }}>
               Aarav <span className="gradient-text">Enterprises</span>
+            </div>
+            <div style={{ fontSize: '0.68rem', fontWeight: 600, color: 'var(--text-subtle)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              Signage & Printing
             </div>
           </div>
         </Link>
